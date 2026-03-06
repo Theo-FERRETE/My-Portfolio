@@ -1,0 +1,12 @@
+/**
+ * Configuration ts-node pour les scripts
+ */
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2020",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node"
+  }
+}

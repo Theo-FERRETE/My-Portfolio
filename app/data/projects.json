@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "title": "Eclipse Auto",
+    "description": "Un site de concession auto fictive que j'ai monté de A à Z. Gestion des Voitures en stock, réservations clients, le tout avec une vraie DB PostgreSQL. Prisma ORM pour gérer les relations, déployé sur Vercel. Défi principal : gérer le système de filtres et la recherche en temps réel.",
+    "image": "/images/projects/logo-eclipse.png",
+    "tags": ["React", "Node", "Prisma", "PostgreSQL", "CSS", "Vercel", "Supabase"],
+    "link": "https://eclipse-auto-client.vercel.app",
+    "featured": true,
+    "createdAt": "2025-07-15T00:00:00.000Z"
+  },
+
+  {
+    "id": 2,
+    "title": "Travel Site",
+    "description": "Site de voyage promotionnel avec destinations et offres.",
+    "longDescription": "Site web promotionnel pour une agence de voyage, présentant diverses destinations, offres spéciales , et de multiples mode de transport.",
+    "tags": ["React", "JSON", "Node", "CSS", "Vercel"],
+    "image": "/images/projects/travel-site.png",
+    "link": "https://travel-site-six-eta.vercel.app" ,
+    "featured": true,
+    "createdAt": "2025-03-10T00:00:00.000Z"
+  }
+]
