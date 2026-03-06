@@ -1,25 +1,4 @@
-# 🎨 Portfolio Moderne - Théo Anderson
-
-Un portfolio moderne et élégant construit avec **Next.js 16**, **JSON** et **Tailwind CSS 4**.
-
-## ✨ Caractéristiques
-
-- 🎯 **Design moderne** avec glassmorphism et gradients animés
-- 🌈 **Animations fluides** au scroll et au hover
-- 📱 **Responsive** - parfait sur tous les écrans
-- 🌙 **Mode sombre** automatique (selon préférences système)
-- ⚡ **Performance optimale** avec Next.js
-- 🎨 **Composants réutilisables** et modulaires
-- 💫 **Effets visuels uniques** (particules, parallaxe, etc.)
-
-## 🚀 Sections du Portfolio
-
-1. **Hero** - Section d'accueil avec animation de particules
-2. **À propos** - Présentation personnelle avec cartes interactives
-3. **Compétences** - Barres de progression animées pour chaque technologie
-4. **Projets** - Galerie de projets avec effets au hover
-5. **Contact** - Formulaire de contact et réseaux sociaux
-6. **Footer** - Navigation et informations
+Bienvenue sur mon Portfolio
 
 ## 📦 Installation et Lancement
 
