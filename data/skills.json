@@ -94,5 +94,21 @@
     "icon": "🐳",
     "description": "Pour conteneuriser mes apps et garantir la cohérence entre environnements",
     "order": 12
+  },
+  {
+    "name": "PHP",
+    "category": "Backend",
+    "icon": "⚡",
+    "description": "Le PHP ( Hypertext Preprocessor) est un langage de programmation libre, il",
+    "order": 0,
+    "id": 13
+  },
+  {
+    "name": "MYSQL",
+    "category": "Database",
+    "icon": "⚡",
+    "description": "Langage simple pour débuter avec les BDD\n",
+    "order": 0,
+    "id": 14
   }
 ]
