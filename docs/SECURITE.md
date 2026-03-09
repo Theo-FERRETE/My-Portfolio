@@ -16,9 +16,9 @@ npm run dev
 
 **Login admin par défaut :**
 - Email: `admin@portfolio.com`
-- Password: `admin123`
+- Password: Utiliser `npm run hash-password` pour créer votre propre mot de passe
 
-⚠️ **Ces valeurs sont pour le DEV uniquement !**
+⚠️ **IMPORTANT : Changez le mot de passe AVANT tout déploiement !**
 
 ## 🚀 Avant de Déployer sur OVH
 

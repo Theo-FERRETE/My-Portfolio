@@ -28,17 +28,10 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Vérifier le mot de passe hashé uniquement (PRODUCTION SAFE)
-        console.log('🔍 DEBUG - Email:', credentials.email);
-        console.log('🔍 DEBUG - Password:', credentials.password);
-        console.log('🔍 DEBUG - Hash:', adminPasswordHash);
-        console.log('🔍 DEBUG - Hash length:', adminPasswordHash.length);
-        
         const isPasswordValid = await verifyPassword(
           credentials.password,
           adminPasswordHash
         );
-        
-        console.log('🔍 DEBUG - Password valid?', isPasswordValid);
 
         if (!isPasswordValid) {
           // Log échec de connexion

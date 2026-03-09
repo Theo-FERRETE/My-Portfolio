@@ -37,6 +37,10 @@ yarn-error.log*
 /data/2fa.json
 /logs/
 
+# 🔐 Données personnelles sensibles
+/data/profile.json
+/docs/SECURITE.md
+
 # vercel
 .vercel
 
