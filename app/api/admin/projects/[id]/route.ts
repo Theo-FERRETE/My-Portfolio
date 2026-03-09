@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getProjectById, updateProject, deleteProject } from '@/lib/data-helpers';
-import { requireAdmin } from '@/lib/auth-helpers';
-import { auditActions } from '@/lib/audit-log';
-import { getClientIp } from '@/lib/rate-limit';
-import { projectSchema } from '@/lib/validation';
+import { getProjectById, updateProject, deleteProject } from '@/lib/data';
+import { requireAdmin } from '@/lib/auth';
+import { auditActions } from '@/lib/security';
+import { getClientIp } from '@/lib/security';
+import { projectSchema } from '@/lib/data';
 import { z } from 'zod';
 
 export async function GET(

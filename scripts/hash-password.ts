@@ -1,5 +1,5 @@
 import * as readline from 'readline';
-import { hashPassword } from '@/lib/password';
+import { hashPassword } from '@/lib/auth';
 
 const rl = readline.createInterface({
   input: process.stdin,

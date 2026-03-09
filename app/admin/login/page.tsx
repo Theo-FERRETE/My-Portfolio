@@ -1,17 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { Shield } from 'lucide-react';
 
 export default function AdminLogin() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    token: '', // 🔐 Code 2FA
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const tokenInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,18 +25,31 @@ export default function AdminLogin() {
       const result = await signIn('credentials', {
         email: formData.email,
         password: formData.password,
+        token: formData.token || undefined, // Envoyer le code 2FA si présent
         redirect: false,
       });
 
       if (result?.error) {
-        setError('Email ou mot de passe incorrect');
-      } else {
-        router.push('/admin/dashboard');
-        router.refresh();
+        // Gérer les différentes erreurs
+        if (result.error === '2FA_REQUIRED') {
+          setError('Code 2FA requis - Entrez le code de votre application Authenticator');
+          tokenInputRef.current?.focus();
+        } else if (result.error === 'Code 2FA invalide') {
+          setError('Code 2FA invalide ou expiré');
+          setFormData({ ...formData, token: '' });
+          tokenInputRef.current?.focus();
+        } else {
+          setError(result.error || 'Email ou mot de passe incorrect');
+        }
+        setIsLoading(false);
+        return;
       }
+      
+      // ✅ Connexion réussie - redirection automatique
+      router.push('/admin/dashboard');
+      router.refresh();
     } catch (err) {
       setError('Une erreur est survenue');
-    } finally {
       setIsLoading(false);
     }
   };
@@ -60,6 +76,14 @@ export default function AdminLogin() {
               </div>
             )}
 
+            {/* 🔐 Message 2FA */}
+            {error && error.includes('2FA') && (
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                <span>{error}</span>
+              </div>
+            )}
+
             <div>
               <label
                 htmlFor="email"
@@ -74,7 +98,7 @@ export default function AdminLogin() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
-                placeholder="admin@example.com"
+                placeholder="admin@portfolio.com"
               />
             </div>
 
@@ -96,10 +120,35 @@ export default function AdminLogin() {
               />
             </div>
 
+            {/* 🔐 Champ 2FA (toujours visible, optionnel) */}
+            <div>
+              <label
+                htmlFor="token"
+                className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2"
+              >
+                <Shield className="w-4 h-4" />
+                Code 2FA (optionnel)
+              </label>
+              <input
+                ref={tokenInputRef}
+                type="text"
+                id="token"
+                value={formData.token}
+                onChange={(e) => setFormData({ ...formData, token: e.target.value.replace(/\D/g, '').slice(0, 6) })}
+                maxLength={6}
+                autoComplete="off"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none text-center text-2xl font-mono tracking-widest"
+                placeholder="000000"
+              />
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                Si la 2FA est activée, entrez le code à 6 chiffres de Google Authenticator
+              </p>
+            </div>
+
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               {isLoading ? 'Connexion...' : 'Se connecter'}
             </button>

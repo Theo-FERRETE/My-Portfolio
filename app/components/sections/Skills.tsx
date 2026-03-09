@@ -1,17 +1,18 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import skillsData from '@/data/skills.json';
 
-const skills = [
-  { name: 'React', icon: '⚛️', color: 'from-cyan-500 to-blue-500' },
-  { name: 'Next.js', icon: '▲', color: 'from-gray-700 to-gray-900' },
-  { name: 'TypeScript', icon: 'TS', color: 'from-blue-600 to-blue-700' },
-  { name: 'Tailwind CSS', icon: '🎨', color: 'from-cyan-400 to-blue-500' },
-  { name: 'Node.js', icon: '🟢', color: 'from-green-600 to-green-700' },
-  { name: 'Python', icon: '🐍', color: 'from-yellow-500 to-blue-600' },
-  { name: 'MongoDB', icon: '🍃', color: 'from-green-500 to-green-600' },
-  { name: 'Git', icon: '📦', color: 'from-orange-600 to-red-600' },
-];
+// Fonction pour générer une couleur gradient basée sur la catégorie
+const getCategoryColor = (category: string) => {
+  const colors: Record<string, string> = {
+    'Frontend': 'from-cyan-500 to-blue-500',
+    'Backend': 'from-green-600 to-green-700',
+    'Database': 'from-purple-600 to-purple-700',
+    'Language': 'from-blue-600 to-blue-700',
+  };
+  return colors[category] || 'from-gray-600 to-gray-700';
+};
 
 export default function Skills() {
   const [isVisible, setIsVisible] = useState(false);
@@ -53,24 +54,26 @@ export default function Skills() {
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {skills.map((skill, index) => (
-              <div
-                key={skill.name}
-                className="group"
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-gray-700 h-full">
-                  <div className="flex flex-col items-center text-center space-y-3">
-                    <div className={`text-4xl p-4 rounded-xl bg-gradient-to-r ${skill.color} bg-opacity-10`}>
-                      {skill.icon}
+            {skillsData
+              .sort((a, b) => a.order - b.order)
+              .map((skill, index) => (
+                <div
+                  key={skill.id}
+                  className="group"
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                >
+                  <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-gray-700 h-full">
+                    <div className="flex flex-col items-center text-center space-y-3">
+                      <div className={`text-4xl p-4 rounded-xl bg-gradient-to-r ${getCategoryColor(skill.category)} bg-opacity-10`}>
+                        {skill.icon}
+                      </div>
+                      <span className="font-semibold text-gray-800 dark:text-gray-200">
+                        {skill.name}
+                      </span>
                     </div>
-                    <span className="font-semibold text-gray-800 dark:text-gray-200">
-                      {skill.name}
-                    </span>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>

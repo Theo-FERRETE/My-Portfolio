@@ -62,16 +62,29 @@ function cleanupExpiredEntries(): void {
   }
 }
 
+/**
+ * 🔒 Récupère l'IP réelle du client de manière sécurisée
+ * Protège contre le spoofing d'IP en validant les proxies de confiance
+ */
 export function getClientIp(request: Request): string {
-  const forwarded = request.headers.get('x-forwarded-for');
-  if (forwarded) {
-    return forwarded.split(',')[0].trim();
+  // Vérifier si on est derrière un proxy de confiance (Vercel, Netlify, OVH, etc.)
+  const isTrustedProxy = process.env.TRUSTED_PROXY === 'true';
+  
+  if (isTrustedProxy) {
+    // Utiliser x-forwarded-for uniquement si on fait confiance au proxy
+    const forwarded = request.headers.get('x-forwarded-for');
+    if (forwarded) {
+      // Prendre la première IP (client réel)
+      return forwarded.split(',')[0].trim();
+    }
+    
+    const realIp = request.headers.get('x-real-ip');
+    if (realIp) {
+      return realIp.trim();
+    }
   }
-
-  const realIp = request.headers.get('x-real-ip');
-  if (realIp) {
-    return realIp;
-  }
-
-  return 'unknown';
+  
+  // En développement ou sans proxy de confiance, on ne peut pas récupérer l'IP fiable
+  // Utiliser un identifiant par défaut pour éviter le bypass
+  return 'local-client';
 }

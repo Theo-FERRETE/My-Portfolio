@@ -96,6 +96,14 @@ export default function AdminDashboard() {
       count: null,
       gradient: 'from-green-500 to-emerald-500',
     },
+    {
+      title: 'Sécurité 2FA',
+      description: 'Authentification à deux facteurs',
+      icon: '🔐',
+      href: '/admin/2fa',
+      count: null,
+      gradient: 'from-red-500 to-orange-500',
+    },
   ];
 
   return (
@@ -104,21 +112,31 @@ export default function AdminDashboard() {
       <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Dashboard
-              </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                Content de te revoir Theo 👋
-              </p>
-            </div>
             <div className="flex items-center gap-4">
               <Link
                 href="/"
-                className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group"
+                title="Retour au site"
               >
-                Voir le site
+                <svg 
+                  className="w-6 h-6 text-gray-600 dark:text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
               </Link>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  Dashboard
+                </h1>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  Content de te revoir Theo 👋
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
               <button
                 onClick={handleSignOut}
                 className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"

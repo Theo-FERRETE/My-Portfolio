@@ -33,6 +33,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# 🔐 Security - 2FA secrets (NEVER commit)
+/data/2fa.json
+/logs/
+
 # vercel
 .vercel
 

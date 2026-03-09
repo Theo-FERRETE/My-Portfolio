@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import projectsData from '@/app/data/projects.json';
+import projectsData from '@/data/projects.json';
 
 interface Project {
   id: number;

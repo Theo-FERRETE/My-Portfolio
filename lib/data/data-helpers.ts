@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const DATA_DIR = path.join(process.cwd(), 'app', 'data');
+const DATA_DIR = path.join(process.cwd(), 'data');
 
 // Projects
 export interface Project {

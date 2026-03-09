@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import projectsData from '@/app/data/projects.json';
+import projectsData from '@/data/projects.json';
 
 export default function Projects() {
   const [isVisible, setIsVisible] = useState(false);

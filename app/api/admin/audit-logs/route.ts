@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { readAuditLogs, filterAuditLogs } from '@/lib/audit-log';
+import { readAuditLogs, filterAuditLogs } from '@/lib/security';
 
 export async function GET(request: Request) {
   try {

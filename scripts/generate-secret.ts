@@ -1,4 +1,4 @@
-import { generateSecret } from '@/lib/password';
+import { generateSecret } from '@/lib/auth';
 
 console.log('🔐 Générateur de secret\n');
 
