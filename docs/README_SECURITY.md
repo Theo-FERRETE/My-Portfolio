@@ -79,6 +79,11 @@ Entrez votre mot de passe, puis copiez le hash dans `.env.local` :
 ADMIN_PASSWORD_HASH=hash_généré
 ```
 
+⚠️ **Important Next.js** : dans un fichier `.env`, les `$` sont interprétés. Un hash bcrypt doit etre stocké avec des dollars échappés:
+```env
+ADMIN_PASSWORD_HASH=\$2b\$10\$...
+```
+
 ### 4. Configuration .env.local
 
 Créez un fichier `.env.local` à la racine :

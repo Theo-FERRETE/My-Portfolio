@@ -24,11 +24,13 @@ rl.question('Entre ton mot de passe (min. 8 caractères): ', (password) => {
       process.exit(1);
     }
     
+    const envSafeHash = hash.replace(/\$/g, '\\$');
+
     console.log('\n✅ Hash généré avec succès !\n');
     console.log('─'.repeat(70));
-    console.log('ADMIN_PASSWORD_HASH=' + hash);
+    console.log('ADMIN_PASSWORD_HASH=' + envSafeHash);
     console.log('─'.repeat(70));
-    console.log('\n📋 Copie cette ligne dans ton .env.local\n');
+    console.log('\n📋 Copie cette ligne dans ton .env.local (format compatible Next.js)\n');
     
     // Vérification
     bcrypt.compare(password, hash, (err, result) => {

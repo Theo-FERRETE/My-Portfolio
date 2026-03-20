@@ -17,12 +17,14 @@ rl.question('Entre ton mot de passe: ', async (password) => {
 
   try {
     const hash = await hashPassword(password);
+    const envSafeHash = hash.replace(/\$/g, '\\$');
     
     console.log('\n✅ Hash généré !\n');
     console.log('Copie ça dans ton .env.local:');
     console.log('─'.repeat(70));
-    console.log(`ADMIN_PASSWORD_HASH=${hash}`);
+    console.log(`ADMIN_PASSWORD_HASH=${envSafeHash}`);
     console.log('─'.repeat(70));
+    console.log('ℹ️  Le hash est affiché en format compatible .env (dollars échappés).');
     console.log('\n⚠️  Supprime ADMIN_PASSWORD de ton .env\n');
     
     rl.close();
