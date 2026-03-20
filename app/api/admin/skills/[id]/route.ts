@@ -8,10 +8,11 @@ import { z } from 'zod';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const skill = getSkillById(parseInt(params.id));
+    const { id } = await context.params;
+    const skill = getSkillById(parseInt(id));
     if (!skill) {
       return NextResponse.json({ error: 'Compétence introuvable' }, { status: 404 });
     }
@@ -24,22 +25,23 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requireAdmin();
   if (authResult instanceof NextResponse) return authResult;
 
   try {
+    const { id } = await context.params;
     const body = await request.json();
     const data = skillSchema.partial().parse(body);
 
-    const skill = updateSkill(parseInt(params.id), data);
+    const skill = updateSkill(parseInt(id), data);
     if (!skill) {
       return NextResponse.json({ error: 'Compétence introuvable' }, { status: 404 });
     }
 
     const ip = getClientIp(request);
-    await auditActions.updateSkill(authResult.user.email, params.id, ip);
+    await auditActions.updateSkill(authResult.user.email, id, ip);
 
     return NextResponse.json(skill);
   } catch (error) {
@@ -53,19 +55,20 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requireAdmin();
   if (authResult instanceof NextResponse) return authResult;
 
   try {
-    const deleted = deleteSkill(parseInt(params.id));
+    const { id } = await context.params;
+    const deleted = deleteSkill(parseInt(id));
     if (!deleted) {
       return NextResponse.json({ error: 'Compétence introuvable' }, { status: 404 });
     }
 
     const ip = getClientIp(request);
-    await auditActions.deleteSkill(authResult.user.email, params.id, ip);
+    await auditActions.deleteSkill(authResult.user.email, id, ip);
 
     return NextResponse.json({ message: 'Supprimé' });
   } catch (error) {
