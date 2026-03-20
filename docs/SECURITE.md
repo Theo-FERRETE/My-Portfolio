@@ -8,15 +8,18 @@ npm install
 ```
 
 ### 2. Développement Local
-L'application fonctionne directement avec les valeurs par défaut :
+Configurez d'abord votre compte admin dans `.env.local` :
+
+```env
+ADMIN_EMAIL=votre-email@domain.com
+ADMIN_PASSWORD_HASH=<hash_généré_par_npm_run_hash-password>
+```
+
+Ensuite lancez l'application :
 
 ```bash
 npm run dev
 ```
-
-**Login admin par défaut :**
-- Email: `admin@portfolio.com`
-- Password: Utiliser `npm run hash-password` pour créer votre propre mot de passe
 
 ⚠️ **IMPORTANT : Changez le mot de passe AVANT tout déploiement !**
 

@@ -7,6 +7,7 @@ import speakeasy from 'speakeasy';
 import QRCode from 'qrcode';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { AUTH_CONFIG } from './auth-config';
 
 export interface TwoFactorSecret {
   secret: string;
@@ -22,6 +23,11 @@ export interface TwoFactorData {
 }
 
 const DATA_FILE = path.join(process.cwd(), 'data', '2fa.json');
+const LEGACY_ADMIN_EMAIL = 'admin@portfolio.com';
+
+function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
 
 /**
  * Génère un nouveau secret 2FA et un QR code pour Google Authenticator
@@ -138,8 +144,27 @@ async function getTwoFactorData(userEmail: string): Promise<TwoFactorData> {
   try {
     await fs.access(DATA_FILE);
     const content = await fs.readFile(DATA_FILE, 'utf-8');
-    const allData = JSON.parse(content);
-    return allData[userEmail] || { enabled: false };
+    const allData = JSON.parse(content) as Record<string, TwoFactorData>;
+    const normalizedEmail = normalizeEmail(userEmail);
+
+    if (allData[normalizedEmail]) {
+      return allData[normalizedEmail];
+    }
+
+    // Migrate old hardcoded admin email entry to configured admin email once.
+    const configuredAdminEmail = AUTH_CONFIG.adminEmail;
+    if (
+      configuredAdminEmail &&
+      normalizedEmail === configuredAdminEmail &&
+      allData[LEGACY_ADMIN_EMAIL]
+    ) {
+      allData[normalizedEmail] = allData[LEGACY_ADMIN_EMAIL];
+      delete allData[LEGACY_ADMIN_EMAIL];
+      await fs.writeFile(DATA_FILE, JSON.stringify(allData, null, 2));
+      return allData[normalizedEmail];
+    }
+
+    return { enabled: false };
   } catch {
     return { enabled: false };
   }
@@ -150,6 +175,7 @@ async function getTwoFactorData(userEmail: string): Promise<TwoFactorData> {
  */
 async function saveTwoFactorData(userEmail: string, data: TwoFactorData): Promise<void> {
   let allData: Record<string, TwoFactorData> = {};
+  const normalizedEmail = normalizeEmail(userEmail);
 
   try {
     await fs.access(DATA_FILE);
@@ -160,7 +186,7 @@ async function saveTwoFactorData(userEmail: string, data: TwoFactorData): Promis
     await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
   }
 
-  allData[userEmail] = data;
+  allData[normalizedEmail] = data;
   await fs.writeFile(DATA_FILE, JSON.stringify(allData, null, 2));
 }
 

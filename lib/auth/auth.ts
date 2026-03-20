@@ -19,11 +19,16 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Email et mot de passe requis');
         }
 
+        const inputEmail = credentials.email.trim().toLowerCase();
         const adminEmail = AUTH_CONFIG.adminEmail;
         const adminPasswordHash = AUTH_CONFIG.adminPasswordHash;
+
+        if (!adminEmail) {
+          throw new Error('Configuration admin invalide: ADMIN_EMAIL est requis');
+        }
         
         // Vérifier l'email
-        if (credentials.email !== adminEmail) {
+        if (inputEmail !== adminEmail) {
           throw new Error('Email ou mot de passe incorrect');
         }
 
@@ -35,12 +40,17 @@ export const authOptions: NextAuthOptions = {
 
         if (!isPasswordValid) {
           // Log échec de connexion
-          await auditActions.login(credentials.email, 'unknown', false);
+          await auditActions.login(inputEmail, 'unknown', false);
           throw new Error('Email ou mot de passe incorrect');
         }
 
+        // Allow temporary bypass when recovering admin access.
+        const disableTwoFactor = process.env.DISABLE_2FA === 'true';
+
         // 🔐 VÉRIFICATION 2FA si activé
-        const twoFactorEnabled = await isTwoFactorEnabled(credentials.email);
+        const twoFactorEnabled = disableTwoFactor
+          ? false
+          : await isTwoFactorEnabled(adminEmail);
         
         if (twoFactorEnabled) {
           // Si 2FA activé, le code est obligatoire
@@ -50,16 +60,16 @@ export const authOptions: NextAuthOptions = {
           }
 
           // Vérifier le code 2FA
-          const twoFactorValid = await verifyTwoFactorToken(credentials.token, credentials.email);
+          const twoFactorValid = await verifyTwoFactorToken(credentials.token, adminEmail);
           
           if (!twoFactorValid) {
-            await auditActions.login(credentials.email, 'unknown', false);
+            await auditActions.login(inputEmail, 'unknown', false);
             throw new Error('Code 2FA invalide');
           }
         }
 
         // Log succès de connexion
-        await auditActions.login(credentials.email, 'unknown', true);
+        await auditActions.login(adminEmail, 'unknown', true);
 
         return {
           id: '1',
