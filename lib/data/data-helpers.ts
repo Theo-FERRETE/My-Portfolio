@@ -154,3 +154,75 @@ export function updateProfile(updates: Partial<Profile>): Profile {
   fs.writeFileSync(filePath, JSON.stringify(updatedProfile, null, 2));
   return updatedProfile;
 }
+
+// Contact messages
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: 'new' | 'read' | 'replied';
+  replyMessage?: string;
+  repliedAt?: string;
+  createdAt: string;
+}
+
+function ensureContactMessagesFile(): string {
+  const filePath = path.join(DATA_DIR, 'contact-messages.json');
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, '[]');
+  }
+  return filePath;
+}
+
+export function getContactMessages(): ContactMessage[] {
+  const filePath = ensureContactMessagesFile();
+  const fileContents = fs.readFileSync(filePath, 'utf8');
+  return JSON.parse(fileContents);
+}
+
+export function saveContactMessages(messages: ContactMessage[]): void {
+  const filePath = ensureContactMessagesFile();
+  fs.writeFileSync(filePath, JSON.stringify(messages, null, 2));
+}
+
+export function createContactMessage(
+  input: Omit<ContactMessage, 'id' | 'status' | 'createdAt'>
+): ContactMessage {
+  const messages = getContactMessages();
+  const newId = messages.length > 0 ? Math.max(...messages.map((m) => m.id)) + 1 : 1;
+
+  const newMessage: ContactMessage = {
+    ...input,
+    id: newId,
+    status: 'new',
+    createdAt: new Date().toISOString(),
+  };
+
+  messages.push(newMessage);
+  saveContactMessages(messages);
+  return newMessage;
+}
+
+export function getContactMessageById(id: number): ContactMessage | undefined {
+  const messages = getContactMessages();
+  return messages.find((m) => m.id === id);
+}
+
+export function updateContactMessage(id: number, updates: Partial<ContactMessage>): ContactMessage | null {
+  const messages = getContactMessages();
+  const index = messages.findIndex((m) => m.id === id);
+
+  if (index === -1) {
+    return null;
+  }
+
+  messages[index] = {
+    ...messages[index],
+    ...updates,
+    id,
+  };
+
+  saveContactMessages(messages);
+  return messages[index];
+}

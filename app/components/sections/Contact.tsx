@@ -10,6 +10,7 @@ export default function Contact() {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -32,16 +33,46 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simuler l'envoi
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    alert('C\'est envoyé ! 🚀');
-    setFormData({ name: '', email: '', message: '' });
-    setIsSubmitting(false);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setSubmitStatus({
+          type: 'error',
+          message: result.error || 'Impossible d\'envoyer le message pour le moment.',
+        });
+        return;
+      }
+
+      setSubmitStatus({
+        type: 'success',
+        message: 'Message envoye avec succes. Je reviens vers vous rapidement !',
+      });
+      setFormData({ name: '', email: '', message: '' });
+    } catch {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Erreur reseau. Verifiez votre connexion puis reessayez.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (submitStatus) {
+      setSubmitStatus(null);
+    }
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -133,6 +164,20 @@ export default function Contact() {
                 >
                   {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
                 </button>
+
+                {submitStatus && (
+                  <p
+                    className={`mt-4 text-sm font-medium ${
+                      submitStatus.type === 'success'
+                        ? 'text-green-600 dark:text-green-400'
+                        : 'text-red-600 dark:text-red-400'
+                    }`}
+                    role="status"
+                    aria-live="polite"
+                  >
+                    {submitStatus.message}
+                  </p>
+                )}
               </form>
             </div>
 

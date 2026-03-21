@@ -12,6 +12,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState({
     projects: 0,
     skills: 0,
+    messages: 0,
   });
 
   useEffect(() => {
@@ -28,17 +29,20 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const [projectsRes, skillsRes] = await Promise.all([
+      const [projectsRes, skillsRes, messagesRes] = await Promise.all([
         fetch('/api/admin/projects'),
         fetch('/api/admin/skills'),
+        fetch('/api/admin/contact-messages'),
       ]);
 
       const projects = await projectsRes.json();
       const skills = await skillsRes.json();
+      const messages = await messagesRes.json();
 
       setStats({
         projects: projects.length || 0,
         skills: skills.length || 0,
+        messages: (messages || []).filter((message: { status: string }) => message.status === 'new').length,
       });
     } catch (error) {
       console.error('Erreur lors de la récupération des statistiques:', error);
@@ -47,7 +51,7 @@ export default function AdminDashboard() {
 
   const handleSignOut = async () => {
     // Clear local state
-    setStats({ projects: 0, skills: 0 });
+    setStats({ projects: 0, skills: 0, messages: 0 });
     
     // Sign out avec NextAuth et redirection vers l'accueil
     await signOut({ 
@@ -110,6 +114,14 @@ export default function AdminDashboard() {
       href: '/admin/2fa',
       count: null,
       gradient: 'from-red-500 to-orange-500',
+    },
+    {
+      title: 'Messages',
+      description: 'Lire et repondre aux messages de contact',
+      icon: '✉️',
+      href: '/admin/messages',
+      count: stats.messages,
+      gradient: 'from-indigo-500 to-purple-500',
     },
   ];
 

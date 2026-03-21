@@ -42,6 +42,12 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'Mot de passe requis'),
 });
 
+export const contactSchema = z.object({
+  name: z.string().trim().min(2, 'Nom trop court').max(100, 'Nom trop long'),
+  email: z.string().trim().email('Email invalide').max(200, 'Email trop long'),
+  message: z.string().trim().min(10, 'Message trop court').max(2000, 'Message trop long'),
+});
+
 // Types
 export type ProjectInput = z.infer<typeof projectSchema>;
 export type ProjectUpdate = z.infer<typeof projectUpdateSchema>;
@@ -49,3 +55,4 @@ export type SkillInput = z.infer<typeof skillSchema>;
 export type SkillUpdate = z.infer<typeof skillUpdateSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
+export type ContactInput = z.infer<typeof contactSchema>;
