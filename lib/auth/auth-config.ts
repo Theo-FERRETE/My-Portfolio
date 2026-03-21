@@ -12,9 +12,18 @@ function normalizeEnvValue(value: string): string {
   return unquoted.replace(/\\\$/g, '$');
 }
 
+const DEFAULT_ADMIN_EMAIL = 'theo.ferrete@gmail.com';
+const DEFAULT_ADMIN_PASSWORD_HASH = '$2b$10$m0v8SvLd2BJFWkm24qhAxe8SAgnJOqHAGqSq8xJoviBU0c6hoiHgG'; // admin123
+
 export const AUTH_CONFIG = {
-  adminEmail: process.env.ADMIN_EMAIL?.trim().toLowerCase() || '',
+  adminEmail: process.env.ADMIN_EMAIL
+    ? normalizeEnvValue(process.env.ADMIN_EMAIL).toLowerCase()
+    : DEFAULT_ADMIN_EMAIL,
   adminPasswordHash: process.env.ADMIN_PASSWORD_HASH
     ? normalizeEnvValue(process.env.ADMIN_PASSWORD_HASH)
-    : '$2b$10$NPcT4ANVo/0hXH4Q32pdVut1KEr3AR2VuOcU1x8kLacKDrYhqx8wu',
+    : DEFAULT_ADMIN_PASSWORD_HASH,
+  adminPasswordPlain: process.env.ADMIN_PASSWORD
+    ? normalizeEnvValue(process.env.ADMIN_PASSWORD)
+    : '',
+  disableTwoFactor: process.env.DISABLE_2FA === 'true',
 } as const;

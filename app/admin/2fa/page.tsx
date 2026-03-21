@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Shield, Key, Download, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface TwoFactorStatus {
   enabled: boolean;
+  policyDisabled?: boolean;
   backupCodesCount: number;
 }
 
@@ -26,9 +27,9 @@ export default function TwoFactorPage() {
   const [newBackupCodes, setNewBackupCodes] = useState<string[] | null>(null);
 
   // Charger le statut au montage
-  useState(() => {
-    fetchStatus();
-  });
+  useEffect(() => {
+    void fetchStatus();
+  }, []);
 
   async function fetchStatus() {
     try {
@@ -180,6 +181,12 @@ export default function TwoFactorPage() {
       {/* Statut actuel */}
       {status && !setup && (
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+          {status.policyDisabled && (
+            <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
+              Le 2FA est desactive globalement via `DISABLE_2FA=true`. Vous pouvez le configurer ici puis remettre `DISABLE_2FA=false` pour l'activer a la connexion.
+            </div>
+          )}
+
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Statut</h2>
             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
