@@ -32,21 +32,21 @@ export default function About() {
       <div className="absolute top-20 left-10 w-64 h-64 bg-purple-300/20 dark:bg-purple-700/20 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-20 right-10 w-64 h-64 bg-pink-300/20 dark:bg-pink-700/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`max-w-4xl mx-auto transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8 sm:mb-12 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             À propos de moi
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="relative group">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
+            <div className="relative group order-2 md:order-1">
               <div className="absolute -inset-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
-              <div className="relative bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 p-8 rounded-2xl backdrop-blur-sm border border-purple-200 dark:border-purple-800">
-                <div className="text-6xl mb-4">👋</div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+              <div className="relative bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 p-6 sm:p-8 rounded-2xl backdrop-blur-sm border border-purple-200 dark:border-purple-800">
+                <div className="text-5xl sm:text-6xl mb-4">👋</div>
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
                   Salut !
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
                   Développeur web basé à Rognac. J'ai commencé à coder en bidouillant 
                   des sites pour le fun, et maintenant c'est devenu mon métier. Je bosse 
                   principalement avec React et Next.js, mais j'aime bien explorer de 
@@ -55,17 +55,17 @@ export default function About() {
               </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6 order-1 md:order-2">
               <div className="group">
-                <div className="flex items-start space-x-4 p-4 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors duration-300">
-                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-xl">
+                <div className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors duration-300">
+                  <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white text-lg sm:text-xl flex-grow-0">
                     💻
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-1">
+                  <div className="flex-grow">
+                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-1 text-sm sm:text-base">
                       Développement Web
                     </h4>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
                       React, Next.js et TypeScript au quotidien - c'est ce que je maîtrise le mieux
                     </p>
                   </div>
@@ -73,15 +73,15 @@ export default function About() {
               </div>
 
               <div className="group">
-                <div className="flex items-start space-x-4 p-4 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors duration-300">
-                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center text-white text-xl">
+                <div className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors duration-300">
+                  <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center text-white text-lg sm:text-xl flex-grow-0">
                     🎨
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-1">
+                  <div className="flex-grow">
+                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-1 text-sm sm:text-base">
                       Design UI/UX
                     </h4>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
                       J'aime que les interfaces soient claires et agréables à utiliser
                     </p>
                   </div>
@@ -89,15 +89,15 @@ export default function About() {
               </div>
 
               <div className="group">
-                <div className="flex items-start space-x-4 p-4 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors duration-300">
-                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-500 rounded-lg flex items-center justify-center text-white text-xl">
+                <div className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors duration-300">
+                  <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-pink-500 to-purple-500 rounded-lg flex items-center justify-center text-white text-lg sm:text-xl flex-grow-0">
                     🚀
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-1">
+                  <div className="flex-grow">
+                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-1 text-sm sm:text-base">
                       Performance
                     </h4>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
                       Personne n'aime les sites lents - j'optimise pour que ça tourne bien
                     </p>
                   </div>
