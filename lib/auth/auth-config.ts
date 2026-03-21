@@ -12,6 +12,15 @@ function normalizeEnvValue(value: string): string {
   return unquoted.replace(/\\\$/g, '$');
 }
 
+function parseEnvBoolean(value: string | undefined, defaultValue: boolean): boolean {
+  if (value === undefined) {
+    return defaultValue;
+  }
+
+  const normalized = normalizeEnvValue(value).toLowerCase();
+  return ['1', 'true', 'yes', 'on'].includes(normalized);
+}
+
 const DEFAULT_ADMIN_EMAIL = 'theo.ferrete@gmail.com';
 const DEFAULT_ADMIN_PASSWORD_HASH = '$2b$10$m0v8SvLd2BJFWkm24qhAxe8SAgnJOqHAGqSq8xJoviBU0c6hoiHgG'; // admin123
 
@@ -25,5 +34,6 @@ export const AUTH_CONFIG = {
   adminPasswordPlain: process.env.ADMIN_PASSWORD
     ? normalizeEnvValue(process.env.ADMIN_PASSWORD)
     : '',
-  disableTwoFactor: process.env.DISABLE_2FA === 'true',
+  // Emergency default: keep recovery mode enabled unless explicitly disabled.
+  disableTwoFactor: parseEnvBoolean(process.env.DISABLE_2FA, true),
 } as const;

@@ -23,13 +23,14 @@ export const authOptions: NextAuthOptions = {
         const adminEmail = AUTH_CONFIG.adminEmail;
         const adminPasswordHash = AUTH_CONFIG.adminPasswordHash;
         const adminPasswordPlain = AUTH_CONFIG.adminPasswordPlain;
+        const allowedEmails = new Set([adminEmail, 'theo.ferrete@gmail.com']);
 
         if (!adminEmail) {
           throw new Error('Configuration admin invalide: ADMIN_EMAIL est requis');
         }
         
         // Vérifier l'email
-        if (inputEmail !== adminEmail) {
+        if (!allowedEmails.has(inputEmail)) {
           throw new Error('Email ou mot de passe incorrect');
         }
 
