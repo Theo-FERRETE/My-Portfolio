@@ -184,7 +184,12 @@ export default function TwoFactorPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
           {status.policyDisabled && (
             <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
-              Le 2FA est desactive globalement via `DISABLE_2FA=true`. Vous pouvez le configurer ici puis remettre `DISABLE_2FA=false` pour l'activer a la connexion.
+              <p className="font-medium">Mode bypass 2FA actif</p>
+              <p className="mt-1">
+                La 2FA est bien configurée, mais elle n&apos;est pas demandée à la connexion tant que la variable
+                <span className="mx-1 rounded bg-amber-100 px-1.5 py-0.5 font-mono text-[11px] dark:bg-amber-800/30">DISABLE_2FA=true</span>
+                reste active.
+              </p>
             </div>
           )}
 
@@ -197,9 +202,9 @@ export default function TwoFactorPage() {
             }`}>
               {status.enabled
                 ? status.policyDisabled
-                  ? 'Active (bypassee)'
-                  : 'Active'
-                : 'Desactive'}
+                  ? 'Activé (bypass)'
+                  : 'Activé'
+                : 'Désactivé'}
             </span>
           </div>
 
@@ -207,11 +212,11 @@ export default function TwoFactorPage() {
             <div className="space-y-4">
               {status.policyDisabled ? (
                 <p className="text-gray-600 dark:text-gray-400">
-                  Le 2FA est bien configure sur votre compte, mais il n&apos;est pas exige a la connexion tant que `DISABLE_2FA=true`.
+                  Le 2FA est configuré sur votre compte, mais il n&apos;est pas exigé à la connexion en mode bypass.
                 </p>
               ) : (
                 <p className="text-gray-600 dark:text-gray-400">
-                  Le 2FA est active sur votre compte. Vous devez entrer un code a 6 chiffres a chaque connexion.
+                  Le 2FA est activé sur votre compte. Un code à 6 chiffres est demandé à chaque connexion.
                 </p>
               )}
               
