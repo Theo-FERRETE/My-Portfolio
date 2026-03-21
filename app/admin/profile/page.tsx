@@ -33,7 +33,14 @@ export default function AdminProfile() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -101,6 +108,49 @@ export default function AdminProfile() {
       ...profile,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsChangingPassword(true);
+    setPasswordMessage(null);
+
+    try {
+      const res = await fetch('/api/admin/profile/password', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(passwordForm),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setPasswordMessage({
+          type: 'error',
+          text: data?.error || 'Impossible de modifier le mot de passe',
+        });
+        return;
+      }
+
+      setPasswordMessage({
+        type: 'success',
+        text: 'Mot de passe mis a jour avec succes.',
+      });
+      setPasswordForm({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
+    } catch (error) {
+      setPasswordMessage({
+        type: 'error',
+        text: 'Erreur serveur pendant la modification du mot de passe',
+      });
+    } finally {
+      setIsChangingPassword(false);
+    }
   };
 
   if (status === 'loading' || isLoading) {
@@ -301,6 +351,78 @@ export default function AdminProfile() {
                 className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSaving ? 'J\'enregistre...' : 'Sauvegarder'}
+              </button>
+            </div>
+          </form>
+
+          <form onSubmit={handlePasswordChange} className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 space-y-6">
+            {passwordMessage && (
+              <div
+                className={`p-4 rounded-lg ${
+                  passwordMessage.type === 'success'
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+                    : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                }`}
+              >
+                {passwordMessage.text}
+              </div>
+            )}
+
+            <div>
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+                Changer le mot de passe admin
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                Le nouveau mot de passe est stocke en hash cote serveur. Tu n&apos;as plus besoin d&apos;editer le .env pour chaque changement.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Mot de passe actuel
+                </label>
+                <input
+                  type="password"
+                  value={passwordForm.currentPassword}
+                  onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Nouveau mot de passe
+                </label>
+                <input
+                  type="password"
+                  value={passwordForm.newPassword}
+                  onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Confirmation
+                </label>
+                <input
+                  type="password"
+                  value={passwordForm.confirmPassword}
+                  onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                disabled={isChangingPassword}
+                className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isChangingPassword ? 'Mise a jour...' : 'Mettre a jour le mot de passe'}
               </button>
             </div>
           </form>

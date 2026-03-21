@@ -3,7 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyPassword } from './password';
 import { auditActions } from '@/lib/security';
 import { isTwoFactorEnabled, verifyTwoFactorToken } from './two-factor';
-import { AUTH_CONFIG } from './auth-config';
+import { getAuthConfig } from './auth-config';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -19,32 +19,20 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Email et mot de passe requis');
         }
 
+        const authConfig = getAuthConfig();
+
         const inputEmail = credentials.email.trim().toLowerCase();
-        const adminEmail = AUTH_CONFIG.adminEmail;
-        const adminPasswordHash = AUTH_CONFIG.adminPasswordHash;
-        const adminPasswordPlain = AUTH_CONFIG.adminPasswordPlain;
-        const allowedEmails = new Set([adminEmail, 'theo.ferrete@gmail.com']);
+        const adminEmail = authConfig.adminEmail;
+        const adminPasswordHash = authConfig.adminPasswordHash;
+        const adminPasswordPlain = authConfig.adminPasswordPlain;
 
         if (!adminEmail) {
           throw new Error('Configuration admin invalide: ADMIN_EMAIL est requis');
         }
         
         // Vérifier l'email
-        if (!allowedEmails.has(inputEmail)) {
+        if (inputEmail !== adminEmail) {
           throw new Error('Email ou mot de passe incorrect');
-        }
-
-        // Emergency recovery mode: while DISABLE_2FA=true, allow admin login by email
-        // so access can be restored even if hosting env vars are inconsistent.
-        if (AUTH_CONFIG.disableTwoFactor) {
-          await auditActions.login(adminEmail, 'unknown', true);
-
-          return {
-            id: '1',
-            email: adminEmail,
-            name: 'Admin',
-            role: 'admin',
-          };
         }
 
         // Vérifier le mot de passe hashé uniquement (PRODUCTION SAFE)
@@ -59,21 +47,14 @@ export const authOptions: NextAuthOptions = {
             ? credentials.password === adminPasswordPlain
             : false;
 
-        // Emergency fallback to avoid permanent lockout while DISABLE_2FA=true.
-        const isEmergencyRecoveryValid =
-          !isPasswordValid &&
-          !isRecoveryPasswordValid &&
-          AUTH_CONFIG.disableTwoFactor &&
-          credentials.password === 'admin123';
-
-        if (!isPasswordValid && !isRecoveryPasswordValid && !isEmergencyRecoveryValid) {
+        if (!isPasswordValid && !isRecoveryPasswordValid) {
           // Log échec de connexion
           await auditActions.login(inputEmail, 'unknown', false);
           throw new Error('Email ou mot de passe incorrect');
         }
 
         // Allow temporary bypass when recovering admin access.
-        const disableTwoFactor = AUTH_CONFIG.disableTwoFactor;
+        const disableTwoFactor = authConfig.disableTwoFactor;
 
         // 🔐 VÉRIFICATION 2FA si activé
         const twoFactorEnabled = disableTwoFactor

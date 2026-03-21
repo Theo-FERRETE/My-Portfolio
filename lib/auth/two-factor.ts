@@ -7,7 +7,7 @@ import speakeasy from 'speakeasy';
 import QRCode from 'qrcode';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { AUTH_CONFIG } from './auth-config';
+import { getAuthConfig } from './auth-config';
 
 export interface TwoFactorSecret {
   secret: string;
@@ -152,7 +152,7 @@ async function getTwoFactorData(userEmail: string): Promise<TwoFactorData> {
     }
 
     // Migrate old hardcoded admin email entry to configured admin email once.
-    const configuredAdminEmail = AUTH_CONFIG.adminEmail;
+    const configuredAdminEmail = getAuthConfig().adminEmail;
     if (
       configuredAdminEmail &&
       normalizedEmail === configuredAdminEmail &&

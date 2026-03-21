@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/auth';
 import { isTwoFactorEnabled, getBackupCodes } from '@/lib/auth';
-import { AUTH_CONFIG } from '@/lib/auth';
+import { getAuthConfig } from '@/lib/auth';
 
 /**
  * 🔐 API : Statut du 2FA
@@ -13,7 +13,7 @@ export async function GET() {
 
   try {
     const userEmail = authResult.user.email;
-    const policyDisabled = AUTH_CONFIG.disableTwoFactor;
+    const policyDisabled = getAuthConfig().disableTwoFactor;
     const enabled = policyDisabled ? false : await isTwoFactorEnabled(userEmail);
     const backupCodes = enabled ? await getBackupCodes(userEmail) : [];
 
