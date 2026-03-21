@@ -6,6 +6,7 @@ import { Shield, Key, Download, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface TwoFactorStatus {
   enabled: boolean;
+  enforced?: boolean;
   policyDisabled?: boolean;
   backupCodesCount: number;
 }
@@ -194,15 +195,25 @@ export default function TwoFactorPage() {
                 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
             }`}>
-              {status.enabled ? 'Activé' : 'Désactivé'}
+              {status.enabled
+                ? status.policyDisabled
+                  ? 'Active (bypassee)'
+                  : 'Active'
+                : 'Desactive'}
             </span>
           </div>
 
           {status.enabled ? (
             <div className="space-y-4">
-              <p className="text-gray-600 dark:text-gray-400">
-                Le 2FA est activé sur votre compte. Vous devez entrer un code à 6 chiffres à chaque connexion.
-              </p>
+              {status.policyDisabled ? (
+                <p className="text-gray-600 dark:text-gray-400">
+                  Le 2FA est bien configure sur votre compte, mais il n&apos;est pas exige a la connexion tant que `DISABLE_2FA=true`.
+                </p>
+              ) : (
+                <p className="text-gray-600 dark:text-gray-400">
+                  Le 2FA est active sur votre compte. Vous devez entrer un code a 6 chiffres a chaque connexion.
+                </p>
+              )}
               
               <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                 <Key className="w-4 h-4" />

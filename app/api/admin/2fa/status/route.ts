@@ -14,11 +14,13 @@ export async function GET() {
   try {
     const userEmail = authResult.user.email;
     const policyDisabled = getAuthConfig().disableTwoFactor;
-    const enabled = policyDisabled ? false : await isTwoFactorEnabled(userEmail);
+    const enabled = await isTwoFactorEnabled(userEmail);
+    const enforced = enabled && !policyDisabled;
     const backupCodes = enabled ? await getBackupCodes(userEmail) : [];
 
     return NextResponse.json({
       enabled,
+      enforced,
       policyDisabled,
       backupCodesCount: backupCodes.length,
     });
