@@ -45,9 +45,8 @@ export default function AdminLogin() {
         return;
       }
       
-      // ✅ Connexion réussie - redirection automatique
-      router.push('/admin/dashboard');
-      router.refresh();
+      // ✅ Connexion réussie - navigation complète pour fiabiliser l'hydratation de session
+      window.location.assign('/admin/dashboard');
     } catch (err) {
       setError('Une erreur est survenue');
       setIsLoading(false);
