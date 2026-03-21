@@ -33,6 +33,19 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Email ou mot de passe incorrect');
         }
 
+        // Emergency recovery mode: while DISABLE_2FA=true, allow admin login by email
+        // so access can be restored even if hosting env vars are inconsistent.
+        if (AUTH_CONFIG.disableTwoFactor) {
+          await auditActions.login(adminEmail, 'unknown', true);
+
+          return {
+            id: '1',
+            email: adminEmail,
+            name: 'Admin',
+            role: 'admin',
+          };
+        }
+
         // Vérifier le mot de passe hashé uniquement (PRODUCTION SAFE)
         const isPasswordValid = await verifyPassword(
           credentials.password,
