@@ -5,7 +5,7 @@
     "description": "Un site de concession auto fictive que j'ai monté de A à Z. Gestion des Voitures en stock, réservations clients, J'ai utilisé React pour le front, Node.js pour le back, et Supabase pour la base de données. J'ai aussi déployé le projet sur un VPS pour une expérience complète.",
     "image": "/images/projects/eclipse_auto_logo.svg",
     "tags": ["React", "Node","PostgreSQL", "CSS", "VPS", "Supabase"],
-    "link": "https://eclipse-auto-client.theo-ferrete.fr",
+    "link": "https://eclipse-auto.theo-ferrete.fr",
     "link github": "https://github.com/Theo-FERRETE/Eclipse-Auto-v2",
     "featured": true,
     "createdAt": "2025-07-15T00:00:00.000Z"
