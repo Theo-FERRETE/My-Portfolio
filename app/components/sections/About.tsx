@@ -5,26 +5,12 @@ import skillsData from '@/data/skills.json';
 import projectsData from '@/data/projects.json';
 import profileData from '@/data/profile.json';
 
-const getCategoryColor = (category: string) => {
-  const colors: Record<string, string> = {
-    'Frontend': 'from-cyan-500 to-blue-500',
-    'Backend': 'from-green-500 to-emerald-600',
-    'Database': 'from-purple-500 to-purple-700',
-    'Language': 'from-blue-500 to-blue-700',
-    'DevOps': 'from-orange-500 to-red-500',
-  };
-  return colors[category] || 'from-gray-500 to-gray-700';
-};
-
-const getCategoryIcon = (category: string) => {
-  const icons: Record<string, string> = {
-    'Frontend': '🖥️',
-    'Backend': '⚙️',
-    'Database': '🗄️',
-    'Language': '📝',
-    'DevOps': '🚀',
-  };
-  return icons[category] || '🔧';
+const categoryConfig: Record<string, { className: string; icon: string }> = {
+  'Frontend':  { className: 'bg-cyan-500',   icon: '🖥️' },
+  'Backend':   { className: 'bg-green-600',  icon: '⚙️' },
+  'Database':  { className: 'bg-purple-600', icon: '🗄️' },
+  'Language':  { className: 'bg-blue-600',   icon: '📝' },
+  'DevOps':    { className: 'bg-orange-500', icon: '🚀' },
 };
 
 export default function About() {
@@ -147,8 +133,8 @@ export default function About() {
                   className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700"
                 >
                   <div className="flex items-center gap-2 mb-3">
-                    <span className={`text-sm font-semibold px-2 py-0.5 rounded-full text-white bg-gradient-to-r ${getCategoryColor(category)}`}>
-                      {getCategoryIcon(category)} {category}
+                    <span className={`text-sm font-semibold px-2 py-0.5 rounded-full text-white ${categoryConfig[category]?.className ?? 'bg-gray-500'}`}>
+                      {categoryConfig[category]?.icon ?? '🔧'} {category}
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-2">
