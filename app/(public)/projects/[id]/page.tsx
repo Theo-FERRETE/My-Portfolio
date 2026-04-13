@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import projectsData from '@/data/projects.json';
-
 interface Project {
   id: number;
   title: string;
@@ -24,13 +22,17 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     const projectId = parseInt(params.id as string);
-    const foundProject = projectsData.find((p) => p.id === projectId);
-    
-    if (foundProject) {
-      setProject(foundProject);
-    } else {
-      router.push('/projects');
-    }
+    fetch('/api/projects')
+      .then((res) => res.json())
+      .then((data: Project[]) => {
+        const foundProject = data.find((p) => p.id === projectId);
+        if (foundProject) {
+          setProject(foundProject);
+        } else {
+          router.push('/projects');
+        }
+      })
+      .catch(() => router.push('/projects'));
   }, [params.id, router]);
 
   if (!project) {

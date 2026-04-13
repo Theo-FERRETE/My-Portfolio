@@ -1,11 +1,29 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import projectsData from '@/data/projects.json';
+
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  link: string;
+  featured: boolean;
+  createdAt: string;
+}
 
 export default function Projects() {
   const [isVisible, setIsVisible] = useState(false);
+  const [projectsData, setProjectsData] = useState<Project[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    fetch('/api/projects')
+      .then((res) => res.json())
+      .then((data) => setProjectsData(data))
+      .catch((err) => console.error('Erreur chargement projets:', err));
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

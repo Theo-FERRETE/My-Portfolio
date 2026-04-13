@@ -2,8 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import skillsData from '@/data/skills.json';
-import projectsData from '@/data/projects.json';
 import profileData from '@/data/profile.json';
+
+interface Project {
+  id: number;
+  title: string;
+  tags: string[];
+}
 
 const categoryConfig: Record<string, { className: string; icon: string }> = {
   'Frontend':  { className: 'bg-cyan-500',   icon: '🖥️' },
@@ -15,7 +20,15 @@ const categoryConfig: Record<string, { className: string; icon: string }> = {
 
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
+  const [projectsData, setProjectsData] = useState<Project[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    fetch('/api/projects')
+      .then((res) => res.json())
+      .then((data: Project[]) => setProjectsData(data))
+      .catch((err) => console.error('Erreur chargement projets:', err));
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
