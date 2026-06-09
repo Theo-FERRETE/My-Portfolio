@@ -61,7 +61,7 @@ export default function Hero() {
               Me contacter
             </Link>
             <a
-              href="/cv.pdf"
+              href="/CV_Theo_Ferrete.pdf"
               download
               className="flex items-center justify-center gap-1 sm:gap-2 px-4 sm:px-8 py-2.5 sm:py-4 border-2 border-gray-400 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-full font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-105 text-xs sm:text-base"
             >

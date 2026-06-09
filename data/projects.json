@@ -6,7 +6,7 @@
     "image": "/images/projects/eclipse_auto_logo.svg",
     "tags": ["React", "Node","PostgreSQL", "CSS", "VPS", "Supabase"],
     "link": "https://eclipse-auto.theo-ferrete.fr",
-    "link github": "https://github.com/Theo-FERRETE/Eclipse-Auto-v2",
+    "link github": "https://github.com/Theo-FERRETE/Eclipse-Auto",
     "featured": true,
     "createdAt": "2025-07-15T00:00:00.000Z"
   },

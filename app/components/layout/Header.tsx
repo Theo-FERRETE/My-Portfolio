@@ -67,7 +67,7 @@ export default function Header() {
             </ul>
 
             <a
-              href="/cv.pdf"
+              href="/CV_Theo_Ferrete.pdf"
               download
               className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-medium text-sm hover:scale-105 transition-transform duration-300 shadow-md hover:shadow-lg"
             >
@@ -116,7 +116,7 @@ export default function Header() {
               </ul>
               <div className="px-4 pb-4">
                 <a
-                  href="/cv.pdf"
+                  href="/CV_Theo_Ferrete.pdf"
                   download
                   className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-medium text-sm hover:scale-105 transition-transform duration-300 shadow-md hover:shadow-lg"
                 >

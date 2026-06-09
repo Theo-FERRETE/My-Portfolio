@@ -148,7 +148,7 @@ export default function Contact() {
                 </p>
 
                 <a
-                  href="/cv.pdf"
+                  href="/CV_Theo_Ferrete.pdf"
                   download
                   className="flex items-center justify-center gap-2 sm:gap-3 w-full px-4 sm:px-6 py-3 sm:py-4 mb-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-[1.02] text-xs sm:text-sm"
                 >
