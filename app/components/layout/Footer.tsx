@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
+import { Github, Linkedin, Mail } from 'lucide-react';
 
 export default function Footer() {
   const router = useRouter();
@@ -51,15 +51,7 @@ export default function Footer() {
               >
                 <Linkedin size={18} />
               </a>
-              <a 
-                href="https://twitter.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="p-2 bg-gray-800 hover:bg-purple-600 rounded-lg transition-all duration-300 hover:scale-110"
-                aria-label="Twitter"
-              >
-                <Twitter size={18} />
-              </a>
+
               <a 
                 href="/contact"
                 className="p-2 bg-gray-800 hover:bg-purple-600 rounded-lg transition-all duration-300 hover:scale-110"
@@ -112,7 +104,7 @@ export default function Footer() {
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-white">Contact</h3>
             <div className="flex flex-col space-y-2 sm:space-y-3 text-gray-400 text-xs sm:text-sm">
               <p className="flex items-center gap-2">
-                <Mail size={14} className="sm:size-4 text-purple-400 flex-shrink-0" />
+                <Mail size={14} className="sm:size-4 text-purple-400 shrink-0" />
                 <span className="truncate">theo.ferrete@gmail.com</span>
               </p>
               <p className="mt-2 sm:mt-4 leading-relaxed">

@@ -55,13 +55,13 @@ export default function Contact() {
 
       setSubmitStatus({
         type: 'success',
-        message: 'Message envoye avec succes. Je reviens vers vous rapidement !',
+        message: 'Message envoyé avec succès. Je reviens vers vous rapidement !',
       });
       setFormData({ name: '', email: '', message: '' });
     } catch {
       setSubmitStatus({
         type: 'error',
-        message: 'Erreur reseau. Verifiez votre connexion puis reessayez.',
+        message: 'Erreur réseau. Vérifiez votre connexion puis réessayez.',
       });
     } finally {
       setIsSubmitting(false);
@@ -82,7 +82,7 @@ export default function Contact() {
   const socialLinks = [
     { name: 'GitHub', icon: '💻', url: 'https://www.github.com/Theo-FERRETE', color: 'hover:text-gray-700' },
     { name: 'LinkedIn', icon: '💼', url: 'https://www.linkedin.com/in/theo-ferrete/', color: 'hover:text-blue-600' },
-    { name: 'Twitter', icon: '🐦', url: 'https://twitter.com', color: 'hover:text-blue-400' },
+
     { name: 'Email', icon: '📧', url: 'mailto:theo.ferrete@gmail.com', color: 'hover:text-red-600' },
   ];
 

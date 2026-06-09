@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "@/app/globals.css";
-import Header from "@/app/components/layout/Header";
-import Footer from "@/app/components/layout/Footer";
+import "./globals.css";
 import AuthProvider from "@/app/components/providers/AuthProvider";
 
 const geistSans = Geist({
@@ -27,11 +25,13 @@ export const metadata: Metadata = {
     title: "Théo FERRETE - Développeur Full Stack",
     description: "Portfolio moderne de développeur Full Stack",
     siteName: "Portfolio Théo FERRETE",
+    images: [{ url: "/images/profile/avatar.png", width: 1200, height: 630, alt: "Théo FERRETE - Développeur Full Stack" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Théo FERRETE - Développeur Full Stack",
     description: "Portfolio moderne de développeur Full Stack",
+    images: ["/images/profile/avatar.png"],
   },
 };
 

@@ -42,7 +42,7 @@ export default function Header() {
       <nav className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent truncate">
-            Portfolio
+            Théo FERRETE
           </Link>
           
           <div className="hidden md:flex items-center gap-6">
