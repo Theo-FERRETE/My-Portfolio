@@ -11,6 +11,7 @@ export interface Project {
   image: string;
   tags: string[];
   link: string;
+  github?: string;
   featured: boolean;
   createdAt: string;
 }

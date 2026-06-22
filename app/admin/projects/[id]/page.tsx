@@ -11,6 +11,7 @@ interface ProjectForm {
   image: string;
   tags: string;
   link: string;
+  github: string;
   featured: boolean;
 }
 
@@ -24,6 +25,7 @@ export default function EditProject() {
     image: '',
     tags: '',
     link: '',
+    github: '',
     featured: false,
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +55,7 @@ export default function EditProject() {
           image: data.image || '',
           tags: Array.isArray(data.tags) ? data.tags.join(', ') : '',
           link: data.link || '',
+          github: data.github || '',
           featured: data.featured || false,
         });
       } else {
@@ -232,6 +235,20 @@ export default function EditProject() {
                 placeholder="https://mon-projet.com"
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
                 required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Lien GitHub
+              </label>
+              <input
+                type="url"
+                name="github"
+                value={formData.github}
+                onChange={handleChange}
+                placeholder="https://github.com/..."
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
               />
             </div>
 

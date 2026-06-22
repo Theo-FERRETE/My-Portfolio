@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Github } from 'lucide-react';
 interface Project {
   id: number;
   title: string;
@@ -11,6 +12,7 @@ interface Project {
   image: string;
   tags: string[];
   link: string;
+  github?: string;
   featured: boolean;
   createdAt: string;
 }
@@ -164,6 +166,17 @@ export default function ProjectDetailPage() {
                 </svg>
                 Visiter le site
               </a>
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 px-8 py-4 border-2 border-gray-700 text-gray-700 dark:text-gray-300 dark:border-gray-500 text-center rounded-xl font-semibold hover:bg-gray-800 hover:text-white hover:border-gray-800 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+                >
+                  <Github className="w-5 h-5" />
+                  Voir le code
+                </a>
+              )}
               <Link
                 href="/contact"
                 className="flex-1 px-8 py-4 border-2 border-purple-600 text-purple-600 dark:text-purple-400 text-center rounded-xl font-semibold hover:bg-purple-600 hover:text-white dark:hover:text-white transition-all hover:scale-[1.02]"

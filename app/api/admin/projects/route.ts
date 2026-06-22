@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
       image: data.image || '',
       tags: data.tags,
       link: data.link || '',
+      github: data.github || '',
       featured: data.featured || false,
     });
 

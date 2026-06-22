@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { Github } from 'lucide-react';
 
 interface Project {
   id: number;
@@ -9,6 +10,7 @@ interface Project {
   image: string;
   tags: string[];
   link: string;
+  github?: string;
   featured: boolean;
   createdAt: string;
 }
@@ -137,6 +139,17 @@ export default function Projects() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                       </a>
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label="Voir le code sur GitHub"
+                          className="px-3 sm:px-4 py-2 sm:py-2.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-center rounded-lg font-semibold hover:bg-gray-800 hover:text-white hover:border-gray-800 dark:hover:bg-gray-700 transition-all hover:scale-[1.02] flex items-center justify-center"
+                        >
+                          <Github className="w-3 h-3 sm:w-4 sm:h-4" />
+                        </a>
+                      )}
                     </div>
                   </div>
 

@@ -6,6 +6,7 @@ export const projectSchema = z.object({
   image: z.string().url('URL invalide').optional().or(z.literal('')),
   tags: z.array(z.string()).min(1, 'Minimum 1 tag').max(20, 'Max 20 tags'),
   link: z.string().url('URL invalide').optional().or(z.literal('')),
+  github: z.string().url('URL invalide').optional().or(z.literal('')),
   featured: z.boolean().optional().default(false),
 });
 
