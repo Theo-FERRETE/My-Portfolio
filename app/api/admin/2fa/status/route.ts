@@ -13,7 +13,7 @@ export async function GET() {
 
   try {
     const userEmail = authResult.user.email;
-    const policyDisabled = getAuthConfig().disableTwoFactor;
+    const policyDisabled = (await getAuthConfig()).disableTwoFactor;
     const enabled = await isTwoFactorEnabled(userEmail);
     const enforced = enabled && !policyDisabled;
     const backupCodes = enabled ? await getBackupCodes(userEmail) : [];

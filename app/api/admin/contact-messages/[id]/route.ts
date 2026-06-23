@@ -25,7 +25,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
     }
 
-    const existing = getContactMessageById(id);
+    const existing = await getContactMessageById(id);
     if (!existing) {
       return NextResponse.json({ error: 'Message introuvable' }, { status: 404 });
     }
@@ -33,7 +33,7 @@ export async function PATCH(
     const body = await request.json();
     const data = updateMessageSchema.parse(body);
 
-    const updated = updateContactMessage(id, {
+    const updated = await updateContactMessage(id, {
       status: data.status ?? existing.status,
       replyMessage: data.replyMessage ?? existing.replyMessage,
       repliedAt:

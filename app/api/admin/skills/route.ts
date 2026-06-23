@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 export async function GET() {
   try {
-    return NextResponse.json(getSkills());
+    return NextResponse.json(await getSkills());
   } catch (error) {
     console.error('Erreur GET skills:', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const data = skillSchema.parse(body);
 
-    const skill = createSkill({
+    const skill = await createSkill({
       name: data.name,
       category: data.category,
       icon: data.icon,

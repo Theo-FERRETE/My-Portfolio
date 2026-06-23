@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { getProjects } from '@/lib/data/data-helpers';
+import { getProfile } from '@/lib/data/data-helpers';
 
 export async function GET() {
   try {
-    return NextResponse.json(await getProjects());
+    return NextResponse.json(await getProfile());
   } catch (error) {
-    console.error('Erreur GET projects:', error);
+    console.error('Erreur GET profile:', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }

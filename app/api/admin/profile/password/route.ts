@@ -26,7 +26,7 @@ export async function PUT(request: NextRequest) {
 
     requireStrongPassword(data.newPassword);
 
-    const authConfig = getAuthConfig();
+    const authConfig = await getAuthConfig();
 
     const isCurrentPasswordValid = await verifyPassword(data.currentPassword, authConfig.adminPasswordHash);
     const isCurrentPlainPasswordValid =
@@ -51,7 +51,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const newHash = await hashPassword(data.newPassword);
-    saveAdminPasswordHash(newHash);
+    await saveAdminPasswordHash(newHash);
 
     const ip = getClientIp(request);
     await addAuditLog({

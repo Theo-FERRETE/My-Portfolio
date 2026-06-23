@@ -12,7 +12,7 @@ export async function GET(
 ) {
   try {
     const { id } = await context.params;
-    const project = getProjectById(parseInt(id));
+    const project = await getProjectById(parseInt(id));
     if (!project) {
       return NextResponse.json({ error: 'Projet introuvable' }, { status: 404 });
     }
@@ -35,7 +35,7 @@ export async function PUT(
     const body = await request.json();
     const data = projectSchema.partial().parse(body);
 
-    const project = updateProject(parseInt(id), data);
+    const project = await updateProject(parseInt(id), data);
     if (!project) {
       return NextResponse.json({ error: 'Projet introuvable' }, { status: 404 });
     }
@@ -62,7 +62,7 @@ export async function DELETE(
 
   try {
     const { id } = await context.params;
-    const deleted = deleteProject(parseInt(id));
+    const deleted = await deleteProject(parseInt(id));
     if (!deleted) {
       return NextResponse.json({ error: 'Projet introuvable' }, { status: 404 });
     }

@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Email et mot de passe requis');
         }
 
-        const authConfig = getAuthConfig();
+        const authConfig = await getAuthConfig();
 
         const inputEmail = credentials.email.trim().toLowerCase();
         const adminEmail = authConfig.adminEmail;

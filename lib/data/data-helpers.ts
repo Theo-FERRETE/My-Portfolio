@@ -1,7 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-
-const DATA_DIR = path.join(process.cwd(), 'data');
+import { getSupabaseClient } from '@/lib/supabase';
 
 // Projects
 export interface Project {
@@ -16,52 +13,77 @@ export interface Project {
   createdAt: string;
 }
 
-export function getProjects(): Project[] {
-  const filePath = path.join(DATA_DIR, 'projects.json');
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  return JSON.parse(fileContents);
-}
-
-export function saveProjects(projects: Project[]): void {
-  const filePath = path.join(DATA_DIR, 'projects.json');
-  fs.writeFileSync(filePath, JSON.stringify(projects, null, 2));
-}
-
-export function getProjectById(id: number): Project | undefined {
-  const projects = getProjects();
-  return projects.find((p) => p.id === id);
-}
-
-export function createProject(project: Omit<Project, 'id' | 'createdAt'>): Project {
-  const projects = getProjects();
-  const newId = projects.length > 0 ? Math.max(...projects.map((p) => p.id)) + 1 : 1;
-  const newProject: Project = {
-    ...project,
-    id: newId,
-    createdAt: new Date().toISOString(),
+function mapProjectRow(row: any): Project {
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    image: row.image,
+    tags: row.tags,
+    link: row.link,
+    github: row.github,
+    featured: row.featured,
+    createdAt: row.created_at,
   };
-  projects.push(newProject);
-  saveProjects(projects);
-  return newProject;
 }
 
-export function updateProject(id: number, updates: Partial<Project>): Project | null {
-  const projects = getProjects();
-  const index = projects.findIndex((p) => p.id === id);
-  if (index === -1) return null;
-  
-  projects[index] = { ...projects[index], ...updates, id }; // Keep original ID
-  saveProjects(projects);
-  return projects[index];
+export async function getProjects(): Promise<Project[]> {
+  const { data, error } = await getSupabaseClient()
+    .from('projects')
+    .select('*')
+    .order('id', { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map(mapProjectRow);
 }
 
-export function deleteProject(id: number): boolean {
-  const projects = getProjects();
-  const filtered = projects.filter((p) => p.id !== id);
-  if (filtered.length === projects.length) return false;
-  
-  saveProjects(filtered);
-  return true;
+export async function getProjectById(id: number): Promise<Project | undefined> {
+  const { data, error } = await getSupabaseClient()
+    .from('projects')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? mapProjectRow(data) : undefined;
+}
+
+export async function createProject(project: Omit<Project, 'id' | 'createdAt'>): Promise<Project> {
+  const { data, error } = await getSupabaseClient()
+    .from('projects')
+    .insert({
+      title: project.title,
+      description: project.description,
+      image: project.image,
+      tags: project.tags,
+      link: project.link,
+      github: project.github ?? '',
+      featured: project.featured,
+    })
+    .select('*')
+    .single();
+  if (error) throw error;
+  return mapProjectRow(data);
+}
+
+export async function updateProject(id: number, updates: Partial<Project>): Promise<Project | null> {
+  const { id: _id, createdAt: _createdAt, ...rest } = updates;
+  const { data, error } = await getSupabaseClient()
+    .from('projects')
+    .update(rest)
+    .eq('id', id)
+    .select('*')
+    .maybeSingle();
+  if (error) throw error;
+  return data ? mapProjectRow(data) : null;
+}
+
+export async function deleteProject(id: number): Promise<boolean> {
+  const { data, error } = await getSupabaseClient()
+    .from('projects')
+    .delete()
+    .eq('id', id)
+    .select('id');
+  if (error) throw error;
+  return (data?.length ?? 0) > 0;
 }
 
 // Skills
@@ -74,51 +96,72 @@ export interface Skill {
   order: number;
 }
 
-export function getSkills(): Skill[] {
-  const filePath = path.join(DATA_DIR, 'skills.json');
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  return JSON.parse(fileContents);
-}
-
-export function saveSkills(skills: Skill[]): void {
-  const filePath = path.join(DATA_DIR, 'skills.json');
-  fs.writeFileSync(filePath, JSON.stringify(skills, null, 2));
-}
-
-export function getSkillById(id: number): Skill | undefined {
-  const skills = getSkills();
-  return skills.find((s) => s.id === id);
-}
-
-export function createSkill(skill: Omit<Skill, 'id'>): Skill {
-  const skills = getSkills();
-  const newId = skills.length > 0 ? Math.max(...skills.map((s) => s.id)) + 1 : 1;
-  const newSkill: Skill = {
-    ...skill,
-    id: newId,
+function mapSkillRow(row: any): Skill {
+  return {
+    id: row.id,
+    name: row.name,
+    category: row.category,
+    icon: row.icon,
+    description: row.description ?? undefined,
+    order: row.order,
   };
-  skills.push(newSkill);
-  saveSkills(skills);
-  return newSkill;
 }
 
-export function updateSkill(id: number, updates: Partial<Skill>): Skill | null {
-  const skills = getSkills();
-  const index = skills.findIndex((s) => s.id === id);
-  if (index === -1) return null;
-  
-  skills[index] = { ...skills[index], ...updates, id }; // Keep original ID
-  saveSkills(skills);
-  return skills[index];
+export async function getSkills(): Promise<Skill[]> {
+  const { data, error } = await getSupabaseClient()
+    .from('skills')
+    .select('*')
+    .order('order', { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map(mapSkillRow);
 }
 
-export function deleteSkill(id: number): boolean {
-  const skills = getSkills();
-  const filtered = skills.filter((s) => s.id !== id);
-  if (filtered.length === skills.length) return false;
-  
-  saveSkills(filtered);
-  return true;
+export async function getSkillById(id: number): Promise<Skill | undefined> {
+  const { data, error } = await getSupabaseClient()
+    .from('skills')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? mapSkillRow(data) : undefined;
+}
+
+export async function createSkill(skill: Omit<Skill, 'id'>): Promise<Skill> {
+  const { data, error } = await getSupabaseClient()
+    .from('skills')
+    .insert({
+      name: skill.name,
+      category: skill.category,
+      icon: skill.icon,
+      description: skill.description ?? null,
+      order: skill.order,
+    })
+    .select('*')
+    .single();
+  if (error) throw error;
+  return mapSkillRow(data);
+}
+
+export async function updateSkill(id: number, updates: Partial<Skill>): Promise<Skill | null> {
+  const { id: _id, ...rest } = updates;
+  const { data, error } = await getSupabaseClient()
+    .from('skills')
+    .update(rest)
+    .eq('id', id)
+    .select('*')
+    .maybeSingle();
+  if (error) throw error;
+  return data ? mapSkillRow(data) : null;
+}
+
+export async function deleteSkill(id: number): Promise<boolean> {
+  const { data, error } = await getSupabaseClient()
+    .from('skills')
+    .delete()
+    .eq('id', id)
+    .select('id');
+  if (error) throw error;
+  return (data?.length ?? 0) > 0;
 }
 
 // Profile
@@ -129,31 +172,47 @@ export interface Profile {
   email: string;
   phone: string;
   location: string;
-  availability: string;
-  social: {
-    github: string;
-    linkedin: string;
-    twitter: string;
-  };
+  github: string;
+  linkedin: string;
+  twitter: string;
   updatedAt: string;
 }
 
-export function getProfile(): Profile {
-  const filePath = path.join(DATA_DIR, 'profile.json');
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  return JSON.parse(fileContents);
+function mapProfileRow(row: any): Profile {
+  return {
+    name: row.name,
+    title: row.title,
+    bio: row.bio,
+    email: row.email,
+    phone: row.phone,
+    location: row.location,
+    github: row.github,
+    linkedin: row.linkedin,
+    twitter: row.twitter,
+    updatedAt: row.updated_at,
+  };
 }
 
-export function updateProfile(updates: Partial<Profile>): Profile {
-  const profile = getProfile();
-  const updatedProfile = {
-    ...profile,
-    ...updates,
-    updatedAt: new Date().toISOString(),
-  };
-  const filePath = path.join(DATA_DIR, 'profile.json');
-  fs.writeFileSync(filePath, JSON.stringify(updatedProfile, null, 2));
-  return updatedProfile;
+export async function getProfile(): Promise<Profile> {
+  const { data, error } = await getSupabaseClient()
+    .from('profile')
+    .select('*')
+    .eq('id', true)
+    .single();
+  if (error) throw error;
+  return mapProfileRow(data);
+}
+
+export async function updateProfile(updates: Partial<Profile>): Promise<Profile> {
+  const { updatedAt: _updatedAt, ...rest } = updates;
+  const { data, error } = await getSupabaseClient()
+    .from('profile')
+    .update({ ...rest, updated_at: new Date().toISOString() })
+    .eq('id', true)
+    .select('*')
+    .single();
+  if (error) throw error;
+  return mapProfileRow(data);
 }
 
 // Contact messages
@@ -168,62 +227,76 @@ export interface ContactMessage {
   createdAt: string;
 }
 
-function ensureContactMessagesFile(): string {
-  const filePath = path.join(DATA_DIR, 'contact-messages.json');
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, '[]');
-  }
-  return filePath;
+function mapContactMessageRow(row: any): ContactMessage {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    message: row.message,
+    status: row.status,
+    replyMessage: row.reply_message ?? undefined,
+    repliedAt: row.replied_at ?? undefined,
+    createdAt: row.created_at,
+  };
 }
 
-export function getContactMessages(): ContactMessage[] {
-  const filePath = ensureContactMessagesFile();
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  return JSON.parse(fileContents);
+export async function getContactMessages(): Promise<ContactMessage[]> {
+  const { data, error } = await getSupabaseClient()
+    .from('contact_messages')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map(mapContactMessageRow);
 }
 
-export function saveContactMessages(messages: ContactMessage[]): void {
-  const filePath = ensureContactMessagesFile();
-  fs.writeFileSync(filePath, JSON.stringify(messages, null, 2));
-}
-
-export function createContactMessage(
+export async function createContactMessage(
   input: Omit<ContactMessage, 'id' | 'status' | 'createdAt'>
-): ContactMessage {
-  const messages = getContactMessages();
-  const newId = messages.length > 0 ? Math.max(...messages.map((m) => m.id)) + 1 : 1;
-
-  const newMessage: ContactMessage = {
-    ...input,
-    id: newId,
-    status: 'new',
-    createdAt: new Date().toISOString(),
-  };
-
-  messages.push(newMessage);
-  saveContactMessages(messages);
-  return newMessage;
+): Promise<ContactMessage> {
+  const { data, error } = await getSupabaseClient()
+    .from('contact_messages')
+    .insert({
+      name: input.name,
+      email: input.email,
+      message: input.message,
+      status: 'new',
+    })
+    .select('*')
+    .single();
+  if (error) throw error;
+  return mapContactMessageRow(data);
 }
 
-export function getContactMessageById(id: number): ContactMessage | undefined {
-  const messages = getContactMessages();
-  return messages.find((m) => m.id === id);
+export async function getContactMessageById(id: number): Promise<ContactMessage | undefined> {
+  const { data, error } = await getSupabaseClient()
+    .from('contact_messages')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? mapContactMessageRow(data) : undefined;
 }
 
-export function updateContactMessage(id: number, updates: Partial<ContactMessage>): ContactMessage | null {
-  const messages = getContactMessages();
-  const index = messages.findIndex((m) => m.id === id);
-
-  if (index === -1) {
-    return null;
+export async function updateContactMessage(
+  id: number,
+  updates: Partial<ContactMessage>
+): Promise<ContactMessage | null> {
+  const { id: _id, ...rest } = updates;
+  const patch: Record<string, unknown> = { ...rest };
+  if ('replyMessage' in rest) {
+    patch.reply_message = rest.replyMessage;
+    delete patch.replyMessage;
+  }
+  if ('repliedAt' in rest) {
+    patch.replied_at = rest.repliedAt;
+    delete patch.repliedAt;
   }
 
-  messages[index] = {
-    ...messages[index],
-    ...updates,
-    id,
-  };
-
-  saveContactMessages(messages);
-  return messages[index];
+  const { data, error } = await getSupabaseClient()
+    .from('contact_messages')
+    .update(patch)
+    .eq('id', id)
+    .select('*')
+    .maybeSingle();
+  if (error) throw error;
+  return data ? mapContactMessageRow(data) : null;
 }

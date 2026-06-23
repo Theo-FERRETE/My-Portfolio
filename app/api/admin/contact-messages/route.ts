@@ -9,7 +9,7 @@ export async function GET() {
   }
 
   try {
-    const messages = getContactMessages().sort((a, b) => {
+    const messages = (await getContactMessages()).sort((a, b) => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
 

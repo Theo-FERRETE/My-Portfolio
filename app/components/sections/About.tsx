@@ -1,14 +1,28 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import skillsData from '@/data/skills.json';
-import profileData from '@/data/profile.json';
 
 interface Project {
   id: number;
   title: string;
   tags: string[];
 }
+
+interface Skill {
+  id: number;
+  name: string;
+  category: string;
+  icon: string;
+  order: number;
+}
+
+interface Profile {
+  name: string;
+  bio: string;
+  location: string;
+}
+
+const EMPTY_PROFILE: Profile = { name: '', bio: '', location: '' };
 
 const categoryConfig: Record<string, { className: string; icon: string }> = {
   'Frontend':  { className: 'bg-cyan-500',   icon: '🖥️' },
@@ -21,6 +35,8 @@ const categoryConfig: Record<string, { className: string; icon: string }> = {
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
   const [projectsData, setProjectsData] = useState<Project[]>([]);
+  const [skillsData, setSkillsData] = useState<Skill[]>([]);
+  const [profileData, setProfileData] = useState<Profile>(EMPTY_PROFILE);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -28,6 +44,16 @@ export default function About() {
       .then((res) => res.json())
       .then((data: Project[]) => setProjectsData(data))
       .catch((err) => console.error('Erreur chargement projets:', err));
+
+    fetch('/api/skills')
+      .then((res) => res.json())
+      .then((data: Skill[]) => setSkillsData(data))
+      .catch((err) => console.error('Erreur chargement skills:', err));
+
+    fetch('/api/profile')
+      .then((res) => res.json())
+      .then((data: Profile) => setProfileData(data))
+      .catch((err) => console.error('Erreur chargement profil:', err));
   }, []);
 
   useEffect(() => {

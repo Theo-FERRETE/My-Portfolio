@@ -1,7 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import skillsData from '@/data/skills.json';
+
+interface Skill {
+  id: number;
+  name: string;
+  category: string;
+  icon: string;
+  order: number;
+}
 
 // Fonction pour générer une couleur gradient basée sur la catégorie
 const getCategoryColor = (category: string) => {
@@ -16,7 +23,15 @@ const getCategoryColor = (category: string) => {
 
 export default function Skills() {
   const [isVisible, setIsVisible] = useState(false);
+  const [skillsData, setSkillsData] = useState<Skill[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    fetch('/api/skills')
+      .then((res) => res.json())
+      .then((data: Skill[]) => setSkillsData(data))
+      .catch((err) => console.error('Erreur chargement skills:', err));
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

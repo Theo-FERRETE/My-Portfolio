@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { getSupabaseClient } from '@/lib/supabase';
 
 function normalizeEnvValue(value: string): string {
   const trimmed = value.trim();
@@ -26,44 +25,30 @@ function parseEnvBoolean(value: string | undefined, defaultValue: boolean): bool
 
 const DEFAULT_ADMIN_EMAIL = 'theo.ferrete@gmail.com';
 const DEFAULT_ADMIN_PASSWORD_HASH = '$2b$10$m0v8SvLd2BJFWkm24qhAxe8SAgnJOqHAGqSq8xJoviBU0c6hoiHgG'; // admin123
-const ADMIN_AUTH_FILE = path.join(process.cwd(), 'data', 'admin-auth.json');
 
-interface StoredAdminAuth {
-  adminPasswordHash?: string;
-  updatedAt?: string;
+export async function saveAdminPasswordHash(hash: string): Promise<void> {
+  const { error } = await getSupabaseClient()
+    .from('admin_auth')
+    .upsert({ id: true, admin_password_hash: hash, updated_at: new Date().toISOString() });
+  if (error) throw error;
 }
 
-function readStoredAdminAuth(): StoredAdminAuth {
-  try {
-    if (!fs.existsSync(ADMIN_AUTH_FILE)) {
-      return {};
-    }
+async function readStoredAdminAuth(): Promise<{ adminPasswordHash?: string }> {
+  const { data, error } = await getSupabaseClient()
+    .from('admin_auth')
+    .select('admin_password_hash')
+    .eq('id', true)
+    .maybeSingle();
 
-    const raw = fs.readFileSync(ADMIN_AUTH_FILE, 'utf8');
-    const parsed = JSON.parse(raw) as StoredAdminAuth;
-
-    if (!parsed.adminPasswordHash || typeof parsed.adminPasswordHash !== 'string') {
-      return {};
-    }
-
-    return parsed;
-  } catch {
+  if (error || !data?.admin_password_hash) {
     return {};
   }
+
+  return { adminPasswordHash: data.admin_password_hash };
 }
 
-export function saveAdminPasswordHash(hash: string): void {
-  const payload: StoredAdminAuth = {
-    adminPasswordHash: hash,
-    updatedAt: new Date().toISOString(),
-  };
-
-  fs.mkdirSync(path.dirname(ADMIN_AUTH_FILE), { recursive: true });
-  fs.writeFileSync(ADMIN_AUTH_FILE, JSON.stringify(payload, null, 2));
-}
-
-export function getAuthConfig() {
-  const stored = readStoredAdminAuth();
+export async function getAuthConfig() {
+  const stored = await readStoredAdminAuth();
 
   const envPasswordHash = process.env.ADMIN_PASSWORD_HASH
     ? normalizeEnvValue(process.env.ADMIN_PASSWORD_HASH)
@@ -81,7 +66,3 @@ export function getAuthConfig() {
     disableTwoFactor: parseEnvBoolean(process.env.DISABLE_2FA, true),
   } as const;
 }
-
-export const AUTH_CONFIG = {
-  ...getAuthConfig(),
-} as const;

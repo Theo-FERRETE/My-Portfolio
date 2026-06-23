@@ -189,18 +189,7 @@ npm start
 
 ### Logs d'audit
 
-Les logs sont stockés dans `/logs/audit.json` :
-
-```bash
-# Voir les logs récents
-tail -f logs/audit.json
-
-# Analyser les tentatives de login
-grep "LOGIN" logs/audit.json
-
-# Vérifier les actions d'un utilisateur
-grep "user@email.com" logs/audit.json
-```
+Les logs sont stockés dans la table Supabase `audit_logs` (1000 entrées max retournées en lecture, voir [lib/security/audit-log.ts](../lib/security/audit-log.ts)). Pour les consulter, utilisez le SQL Editor Supabase ou l'interface web :
 
 Interface web : `https://votre-domaine.com/admin/audit-logs`
 
@@ -219,16 +208,7 @@ await cleanOldLogs(90);
 
 ### Sauvegardes
 
-Sauvegardez régulièrement :
-- `/app/data/projects.json`
-- `/app/data/skills.json`
-- `/app/data/profile.json`
-- `/logs/audit.json`
-
-```bash
-# Script de backup
-tar -czf backup-$(date +%Y%m%d).tar.gz app/data logs
-```
+Toutes les données (projets, skills, profil, messages, 2FA, logs d'audit) sont stockées dans Supabase. Utilisez les sauvegardes automatiques du dashboard Supabase (Project Settings > Database > Backups), ou exportez manuellement via `pg_dump` / le SQL Editor.
 
 ### Monitoring
 

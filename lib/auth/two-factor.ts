@@ -5,9 +5,7 @@
 
 import speakeasy from 'speakeasy';
 import QRCode from 'qrcode';
-import { promises as fs } from 'fs';
-import path from 'path';
-import { getAuthConfig } from './auth-config';
+import { getSupabaseClient } from '@/lib/supabase';
 
 export interface TwoFactorSecret {
   secret: string;
@@ -21,9 +19,6 @@ export interface TwoFactorData {
   backupCodes?: string[];
   enabledAt?: string;
 }
-
-const DATA_FILE = path.join(process.cwd(), 'data', '2fa.json');
-const LEGACY_ADMIN_EMAIL = 'admin@portfolio.com';
 
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
@@ -141,53 +136,41 @@ export async function isTwoFactorEnabled(userEmail: string): Promise<boolean> {
  * Récupère les données 2FA d'un utilisateur
  */
 async function getTwoFactorData(userEmail: string): Promise<TwoFactorData> {
-  try {
-    await fs.access(DATA_FILE);
-    const content = await fs.readFile(DATA_FILE, 'utf-8');
-    const allData = JSON.parse(content) as Record<string, TwoFactorData>;
-    const normalizedEmail = normalizeEmail(userEmail);
+  const normalizedEmail = normalizeEmail(userEmail);
 
-    if (allData[normalizedEmail]) {
-      return allData[normalizedEmail];
-    }
+  const { data, error } = await getSupabaseClient()
+    .from('two_factor')
+    .select('*')
+    .eq('email', normalizedEmail)
+    .maybeSingle();
 
-    // Migrate old hardcoded admin email entry to configured admin email once.
-    const configuredAdminEmail = getAuthConfig().adminEmail;
-    if (
-      configuredAdminEmail &&
-      normalizedEmail === configuredAdminEmail &&
-      allData[LEGACY_ADMIN_EMAIL]
-    ) {
-      allData[normalizedEmail] = allData[LEGACY_ADMIN_EMAIL];
-      delete allData[LEGACY_ADMIN_EMAIL];
-      await fs.writeFile(DATA_FILE, JSON.stringify(allData, null, 2));
-      return allData[normalizedEmail];
-    }
-
-    return { enabled: false };
-  } catch {
+  if (error || !data) {
     return { enabled: false };
   }
+
+  return {
+    enabled: data.enabled,
+    secret: data.secret ?? undefined,
+    backupCodes: data.backup_codes ?? undefined,
+    enabledAt: data.enabled_at ?? undefined,
+  };
 }
 
 /**
  * Sauvegarde les données 2FA d'un utilisateur
  */
 async function saveTwoFactorData(userEmail: string, data: TwoFactorData): Promise<void> {
-  let allData: Record<string, TwoFactorData> = {};
   const normalizedEmail = normalizeEmail(userEmail);
 
-  try {
-    await fs.access(DATA_FILE);
-    const content = await fs.readFile(DATA_FILE, 'utf-8');
-    allData = JSON.parse(content);
-  } catch {
-    // Créer le fichier s'il n'existe pas
-    await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
-  }
+  const { error } = await getSupabaseClient().from('two_factor').upsert({
+    email: normalizedEmail,
+    enabled: data.enabled,
+    secret: data.secret ?? null,
+    backup_codes: data.backupCodes ?? null,
+    enabled_at: data.enabledAt ?? null,
+  });
 
-  allData[normalizedEmail] = data;
-  await fs.writeFile(DATA_FILE, JSON.stringify(allData, null, 2));
+  if (error) throw error;
 }
 
 /**

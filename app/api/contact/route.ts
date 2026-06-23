@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const data = contactSchema.parse(body);
 
-    const message = createContactMessage({
+    const message = await createContactMessage({
       name: data.name,
       email: data.email,
       message: data.message,

@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 export async function GET() {
   try {
-    return NextResponse.json(getProfile());
+    return NextResponse.json(await getProfile());
   } catch (error) {
     console.error('Erreur GET profile:', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
@@ -23,7 +23,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const data = profileSchema.partial().parse(body);
     
-    const profile = updateProfile(data);
+    const profile = await updateProfile(data);
 
     const ip = getClientIp(request);
     await auditActions.updateProfile(authResult.user.email, ip);
