@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 
 interface Project {
   id: number;
@@ -24,12 +25,12 @@ interface Profile {
 
 const EMPTY_PROFILE: Profile = { name: '', bio: '', location: '' };
 
-const categoryConfig: Record<string, { className: string; icon: string }> = {
-  'Frontend':  { className: 'bg-cyan-500',   icon: '🖥️' },
-  'Backend':   { className: 'bg-green-600',  icon: '⚙️' },
-  'Database':  { className: 'bg-purple-600', icon: '🗄️' },
-  'Language':  { className: 'bg-blue-600',   icon: '📝' },
-  'DevOps':    { className: 'bg-orange-500', icon: '🚀' },
+const categoryIcon: Record<string, string> = {
+  'Frontend': '🖥️',
+  'Backend': '⚙️',
+  'Database': '🗄️',
+  'Language': '📝',
+  'DevOps': '🚀',
 };
 
 export default function About() {
@@ -92,63 +93,63 @@ export default function About() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 relative overflow-hidden"
+      className="py-20 bg-background relative overflow-hidden"
     >
-      {/* Éléments décoratifs */}
-      <div className="absolute top-20 left-10 w-64 h-64 bg-purple-300/20 dark:bg-purple-700/20 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-20 right-10 w-64 h-64 bg-pink-300/20 dark:bg-pink-700/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      {/* 3D plein format */}
+      <ChromeCanvas
+        variant="skills"
+        visible={isVisible}
+        className="absolute inset-0 opacity-60 pointer-events-none"
+      />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`max-w-5xl mx-auto transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8 sm:mb-12 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8 sm:mb-12 text-foreground tracking-tight">
             À propos de moi
           </h2>
 
           {/* Bio + stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-start mb-12">
-            <div className="relative group order-2 md:order-1">
-              <div className="absolute -inset-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
-              <div className="relative bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 p-6 sm:p-8 rounded-2xl backdrop-blur-sm border border-purple-200 dark:border-purple-800">
-                <div className="text-5xl sm:text-6xl mb-4">👋</div>
-                <h3 className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
-                  Salut, moi c'est {profileData.name.split(' ')[0]} !
-                </h3>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {profileData.bio}
-                </p>
-                <div className="mt-4 text-sm text-gray-500 dark:text-gray-500 flex items-center gap-1">
-                  <span>📍</span>
-                  <span>{profileData.location}</span>
-                </div>
+            <div className="order-2 md:order-1 glass p-6 sm:p-8 rounded-2xl">
+              <div className="text-5xl sm:text-6xl mb-4">👋</div>
+              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">
+                Salut, moi c'est {profileData.name.split(' ')[0]} !
+              </h3>
+              <p className="text-sm sm:text-base text-foreground/60 leading-relaxed">
+                {profileData.bio}
+              </p>
+              <div className="mt-4 text-sm text-foreground/50 flex items-center gap-1">
+                <span>📍</span>
+                <span>{profileData.location}</span>
               </div>
             </div>
 
             {/* Stats */}
             <div className="space-y-4 order-1 md:order-2">
               {stats.map((stat, i) => (
-                <div key={i} className="flex items-center space-x-4 p-4 rounded-xl bg-white dark:bg-gray-800 shadow-md border border-gray-100 dark:border-gray-700">
+                <div key={i} className="flex items-center space-x-4 p-4 rounded-xl glass">
                   <div className="text-3xl">{stat.icon}</div>
                   <div>
-                    <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    <div className="text-2xl font-bold text-accent">
                       {stat.value}+
                     </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</div>
+                    <div className="text-sm text-foreground/50">{stat.label}</div>
                   </div>
                 </div>
               ))}
 
               {/* Projets phares */}
-              <div className="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-md border border-gray-100 dark:border-gray-700">
-                <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-3 text-sm">Projets récents</h4>
+              <div className="p-4 rounded-xl glass">
+                <h4 className="font-semibold text-foreground/80 mb-3 text-sm">Projets récents</h4>
                 <div className="space-y-2">
                   {projectsData.map((project) => (
                     <div key={project.id} className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                      <span className="text-sm font-medium text-foreground/90">
                         {project.title}
                       </span>
                       <div className="flex flex-wrap gap-1">
                         {project.tags.slice(0, 3).map((tag) => (
-                          <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">
+                          <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent">
                             {tag}
                           </span>
                         ))}
@@ -162,18 +163,18 @@ export default function About() {
 
           {/* Skills par catégorie */}
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
+            <h3 className="text-xl sm:text-2xl font-bold text-center mb-6 text-foreground">
               Ma stack
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {sortedCategories.map((category) => (
                 <div
                   key={category}
-                  className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700"
+                  className="glass p-4 rounded-2xl"
                 >
                   <div className="flex items-center gap-2 mb-3">
-                    <span className={`text-sm font-semibold px-2 py-0.5 rounded-full text-white ${categoryConfig[category]?.className ?? 'bg-gray-500'}`}>
-                      {categoryConfig[category]?.icon ?? '🔧'} {category}
+                    <span className="text-sm font-semibold px-2 py-0.5 rounded-full border border-border text-foreground/80">
+                      {categoryIcon[category] ?? '🔧'} {category}
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -182,7 +183,7 @@ export default function About() {
                       .map((skill) => (
                         <span
                           key={skill.id}
-                          className="text-xs flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
+                          className="text-xs flex items-center gap-1 px-2 py-1 rounded-lg tint text-foreground/70 border border-border"
                         >
                           <span>{skill.icon}</span>
                           <span>{skill.name}</span>

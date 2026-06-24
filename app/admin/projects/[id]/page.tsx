@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
 
 interface ProjectForm {
   title: string;
@@ -117,8 +118,8 @@ export default function EditProject() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">J\'charge...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">J\'charge...</p>
         </div>
       </div>
     );
@@ -128,42 +129,45 @@ export default function EditProject() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement du projet...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">Chargement du projet...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
-      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg">
+    <div className="min-h-screen">
+      <header className="admin-header">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin/projects"
-              className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
-            >
-              ← Retour
-            </Link>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Éditer le projet
-            </h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link
+                href="/admin/projects"
+                className="admin-text-muted hover:opacity-80"
+              >
+                ← Retour
+              </Link>
+              <h1 className="text-2xl font-bold admin-text-accent">
+                Éditer le projet
+              </h1>
+            </div>
+            <AdminThemeSwitcher />
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-6 py-12">
         <div className="max-w-3xl mx-auto">
-          <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 space-y-6">
+          <form onSubmit={handleSubmit} className="admin-card p-8 space-y-6">
             {error && (
-              <div className="p-4 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded-lg">
+              <div className="p-4 bg-red-500/10 text-red-400 rounded-lg">
                 {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium admin-text-muted mb-2">
                 Titre du projet *
               </label>
               <input
@@ -171,13 +175,13 @@ export default function EditProject() {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                className="admin-input w-full px-4 py-2"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium admin-text-muted mb-2">
                 Description *
               </label>
               <textarea
@@ -185,13 +189,13 @@ export default function EditProject() {
                 value={formData.description}
                 onChange={handleChange}
                 rows={4}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                className="admin-input w-full px-4 py-2"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium admin-text-muted mb-2">
                 URL de l'image *
               </label>
               <input
@@ -200,16 +204,16 @@ export default function EditProject() {
                 value={formData.image}
                 onChange={handleChange}
                 placeholder="https://images.unsplash.com/... ou /images/projects/..."
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                className="admin-input w-full px-4 py-2"
                 required
               />
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-sm admin-text-muted">
                 URL externe ou chemin local (/images/projects/mon-image.jpg)
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium admin-text-muted mb-2">
                 Technologies (séparées par des virgules) *
               </label>
               <input
@@ -218,13 +222,13 @@ export default function EditProject() {
                 value={formData.tags}
                 onChange={handleChange}
                 placeholder="React, Next.js, TypeScript, Tailwind"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                className="admin-input w-full px-4 py-2"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium admin-text-muted mb-2">
                 Lien du projet *
               </label>
               <input
@@ -233,13 +237,13 @@ export default function EditProject() {
                 value={formData.link}
                 onChange={handleChange}
                 placeholder="https://mon-projet.com"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                className="admin-input w-full px-4 py-2"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium admin-text-muted mb-2">
                 Lien GitHub
               </label>
               <input
@@ -248,7 +252,7 @@ export default function EditProject() {
                 value={formData.github}
                 onChange={handleChange}
                 placeholder="https://github.com/..."
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                className="admin-input w-full px-4 py-2"
               />
             </div>
 
@@ -259,24 +263,25 @@ export default function EditProject() {
                 id="featured"
                 checked={formData.featured}
                 onChange={handleChange}
-                className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4 rounded"
+                style={{ accentColor: 'var(--admin-accent)' }}
               />
-              <label htmlFor="featured" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="featured" className="ml-2 text-sm font-medium admin-text-muted">
                 Mettre en avant ce projet
               </label>
             </div>
 
-            <div className="flex gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex gap-4 pt-6" style={{ borderTop: '1px solid var(--admin-border)' }}>
               <button
                 type="submit"
                 disabled={isSaving}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="admin-btn-primary flex-1 px-6 py-3 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSaving ? 'J\'enregistre...' : 'Sauvegarder'}
               </button>
               <Link
                 href="/admin/projects"
-                className="px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
+                className="admin-btn-secondary px-6 py-3 transition-all"
               >
                 Annuler
               </Link>

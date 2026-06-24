@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
 
 interface ContactMessage {
   id: number;
@@ -118,8 +119,8 @@ export default function AdminMessagesPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement des messages...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">Chargement des messages...</p>
         </div>
       </div>
     );
@@ -130,71 +131,51 @@ export default function AdminMessagesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
-      <header className="bg-white/80 dark:bg-black/80 backdrop-blur-lg shadow-lg">
+    <div className="min-h-screen">
+      <header className="admin-header">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link
                 href="/admin/dashboard"
-                className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
+                className="admin-text-muted hover:opacity-80"
               >
                 ← Retour
               </Link>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold admin-text-accent">
                 Messages de contact
               </h1>
             </div>
+            <AdminThemeSwitcher />
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-6 py-10">
         <div className="mb-8 flex flex-wrap gap-2">
-          <button
-            onClick={() => setActiveFilter('all')}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              activeFilter === 'all'
-                ? 'bg-purple-600 text-white'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            }`}
-          >
-            Tous ({counters.all})
-          </button>
-          <button
-            onClick={() => setActiveFilter('new')}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              activeFilter === 'new'
-                ? 'bg-purple-600 text-white'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            }`}
-          >
-            Nouveaux ({counters.new})
-          </button>
-          <button
-            onClick={() => setActiveFilter('read')}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              activeFilter === 'read'
-                ? 'bg-purple-600 text-white'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            }`}
-          >
-            Lus ({counters.read})
-          </button>
-          <button
-            onClick={() => setActiveFilter('replied')}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              activeFilter === 'replied'
-                ? 'bg-purple-600 text-white'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            }`}
-          >
-            Repondus ({counters.replied})
-          </button>
+          {([
+            ['all', 'Tous', counters.all],
+            ['new', 'Nouveaux', counters.new],
+            ['read', 'Lus', counters.read],
+            ['replied', 'Repondus', counters.replied],
+          ] as const).map(([key, label, count]) => (
+            <button
+              key={key}
+              onClick={() => setActiveFilter(key)}
+              className="px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+              style={{
+                background: activeFilter === key ? 'var(--admin-accent)' : 'var(--admin-surface)',
+                color: activeFilter === key ? 'var(--admin-background)' : 'var(--admin-foreground)',
+                border: activeFilter === key ? 'none' : '1px solid var(--admin-border)',
+              }}
+            >
+              {label} ({count})
+            </button>
+          ))}
         </div>
 
         {filteredMessages.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center text-gray-600 dark:text-gray-400">
+          <div className="admin-card p-8 text-center admin-text-muted">
             Aucun message pour ce filtre.
           </div>
         ) : (
@@ -202,15 +183,15 @@ export default function AdminMessagesPage() {
             {filteredMessages.map((message) => (
               <article
                 key={message.id}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700"
+                className="admin-card p-6"
               >
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-4">
                   <div>
-                    <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+                    <h2 className="text-lg font-bold">
                       {message.name}
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{message.email}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                    <p className="text-sm admin-text-muted">{message.email}</p>
+                    <p className="text-xs admin-text-muted mt-1">
                       {new Date(message.createdAt).toLocaleString('fr-FR')}
                     </p>
                   </div>
@@ -218,29 +199,29 @@ export default function AdminMessagesPage() {
                   <span
                     className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold w-fit ${
                       message.status === 'new'
-                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                        ? 'bg-blue-500/15 text-blue-400'
                         : message.status === 'read'
-                        ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'
-                        : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                        ? 'bg-amber-500/15 text-amber-400'
+                        : 'bg-green-500/15 text-green-400'
                     }`}
                   >
                     {message.status === 'new' ? 'Nouveau' : message.status === 'read' ? 'Lu' : 'Repondu'}
                   </span>
                 </div>
 
-                <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap mb-4">
+                <p className="whitespace-pre-wrap mb-4">
                   {message.message}
                 </p>
 
                 {message.replyMessage && (
-                  <div className="mb-4 p-3 rounded-lg bg-gray-50 dark:bg-gray-700/40 border border-gray-100 dark:border-gray-700">
-                    <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Derniere reponse enregistree</p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{message.replyMessage}</p>
+                  <div className="mb-4 p-3 rounded-lg" style={{ background: 'var(--admin-background)', border: '1px solid var(--admin-border)' }}>
+                    <p className="text-xs font-semibold admin-text-muted mb-1">Derniere reponse enregistree</p>
+                    <p className="text-sm whitespace-pre-wrap">{message.replyMessage}</p>
                   </div>
                 )}
 
                 <div className="mb-4">
-                  <label htmlFor={`reply-${message.id}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor={`reply-${message.id}`} className="block text-sm font-medium admin-text-muted mb-2">
                     Reponse
                   </label>
                   <textarea
@@ -252,7 +233,7 @@ export default function AdminMessagesPage() {
                       setReplyDrafts((prev) => ({ ...prev, [message.id]: value }));
                     }}
                     placeholder="Ecris ta reponse ici..."
-                    className="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 outline-none"
+                    className="admin-input w-full px-3 py-2"
                   />
                 </div>
 
@@ -268,7 +249,7 @@ export default function AdminMessagesPage() {
 
                   <button
                     onClick={() => handleReply(message)}
-                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-medium hover:shadow-lg transition-all"
+                    className="admin-btn-primary px-4 py-2 text-sm transition-all"
                   >
                     Repondre par email
                   </button>

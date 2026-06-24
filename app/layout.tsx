@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/app/components/providers/AuthProvider";
+import { ThemeProvider } from "@/app/components/providers/ThemeProvider";
+import { THEMES, isTheme, type Theme } from "@/app/components/providers/theme-constants";
+import { getSiteSettings } from "@/lib/data/data-helpers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,19 +38,39 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+const VALID_THEMES = THEMES.map((t) => t.value);
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let defaultTheme: Theme = 'obsidian';
+  try {
+    const settings = await getSiteSettings();
+    if (isTheme(settings.defaultTheme)) defaultTheme = settings.defaultTheme;
+  } catch (error) {
+    console.error('Erreur récupération du thème par défaut:', error);
+  }
+
   return (
-    <html lang="fr" className="scroll-smooth">
+    <html lang="fr" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        {/* Anti-flash : applique le thème (préférence visiteur ou défaut serveur) avant l'hydratation React */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var valid=${JSON.stringify(VALID_THEMES)};var t=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',valid.indexOf(t)!==-1?t:${JSON.stringify(defaultTheme)});}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <ThemeProvider defaultTheme={defaultTheme}>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

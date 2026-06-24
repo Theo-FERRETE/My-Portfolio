@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
 
 interface Project {
   id: string;
@@ -70,8 +71,8 @@ export default function AdminProjects() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Deux secondes...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">Deux secondes...</p>
         </div>
       </div>
     );
@@ -81,36 +82,39 @@ export default function AdminProjects() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement des projets...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">Chargement des projets...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white/80 dark:bg-black/80 backdrop-blur-lg shadow-lg">
+      <header className="admin-header">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link
                 href="/admin/dashboard"
-                className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
+                className="admin-text-muted hover:opacity-80"
               >
                 ← Retour
               </Link>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold admin-text-accent">
                 Gestion des Projets
               </h1>
             </div>
-            <Link
-              href="/admin/projects/new"
-              className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all"
-            >
-              ➕ Nouveau projet
-            </Link>
+            <div className="flex items-center gap-3">
+              <AdminThemeSwitcher />
+              <Link
+                href="/admin/projects/new"
+                className="admin-btn-primary px-4 py-2 transition-all"
+              >
+                ➕ Nouveau projet
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -119,12 +123,12 @@ export default function AdminProjects() {
       <main className="container mx-auto px-6 py-12">
         {projects.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <p className="admin-text-muted mb-4">
               Aucun projet pour le moment
             </p>
             <Link
               href="/admin/projects/new"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all"
+              className="admin-btn-primary inline-block px-6 py-3 transition-all"
             >
               Créer votre premier projet
             </Link>
@@ -134,10 +138,10 @@ export default function AdminProjects() {
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
+                className="admin-card overflow-hidden"
               >
                 {/* Header avec image */}
-                <div className="relative h-48 bg-gray-200 dark:bg-gray-700">
+                <div className="relative h-48" style={{ background: 'var(--admin-background)' }}>
                   <Image
                     src={project.image}
                     alt={project.title}
@@ -149,10 +153,10 @@ export default function AdminProjects() {
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+                  <h3 className="text-xl font-bold mb-2">
                     {project.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                  <p className="admin-text-muted text-sm mb-4 line-clamp-2">
                     {project.description}
                   </p>
 
@@ -161,13 +165,14 @@ export default function AdminProjects() {
                     {project.tags.slice(0, 3).map((tag, index) => (
                       <span
                         key={index}
-                        className="px-2 py-1 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded"
+                        className="px-2 py-1 text-xs rounded admin-text-accent"
+                        style={{ background: 'color-mix(in srgb, var(--admin-accent) 15%, transparent)' }}
                       >
                         {tag}
                       </span>
                     ))}
                     {project.tags.length > 3 && (
-                      <span className="px-2 py-1 text-xs text-gray-500">
+                      <span className="px-2 py-1 text-xs admin-text-muted">
                         +{project.tags.length - 3}
                       </span>
                     )}
@@ -177,13 +182,13 @@ export default function AdminProjects() {
                   <div className="flex gap-2">
                     <Link
                       href={`/admin/projects/${project.id}`}
-                      className="flex-1 px-4 py-2 bg-purple-600 text-white text-center rounded-lg hover:bg-purple-700 transition-colors text-sm"
+                      className="admin-btn-secondary flex-1 px-4 py-2 text-center text-sm"
                     >
                       Modifier
                     </Link>
                     <button
                       onClick={() => handleDelete(project.id)}
-                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+                      className="admin-btn-danger px-4 py-2 text-sm"
                     >
                       🗑️
                     </button>

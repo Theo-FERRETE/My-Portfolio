@@ -1,0 +1,97 @@
+[data-admin-theme='slate-console'] {
+  --admin-background: #0b0e12;
+  --admin-foreground: #e8edf2;
+  --admin-surface: #11151a;
+  --admin-accent: #38bdf8;
+  --admin-border: rgba(255, 255, 255, 0.08);
+  --admin-radius: 0.75rem;
+  --admin-font: inherit;
+}
+
+[data-admin-theme='carbon-fiber'] {
+  --admin-background: #0a0a0a;
+  --admin-foreground: #e6e6e6;
+  --admin-surface: #121212;
+  --admin-accent: #4ade80;
+  --admin-border: rgba(255, 255, 255, 0.1);
+  --admin-radius: 0px;
+  --admin-font: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+[data-admin-theme='graphite-soft'] {
+  --admin-background: #14161a;
+  --admin-foreground: #eceef1;
+  --admin-surface: #1b1e23;
+  --admin-accent: #818cf8;
+  --admin-border: rgba(255, 255, 255, 0.07);
+  --admin-radius: 1rem;
+  --admin-font: inherit;
+}
+
+.admin-shell {
+  background: var(--admin-background);
+  color: var(--admin-foreground);
+  min-height: 100vh;
+}
+
+.admin-header {
+  background: color-mix(in srgb, var(--admin-surface) 80%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-card {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+}
+
+.admin-input {
+  background: var(--admin-background);
+  border: 1px solid var(--admin-border);
+  border-radius: calc(var(--admin-radius) * 0.6);
+  color: var(--admin-foreground);
+  font-family: var(--admin-font);
+}
+
+.admin-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--admin-accent);
+  border-color: var(--admin-accent);
+}
+
+.admin-btn-primary {
+  background: var(--admin-accent);
+  color: var(--admin-background);
+  border-radius: calc(var(--admin-radius) * 0.6);
+  font-family: var(--admin-font);
+  font-weight: 600;
+}
+
+.admin-btn-secondary {
+  background: transparent;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-foreground);
+  border-radius: calc(var(--admin-radius) * 0.6);
+  font-family: var(--admin-font);
+}
+
+.admin-btn-danger {
+  background: #ef4444;
+  color: #ffffff;
+  border-radius: calc(var(--admin-radius) * 0.6);
+  font-family: var(--admin-font);
+  font-weight: 600;
+}
+
+.admin-text-accent {
+  color: var(--admin-accent);
+}
+
+.admin-text-muted {
+  color: color-mix(in srgb, var(--admin-foreground) 60%, transparent);
+}
+
+.admin-divide > * + * {
+  border-top: 1px solid var(--admin-border);
+}

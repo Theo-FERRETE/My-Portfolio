@@ -12,6 +12,9 @@
     "migrate-to-supabase": "node --env-file=.env.local -r tsconfig-paths/register ./node_modules/.bin/ts-node --project tsconfig.scripts.json scripts/migrate-to-supabase.ts"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@react-three/postprocessing": "^3.0.4",
     "@supabase/supabase-js": "^2.108.2",
     "@types/qrcode": "^1.5.6",
     "@types/speakeasy": "^2.0.10",
@@ -19,10 +22,12 @@
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "next-auth": "^4.24.13",
+    "postprocessing": "^6.39.1",
     "qrcode": "^1.5.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "speakeasy": "^2.0.0",
+    "three": "^0.184.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -31,6 +36,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.184.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",

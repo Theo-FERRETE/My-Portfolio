@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
 
 interface Profile {
   name: string;
@@ -157,8 +158,8 @@ export default function AdminProfile() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Deux secondes...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">Deux secondes...</p>
         </div>
       </div>
     );
@@ -168,28 +169,31 @@ export default function AdminProfile() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement du profil...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">Chargement du profil...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg">
+      <header className="admin-header">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin/dashboard"
-              className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
-            >
-              ← Retour
-            </Link>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              Mon Profil
-            </h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link
+                href="/admin/dashboard"
+                className="admin-text-muted hover:opacity-80"
+              >
+                ← Retour
+              </Link>
+              <h1 className="text-2xl font-bold admin-text-accent">
+                Mon Profil
+              </h1>
+            </div>
+            <AdminThemeSwitcher />
           </div>
         </div>
       </header>
@@ -197,13 +201,13 @@ export default function AdminProfile() {
       {/* Main content */}
       <main className="container mx-auto px-6 py-12">
         <div className="max-w-3xl mx-auto">
-          <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 space-y-6">
+          <form onSubmit={handleSubmit} className="admin-card p-8 space-y-6">
             {message && (
               <div
                 className={`p-4 rounded-lg ${
                   message.type === 'success'
-                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
-                    : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                    ? 'bg-green-500/10 text-green-400'
+                    : 'bg-red-500/10 text-red-400'
                 }`}
               >
                 {message.text}
@@ -212,12 +216,12 @@ export default function AdminProfile() {
 
             {/* Informations personnelles */}
             <div>
-              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+              <h2 className="text-xl font-bold mb-4">
                 Infos perso
               </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium admin-text-muted mb-2">
                     Nom
                   </label>
                   <input
@@ -225,12 +229,12 @@ export default function AdminProfile() {
                     name="name"
                     value={profile.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                    className="admin-input w-full px-4 py-2"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium admin-text-muted mb-2">
                     Titre
                   </label>
                   <input
@@ -238,12 +242,12 @@ export default function AdminProfile() {
                     name="title"
                     value={profile.title}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                    className="admin-input w-full px-4 py-2"
                     required
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium admin-text-muted mb-2">
                     Bio
                   </label>
                   <textarea
@@ -251,7 +255,7 @@ export default function AdminProfile() {
                     value={profile.bio}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                    className="admin-input w-full px-4 py-2"
                     required
                   />
                 </div>
@@ -260,10 +264,10 @@ export default function AdminProfile() {
 
             {/* Contact */}
             <div>
-              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">Contact</h2>
+              <h2 className="text-xl font-bold mb-4">Contact</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium admin-text-muted mb-2">
                     Email
                   </label>
                   <input
@@ -271,12 +275,12 @@ export default function AdminProfile() {
                     name="email"
                     value={profile.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                    className="admin-input w-full px-4 py-2"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium admin-text-muted mb-2">
                     Téléphone
                   </label>
                   <input
@@ -284,11 +288,11 @@ export default function AdminProfile() {
                     name="phone"
                     value={profile.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                    className="admin-input w-full px-4 py-2"
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium admin-text-muted mb-2">
                     Localisation
                   </label>
                   <input
@@ -296,7 +300,7 @@ export default function AdminProfile() {
                     name="location"
                     value={profile.location}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                    className="admin-input w-full px-4 py-2"
                   />
                 </div>
               </div>
@@ -304,12 +308,12 @@ export default function AdminProfile() {
 
             {/* Réseaux sociaux */}
             <div>
-              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+              <h2 className="text-xl font-bold mb-4">
                 Réseaux sociaux
               </h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium admin-text-muted mb-2">
                     GitHub
                   </label>
                   <input
@@ -318,11 +322,11 @@ export default function AdminProfile() {
                     value={profile.github}
                     onChange={handleChange}
                     placeholder="https://github.com/..."
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                    className="admin-input w-full px-4 py-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium admin-text-muted mb-2">
                     LinkedIn
                   </label>
                   <input
@@ -331,11 +335,11 @@ export default function AdminProfile() {
                     value={profile.linkedin}
                     onChange={handleChange}
                     placeholder="https://linkedin.com/in/..."
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                    className="admin-input w-full px-4 py-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium admin-text-muted mb-2">
                     Twitter
                   </label>
                   <input
@@ -344,7 +348,7 @@ export default function AdminProfile() {
                     value={profile.twitter}
                     onChange={handleChange}
                     placeholder="https://twitter.com/..."
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                    className="admin-input w-full px-4 py-2"
                   />
                 </div>
               </div>
@@ -355,20 +359,20 @@ export default function AdminProfile() {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="admin-btn-primary px-6 py-3 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSaving ? 'J\'enregistre...' : 'Sauvegarder'}
               </button>
             </div>
           </form>
 
-          <form onSubmit={handlePasswordChange} className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 space-y-6">
+          <form onSubmit={handlePasswordChange} className="admin-card mt-8 p-8 space-y-6">
             {passwordMessage && (
               <div
                 className={`p-4 rounded-lg ${
                   passwordMessage.type === 'success'
-                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
-                    : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                    ? 'bg-green-500/10 text-green-400'
+                    : 'bg-red-500/10 text-red-400'
                 }`}
               >
                 {passwordMessage.text}
@@ -376,48 +380,48 @@ export default function AdminProfile() {
             )}
 
             <div>
-              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+              <h2 className="text-xl font-bold mb-2">
                 Changer le mot de passe admin
               </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              <p className="text-sm admin-text-muted mb-4">
                 Le nouveau mot de passe est stocke en hash cote serveur. Tu n&apos;as plus besoin d&apos;editer le .env pour chaque changement.
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium admin-text-muted mb-2">
                   Mot de passe actuel
                 </label>
                 <input
                   type="password"
                   value={passwordForm.currentPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white"
+                  className="admin-input w-full px-4 py-2"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium admin-text-muted mb-2">
                   Nouveau mot de passe
                 </label>
                 <input
                   type="password"
                   value={passwordForm.newPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white"
+                  className="admin-input w-full px-4 py-2"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium admin-text-muted mb-2">
                   Confirmation
                 </label>
                 <input
                   type="password"
                   value={passwordForm.confirmPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white"
+                  className="admin-input w-full px-4 py-2"
                   required
                 />
               </div>
@@ -427,7 +431,7 @@ export default function AdminProfile() {
               <button
                 type="submit"
                 disabled={isChangingPassword}
-                className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="admin-btn-primary px-6 py-3 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isChangingPassword ? 'Mise a jour...' : 'Mettre a jour le mot de passe'}
               </button>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Shield, Key, Download, AlertCircle, CheckCircle } from 'lucide-react';
+import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
 
 interface TwoFactorStatus {
   enabled: boolean;
@@ -155,25 +156,27 @@ export default function TwoFactorPage() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
+      <AdminThemeSwitcher className="fixed top-4 right-4" />
+
       <div className="mb-6">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
+        <h1 className="text-2xl font-bold flex items-center gap-2 admin-text-accent">
           <Shield className="w-6 h-6" />
           Authentification à Deux Facteurs (2FA)
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">
+        <p className="admin-text-muted mt-2">
           Renforcez la sécurité de votre compte avec Google Authenticator
         </p>
       </div>
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg mb-4 flex items-center gap-2">
+        <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-4 flex items-center gap-2">
           <AlertCircle className="w-5 h-5" />
           {error}
         </div>
       )}
 
       {success && (
-        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 px-4 py-3 rounded-lg mb-4 flex items-center gap-2">
+        <div className="bg-green-500/10 border border-green-500/30 text-green-400 px-4 py-3 rounded-lg mb-4 flex items-center gap-2">
           <CheckCircle className="w-5 h-5" />
           {success}
         </div>
@@ -181,13 +184,13 @@ export default function TwoFactorPage() {
 
       {/* Statut actuel */}
       {status && !setup && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div className="admin-card p-6 mb-6">
           {status.policyDisabled && (
-            <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
+            <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-400">
               <p className="font-medium">Mode bypass 2FA actif</p>
               <p className="mt-1">
                 La 2FA est bien configurée, mais elle n&apos;est pas demandée à la connexion tant que la variable
-                <span className="mx-1 rounded bg-amber-100 px-1.5 py-0.5 font-mono text-[11px] dark:bg-amber-800/30">DISABLE_2FA=true</span>
+                <span className="mx-1 rounded bg-amber-500/20 px-1.5 py-0.5 font-mono text-[11px]">DISABLE_2FA=true</span>
                 reste active.
               </p>
             </div>
@@ -197,8 +200,8 @@ export default function TwoFactorPage() {
             <h2 className="text-lg font-semibold">Statut</h2>
             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
               status.enabled
-                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                ? 'bg-green-500/15 text-green-400'
+                : 'bg-white/10 admin-text-muted'
             }`}>
               {status.enabled
                 ? status.policyDisabled
@@ -211,16 +214,16 @@ export default function TwoFactorPage() {
           {status.enabled ? (
             <div className="space-y-4">
               {status.policyDisabled ? (
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="admin-text-muted">
                   Le 2FA est configuré sur votre compte, mais il n&apos;est pas exigé à la connexion en mode bypass.
                 </p>
               ) : (
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="admin-text-muted">
                   Le 2FA est activé sur votre compte. Un code à 6 chiffres est demandé à chaque connexion.
                 </p>
               )}
-              
-              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+
+              <div className="flex items-center gap-2 text-sm admin-text-muted">
                 <Key className="w-4 h-4" />
                 <span>{status.backupCodesCount} codes de secours restants</span>
               </div>
@@ -229,15 +232,15 @@ export default function TwoFactorPage() {
                 <button
                   onClick={handleRegenerateBackupCodes}
                   disabled={isLoading}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  className="admin-btn-secondary px-4 py-2 disabled:opacity-50"
                 >
                   Régénérer codes de secours
                 </button>
-                
+
                 <button
                   onClick={handleDisable}
                   disabled={isLoading}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                  className="admin-btn-danger px-4 py-2 disabled:opacity-50"
                 >
                   Désactiver 2FA
                 </button>
@@ -245,14 +248,14 @@ export default function TwoFactorPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="admin-text-muted">
                 Le 2FA n'est pas encore activé. Activez-le pour renforcer la sécurité de votre compte.
               </p>
-              
+
               <button
                 onClick={handleSetup}
                 disabled={isLoading}
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50font-medium"
+                className="admin-btn-primary px-6 py-2 disabled:opacity-50"
               >
                 Activer le 2FA
               </button>
@@ -263,13 +266,13 @@ export default function TwoFactorPage() {
 
       {/* Configuration du 2FA */}
       {setup && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 space-y-6">
+        <div className="admin-card p-6 space-y-6">
           <h2 className="text-lg font-semibold">Configuration du 2FA</h2>
 
           {/* Étape 1: Scanner le QR code */}
           <div>
             <h3 className="font-medium mb-2">1. Scannez le QR code</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-sm admin-text-muted mb-4">
               Utilisez Google Authenticator ou une application compatible pour scanner ce code :
             </p>
             <div className="flex justify-center bg-white p-4 rounded-lg">
@@ -280,17 +283,17 @@ export default function TwoFactorPage() {
           {/* Étape 2: Sauvegarder les codes de secours */}
           <div>
             <h3 className="font-medium mb-2">2. Sauvegardez vos codes de secours</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-sm admin-text-muted mb-4">
               Ces codes vous permettront de vous connecter si vous perdez votre appareil :
             </p>
-            <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg font-mono text-sm space-y-1">
+            <div className="bg-black/20 p-4 rounded-lg font-mono text-sm space-y-1">
               {setup.backupCodes.map((code, i) => (
                 <div key={i}>{code}</div>
               ))}
             </div>
             <button
               onClick={() => downloadBackupCodes(setup.backupCodes)}
-              className="mt-3 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 flex items-center gap-2"
+              className="admin-btn-secondary mt-3 px-4 py-2 flex items-center gap-2"
             >
               <Download className="w-4 h-4" />
               Télécharger les codes
@@ -300,7 +303,7 @@ export default function TwoFactorPage() {
           {/* Étape 3: Vérification */}
           <div>
             <h3 className="font-medium mb-2">3. Vérifiez avec un code</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-sm admin-text-muted mb-4">
               Entrez le code à 6 chiffres affiché dans votre application :
             </p>
             <div className="flex gap-3">
@@ -310,12 +313,12 @@ export default function TwoFactorPage() {
                 onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 placeholder="000000"
                 maxLength={6}
-                className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-center text-2xl font-mono"
+                className="admin-input flex-1 px-4 py-2 text-center text-2xl"
               />
               <button
                 onClick={handleEnable}
                 disabled={isLoading || verificationCode.length !== 6}
-                className="px-6 py2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                className="admin-btn-primary px-6 py-2 disabled:opacity-50"
               >
                 Activer
               </button>
@@ -324,7 +327,7 @@ export default function TwoFactorPage() {
 
           <button
             onClick={() => setSetup(null)}
-            className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+            className="admin-text-muted hover:opacity-80"
           >
             Annuler
           </button>
@@ -333,12 +336,12 @@ export default function TwoFactorPage() {
 
       {/* Nouveaux codes de secours régénérés */}
       {newBackupCodes && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div className="admin-card p-6">
           <h2 className="text-lg font-semibold mb-4">Nouveaux codes de secours</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <p className="text-sm admin-text-muted mb-4">
             ⚠️ Les anciens codes ne fonctionnent plus. Sauvegardez ces nouveaux codes :
           </p>
-          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg font-mono text-sm space-y-1 mb-4">
+          <div className="bg-black/20 p-4 rounded-lg font-mono text-sm space-y-1 mb-4">
             {newBackupCodes.map((code, i) => (
               <div key={i}>{code}</div>
             ))}
@@ -346,14 +349,14 @@ export default function TwoFactorPage() {
           <div className="flex gap-3">
             <button
               onClick={() => downloadBackupCodes(newBackupCodes)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              className="admin-btn-secondary px-4 py-2 flex items-center gap-2"
             >
               <Download className="w-4 h-4" />
               Télécharger
             </button>
             <button
               onClick={() => setNewBackupCodes(null)}
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+              className="admin-btn-secondary px-4 py-2"
             >
               Fermer
             </button>

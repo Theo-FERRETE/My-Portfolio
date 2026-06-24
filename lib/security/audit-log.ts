@@ -196,4 +196,13 @@ export const auditActions = {
       ip,
       success: true,
     }),
+
+  updateSettings: (userId: string, ip?: string) =>
+    addAuditLog({
+      userId,
+      action: 'UPDATE',
+      resource: 'settings',
+      ip,
+      success: true,
+    }),
 };

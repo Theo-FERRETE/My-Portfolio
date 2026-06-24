@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
 
 interface Skill {
   id: string;
@@ -65,8 +66,8 @@ export default function AdminSkills() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">J'charge...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">J'charge...</p>
         </div>
       </div>
     );
@@ -76,8 +77,8 @@ export default function AdminSkills() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement des competences...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">Chargement des competences...</p>
         </div>
       </div>
     );
@@ -92,28 +93,31 @@ export default function AdminSkills() {
   }, {} as Record<string, Skill[]>);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg">
+      <header className="admin-header">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link
                 href="/admin/dashboard"
-                className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
+                className="admin-text-muted hover:opacity-80"
               >
                 ← Retour
               </Link>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold admin-text-accent">
                 Gestion des Compétences
               </h1>
             </div>
-            <Link
-              href="/admin/skills/new"
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:shadow-lg transition-all"
-            >
-              ➕ Nouvelle compétence
-            </Link>
+            <div className="flex items-center gap-3">
+              <AdminThemeSwitcher />
+              <Link
+                href="/admin/skills/new"
+                className="admin-btn-primary px-4 py-2 transition-all"
+              >
+                ➕ Nouvelle compétence
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -122,12 +126,12 @@ export default function AdminSkills() {
       <main className="container mx-auto px-6 py-12">
         {skills.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <p className="admin-text-muted mb-4">
               Aucune compétence pour le moment
             </p>
             <Link
               href="/admin/skills/new"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:shadow-lg transition-all"
+              className="admin-btn-primary inline-block px-6 py-3 transition-all"
             >
               Créer votre première compétence
             </Link>
@@ -136,25 +140,25 @@ export default function AdminSkills() {
           <div className="space-y-8">
             {Object.entries(groupedSkills).map(([category, categorySkills]) => (
               <div key={category}>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+                <h2 className="text-2xl font-bold mb-4">
                   {category}
                 </h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {categorySkills.map((skill) => (
                     <div
                       key={skill.id}
-                      className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow"
+                      className="admin-card p-6"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <span className="text-3xl">{skill.icon}</span>
-                          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+                          <h3 className="text-lg font-bold">
                             {skill.name}
                           </h3>
                         </div>
                       </div>
 
-                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                      <p className="admin-text-muted text-sm mb-4">
                         {skill.description}
                       </p>
 
@@ -162,13 +166,13 @@ export default function AdminSkills() {
                       <div className="flex gap-2">
                         <Link
                           href={`/admin/skills/${skill.id}`}
-                          className="flex-1 px-4 py-2 bg-blue-600 text-white text-center rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                          className="admin-btn-secondary flex-1 px-4 py-2 text-center text-sm"
                         >
                           Modifier
                         </Link>
                         <button
                           onClick={() => handleDelete(skill.id)}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+                          className="admin-btn-danger px-4 py-2 text-sm"
                         >
                           🗑️
                         </button>

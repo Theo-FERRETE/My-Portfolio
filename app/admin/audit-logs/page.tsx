@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
 
 interface AuditLog {
   id: string;
@@ -55,8 +56,8 @@ export default function AuditLogsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Patiente 2 sec...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">Patiente 2 sec...</p>
         </div>
       </div>
     );
@@ -66,8 +67,8 @@ export default function AuditLogsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Chargement des logs...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
+          <p className="admin-text-muted">Chargement des logs...</p>
         </div>
       </div>
     );
@@ -75,48 +76,49 @@ export default function AuditLogsPage() {
 
   const getActionColor = (action: string) => {
     switch (action) {
-      case 'CREATE': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-      case 'UPDATE': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
-      case 'DELETE': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
-      case 'LOGIN': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400';
-      case 'LOGOUT': return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
+      case 'CREATE': return 'bg-green-500/15 text-green-400';
+      case 'UPDATE': return 'bg-blue-500/15 text-blue-400';
+      case 'DELETE': return 'bg-red-500/15 text-red-400';
+      case 'LOGIN': return 'bg-purple-500/15 text-purple-400';
+      case 'LOGOUT': return 'bg-white/10 admin-text-muted';
+      default: return 'bg-white/10 admin-text-muted';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
-      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg">
+    <div className="min-h-screen">
+      <header className="admin-header">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link
                 href="/admin/dashboard"
-                className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
+                className="admin-text-muted hover:opacity-80"
               >
                 ← Retour
               </Link>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold admin-text-accent">
                 Logs d'Audit
               </h1>
             </div>
+            <AdminThemeSwitcher />
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-6 py-12">
         {/* Filtres */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
-          <h2 className="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">Filtres</h2>
+        <div className="admin-card p-6 mb-6">
+          <h2 className="text-lg font-bold mb-4">Filtres</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium mb-2 admin-text-muted">
                 Action
               </label>
               <select
                 value={filter.action}
                 onChange={(e) => setFilter({ ...filter, action: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                className="admin-input w-full px-4 py-2"
               >
                 <option value="">Toutes</option>
                 <option value="CREATE">CREATE</option>
@@ -127,13 +129,13 @@ export default function AuditLogsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium mb-2 admin-text-muted">
                 Ressource
               </label>
               <select
                 value={filter.resource}
                 onChange={(e) => setFilter({ ...filter, resource: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                className="admin-input w-full px-4 py-2"
               >
                 <option value="">Toutes</option>
                 <option value="project">Projets</option>
@@ -146,32 +148,32 @@ export default function AuditLogsPage() {
         </div>
 
         {/* Liste des logs */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div className="admin-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-700">
+              <thead style={{ background: 'var(--admin-background)' }}>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium admin-text-muted uppercase tracking-wider">
                     Date/Heure
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium admin-text-muted uppercase tracking-wider">
                     Action
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium admin-text-muted uppercase tracking-wider">
                     Ressource
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium admin-text-muted uppercase tracking-wider">
                     IP
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium admin-text-muted uppercase tracking-wider">
                     Statut
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className="admin-divide">
                 {logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200">
+                  <tr key={log.id} className="hover:opacity-90">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
                       {new Date(log.timestamp).toLocaleString('fr-FR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -179,27 +181,27 @@ export default function AuditLogsPage() {
                         {log.action}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
                       {log.resource}
-                      {log.resourceId && <span className="text-gray-500"> #{log.resourceId}</span>}
+                      {log.resourceId && <span className="admin-text-muted"> #{log.resourceId}</span>}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm admin-text-muted">
                       {log.ip || 'N/A'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {log.success ? (
-                        <span className="text-green-600 dark:text-green-400">✓</span>
+                        <span className="text-green-400">✓</span>
                       ) : (
-                        <span className="text-red-600 dark:text-red-400">✗</span>
+                        <span className="text-red-400">✗</span>
                       )}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            
+
             {logs.length === 0 && (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              <div className="text-center py-12 admin-text-muted">
                 Aucun log trouvé
               </div>
             )}
