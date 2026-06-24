@@ -199,7 +199,7 @@ export default function EditProject() {
                 URL de l'image *
               </label>
               <input
-                type="url"
+                type="text"
                 name="image"
                 value={formData.image}
                 onChange={handleChange}

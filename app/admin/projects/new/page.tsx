@@ -165,11 +165,11 @@ export default function NewProject() {
                 Image *
               </label>
               <input
-                type="url"
+                type="text"
                 name="image"
                 value={formData.image}
                 onChange={handleChange}
-                placeholder="https://unsplash.com/..."
+                placeholder="https://unsplash.com/... ou /images/projects/mon-image.webp"
                 className="admin-input w-full px-4 py-2"
                 required
               />

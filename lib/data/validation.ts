@@ -1,9 +1,16 @@
 import { z } from 'zod';
 
+const imagePathSchema = z
+  .string()
+  .refine(
+    (val) => val === '' || val.startsWith('/') || /^https?:\/\//.test(val),
+    'URL ou chemin local invalide (ex: https://... ou /images/...)'
+  );
+
 export const projectSchema = z.object({
   title: z.string().min(1, 'Titre requis').max(100, 'Trop long'),
   description: z.string().min(1, 'Description requise').max(1000, 'Trop long'),
-  image: z.string().url('URL invalide').optional().or(z.literal('')),
+  image: imagePathSchema.optional(),
   tags: z.array(z.string()).min(1, 'Minimum 1 tag').max(20, 'Max 20 tags'),
   link: z.string().url('URL invalide').optional().or(z.literal('')),
   github: z.string().url('URL invalide').optional().or(z.literal('')),
