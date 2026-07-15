@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Github, ExternalLink, ArrowLeft } from 'lucide-react';
+import { Github, ExternalLink, ArrowLeft, Check } from 'lucide-react';
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 
 interface Project {
@@ -138,15 +138,15 @@ export default function ProjectDetailPage() {
               </h2>
               <ul className="space-y-3">
                 <li className="flex items-start">
-                  <span className="text-accent mr-3 text-xl">✓</span>
+                  <Check className="text-accent mr-3 shrink-0" size={20} />
                   <span className="text-foreground/60">Interface utilisateur moderne et responsive</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-accent mr-3 text-xl">✓</span>
+                  <Check className="text-accent mr-3 shrink-0" size={20} />
                   <span className="text-foreground/60">Performance optimisée</span>
                 </li>
                 <li className="flex items-start">
-                  <span className="text-accent mr-3 text-xl">✓</span>
+                  <Check className="text-accent mr-3 shrink-0" size={20} />
                   <span className="text-foreground/60">Architecture scalable et maintenable</span>
                 </li>
               </ul>

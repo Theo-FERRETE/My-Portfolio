@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Github, Linkedin, Mail, Coffee } from 'lucide-react';
 
 export default function Footer() {
   const router = useRouter();
@@ -120,8 +120,8 @@ export default function Footer() {
             <p className="text-foreground/50 text-xs sm:text-sm">
               © {new Date().getFullYear()} Théo FERRETE. Tous droits réservés.
             </p>
-            <p className="text-foreground/40 text-xs sm:text-sm flex items-center justify-center sm:justify-start gap-1">
-              Fait avec Next.js et beaucoup de café ☕
+            <p className="text-foreground/40 text-xs sm:text-sm flex items-center justify-center sm:justify-start gap-1.5">
+              Fait avec Next.js et beaucoup de café <Coffee size={14} />
             </p>
           </div>
         </div>

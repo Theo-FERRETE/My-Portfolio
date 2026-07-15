@@ -1,0 +1,135 @@
+import type { IconType } from 'react-icons';
+import { Code2 } from 'lucide-react';
+import {
+  SiHtml5,
+  SiCss,
+  SiTailwindcss,
+  SiReact,
+  SiJavascript,
+  SiPrisma,
+  SiPostgresql,
+  SiNodedotjs,
+  SiJson,
+  SiTypescript,
+  SiNextdotjs,
+  SiDocker,
+  SiPhp,
+  SiMysql,
+  SiVuedotjs,
+  SiAngular,
+  SiSass,
+  SiRedux,
+  SiGraphql,
+  SiMongodb,
+  SiExpress,
+  SiFigma,
+  SiPython,
+  SiCplusplus,
+  SiC,
+  SiKubernetes,
+  SiVercel,
+  SiFirebase,
+  SiSupabase,
+  SiJquery,
+  SiBootstrap,
+  SiWebpack,
+  SiVite,
+  SiJest,
+  SiLinux,
+  SiNginx,
+  SiRedis,
+  SiGo,
+  SiRust,
+  SiSwift,
+  SiKotlin,
+  SiFlutter,
+  SiDjango,
+  SiLaravel,
+  SiSymfony,
+  SiWordpress,
+  SiGit,
+  SiGithub,
+} from 'react-icons/si';
+
+interface SkillIconEntry {
+  Icon: IconType;
+  color: string;
+}
+
+// Couleurs officielles de marque, pour un rendu fidèle au vrai logo.
+const SKILL_ICON_MAP: Record<string, SkillIconEntry> = {
+  html: { Icon: SiHtml5, color: '#E34F26' },
+  css: { Icon: SiCss, color: '#663399' },
+  tailwind: { Icon: SiTailwindcss, color: '#06B6D4' },
+  tailwindcss: { Icon: SiTailwindcss, color: '#06B6D4' },
+  react: { Icon: SiReact, color: '#61DAFB' },
+  javascript: { Icon: SiJavascript, color: '#F7DF1E' },
+  js: { Icon: SiJavascript, color: '#F7DF1E' },
+  prisma: { Icon: SiPrisma, color: '#2D3748' },
+  postgresql: { Icon: SiPostgresql, color: '#4169E1' },
+  postgres: { Icon: SiPostgresql, color: '#4169E1' },
+  nodejs: { Icon: SiNodedotjs, color: '#339933' },
+  node: { Icon: SiNodedotjs, color: '#339933' },
+  json: { Icon: SiJson, color: '#000000' },
+  typescript: { Icon: SiTypescript, color: '#3178C6' },
+  ts: { Icon: SiTypescript, color: '#3178C6' },
+  nextjs: { Icon: SiNextdotjs, color: '#000000' },
+  next: { Icon: SiNextdotjs, color: '#000000' },
+  docker: { Icon: SiDocker, color: '#2496ED' },
+  php: { Icon: SiPhp, color: '#777BB4' },
+  mysql: { Icon: SiMysql, color: '#4479A1' },
+  vue: { Icon: SiVuedotjs, color: '#4FC08D' },
+  vuejs: { Icon: SiVuedotjs, color: '#4FC08D' },
+  angular: { Icon: SiAngular, color: '#DD0031' },
+  sass: { Icon: SiSass, color: '#CC6699' },
+  scss: { Icon: SiSass, color: '#CC6699' },
+  redux: { Icon: SiRedux, color: '#764ABC' },
+  graphql: { Icon: SiGraphql, color: '#E10098' },
+  mongodb: { Icon: SiMongodb, color: '#47A248' },
+  mongo: { Icon: SiMongodb, color: '#47A248' },
+  express: { Icon: SiExpress, color: '#000000' },
+  expressjs: { Icon: SiExpress, color: '#000000' },
+  figma: { Icon: SiFigma, color: '#F24E1E' },
+  python: { Icon: SiPython, color: '#3776AB' },
+  'c++': { Icon: SiCplusplus, color: '#00599C' },
+  cplusplus: { Icon: SiCplusplus, color: '#00599C' },
+  c: { Icon: SiC, color: '#A8B9CC' },
+  kubernetes: { Icon: SiKubernetes, color: '#326CE5' },
+  k8s: { Icon: SiKubernetes, color: '#326CE5' },
+  vercel: { Icon: SiVercel, color: '#000000' },
+  firebase: { Icon: SiFirebase, color: '#FFCA28' },
+  supabase: { Icon: SiSupabase, color: '#3FCF8E' },
+  jquery: { Icon: SiJquery, color: '#0769AD' },
+  bootstrap: { Icon: SiBootstrap, color: '#7952B3' },
+  webpack: { Icon: SiWebpack, color: '#8DD6F9' },
+  vite: { Icon: SiVite, color: '#646CFF' },
+  jest: { Icon: SiJest, color: '#C21325' },
+  linux: { Icon: SiLinux, color: '#FCC624' },
+  nginx: { Icon: SiNginx, color: '#009639' },
+  redis: { Icon: SiRedis, color: '#DC382D' },
+  go: { Icon: SiGo, color: '#00ADD8' },
+  golang: { Icon: SiGo, color: '#00ADD8' },
+  rust: { Icon: SiRust, color: '#000000' },
+  swift: { Icon: SiSwift, color: '#F05138' },
+  kotlin: { Icon: SiKotlin, color: '#7F52FF' },
+  flutter: { Icon: SiFlutter, color: '#02569B' },
+  django: { Icon: SiDjango, color: '#092E20' },
+  laravel: { Icon: SiLaravel, color: '#FF2D20' },
+  symfony: { Icon: SiSymfony, color: '#000000' },
+  wordpress: { Icon: SiWordpress, color: '#21759B' },
+  git: { Icon: SiGit, color: '#F05032' },
+  github: { Icon: SiGithub, color: '#181717' },
+};
+
+function normalize(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9+]/g, '');
+}
+
+/** Retourne le vrai logo de marque associé à une techno, ou une icône générique si inconnue. */
+export function getSkillIcon(name: string): SkillIconEntry {
+  return SKILL_ICON_MAP[normalize(name)] ?? { Icon: Code2, color: 'currentColor' };
+}

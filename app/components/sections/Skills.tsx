@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
+import { getSkillIcon } from '@/lib/skill-icons';
 
 interface Skill {
   id: number;
@@ -64,22 +65,25 @@ export default function Skills() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {skillsData
               .sort((a, b) => a.order - b.order)
-              .map((skill, index) => (
+              .map((skill, index) => {
+                const { Icon, color } = getSkillIcon(skill.name);
+                return (
                 <div
                   key={skill.id}
                   className="group"
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
                   <div className="glass p-4 sm:p-6 rounded-2xl hover:border-accent/40 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col items-center">
-                    <div className="text-3xl sm:text-4xl p-3 sm:p-4 rounded-xl tint mb-2 sm:mb-3 group-hover:bg-accent/10 transition-colors duration-300">
-                      {skill.icon}
+                    <div className="p-3 sm:p-4 rounded-xl tint mb-2 sm:mb-3 group-hover:bg-accent/10 transition-colors duration-300">
+                      <Icon size={32} color={color} />
                     </div>
                     <span className="font-semibold text-foreground/90 text-xs sm:text-sm text-center line-clamp-2">
                       {skill.name}
                     </span>
                   </div>
                 </div>
-              ))}
+                );
+              })}
           </div>
         </div>
       </div>

@@ -1,7 +1,21 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import {
+  Monitor,
+  Settings,
+  Database as DatabaseIcon,
+  Code2,
+  Rocket,
+  Wrench,
+  FolderKanban,
+  Target,
+  Hand,
+  MapPin,
+  type LucideIcon,
+} from 'lucide-react';
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
+import { getSkillIcon } from '@/lib/skill-icons';
 
 interface Project {
   id: number;
@@ -25,12 +39,12 @@ interface Profile {
 
 const EMPTY_PROFILE: Profile = { name: '', bio: '', location: '' };
 
-const categoryIcon: Record<string, string> = {
-  'Frontend': '🖥️',
-  'Backend': '⚙️',
-  'Database': '🗄️',
-  'Language': '📝',
-  'DevOps': '🚀',
+const categoryIcon: Record<string, LucideIcon> = {
+  'Frontend': Monitor,
+  'Backend': Settings,
+  'Database': DatabaseIcon,
+  'Language': Code2,
+  'DevOps': Rocket,
 };
 
 export default function About() {
@@ -85,9 +99,9 @@ export default function About() {
   const sortedCategories = categoryOrder.filter(cat => skillsByCategory[cat]);
 
   const stats = [
-    { value: projectsData.length, label: 'Projets réalisés', icon: '📁' },
-    { value: skillsData.length, label: 'Technologies', icon: '🛠️' },
-    { value: sortedCategories.length, label: 'Domaines couverts', icon: '🎯' },
+    { value: projectsData.length, label: 'Projets réalisés', icon: FolderKanban },
+    { value: skillsData.length, label: 'Technologies', icon: Wrench },
+    { value: sortedCategories.length, label: 'Domaines couverts', icon: Target },
   ];
 
   return (
@@ -111,15 +125,15 @@ export default function About() {
           {/* Bio + stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-start mb-12">
             <div className="order-2 md:order-1 glass p-6 sm:p-8 rounded-2xl">
-              <div className="text-5xl sm:text-6xl mb-4">👋</div>
+              <Hand className="mb-4 text-accent" size={48} />
               <h3 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">
                 Salut, moi c'est {profileData.name.split(' ')[0]} !
               </h3>
               <p className="text-sm sm:text-base text-foreground/60 leading-relaxed">
                 {profileData.bio}
               </p>
-              <div className="mt-4 text-sm text-foreground/50 flex items-center gap-1">
-                <span>📍</span>
+              <div className="mt-4 text-sm text-foreground/50 flex items-center gap-1.5">
+                <MapPin size={14} />
                 <span>{profileData.location}</span>
               </div>
             </div>
@@ -128,7 +142,9 @@ export default function About() {
             <div className="space-y-4 order-1 md:order-2">
               {stats.map((stat, i) => (
                 <div key={i} className="flex items-center space-x-4 p-4 rounded-xl glass">
-                  <div className="text-3xl">{stat.icon}</div>
+                  <div className="p-2.5 rounded-lg tint text-accent">
+                    <stat.icon size={22} />
+                  </div>
                   <div>
                     <div className="text-2xl font-bold text-accent">
                       {stat.value}+
@@ -167,31 +183,38 @@ export default function About() {
               Ma stack
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {sortedCategories.map((category) => (
+              {sortedCategories.map((category) => {
+                const CategoryIcon = categoryIcon[category] ?? Wrench;
+                return (
                 <div
                   key={category}
                   className="glass p-4 rounded-2xl"
                 >
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-sm font-semibold px-2 py-0.5 rounded-full border border-border text-foreground/80">
-                      {categoryIcon[category] ?? '🔧'} {category}
+                    <span className="flex items-center gap-1.5 text-sm font-semibold px-2 py-0.5 rounded-full border border-border text-foreground/80">
+                      <CategoryIcon size={14} />
+                      {category}
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {skillsByCategory[category]
                       .sort((a, b) => a.order - b.order)
-                      .map((skill) => (
+                      .map((skill) => {
+                        const { Icon, color } = getSkillIcon(skill.name);
+                        return (
                         <span
                           key={skill.id}
-                          className="text-xs flex items-center gap-1 px-2 py-1 rounded-lg tint text-foreground/70 border border-border"
+                          className="text-xs flex items-center gap-1.5 px-2 py-1 rounded-lg tint text-foreground/70 border border-border"
                         >
-                          <span>{skill.icon}</span>
+                          <Icon size={13} color={color} />
                           <span>{skill.name}</span>
                         </span>
-                      ))}
+                        );
+                      })}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
