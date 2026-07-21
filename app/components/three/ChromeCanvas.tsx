@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 import { useWebGLSupport } from './useWebGLSupport';
 import { useTheme } from '@/app/components/providers/ThemeProvider';
 import type { SceneVariant } from './ChromeObject';
@@ -42,6 +43,19 @@ export default function ChromeCanvas({ variant, visible = true, className }: Chr
   const accentColor = ACCENT_BY_THEME[theme];
   const metalColor = METAL_COLOR_BY_THEME[theme];
 
+  // Laisse l'hydratation et le premier rendu se terminer avant de charger
+  // le bundle three.js (~1 Mo) et de compiler les shaders, pour ne pas
+  // bloquer le thread principal pendant le chargement initial.
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(() => setReady(true), { timeout: 1500 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = window.setTimeout(() => setReady(true), 200);
+    return () => window.clearTimeout(id);
+  }, []);
+
   if (webgl === false) {
     return (
       <div
@@ -54,7 +68,7 @@ export default function ChromeCanvas({ variant, visible = true, className }: Chr
     );
   }
 
-  if (webgl === null) {
+  if (webgl === null || !ready) {
     return <div className={className} aria-hidden />;
   }
 

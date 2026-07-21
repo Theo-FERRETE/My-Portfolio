@@ -40,7 +40,7 @@ export default function LiquidMetalScene({
       dpr={[1, 1.5]}
       frameloop={visible ? 'always' : 'never'}
       camera={{ position: [0, 0, isHero ? 4.4 : 3.2], fov: 38 }}
-      gl={{ antialias: true, alpha: true }}
+      gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
     >
       <Suspense fallback={null}>
         <PointerTilt>
