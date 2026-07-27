@@ -118,13 +118,13 @@ export default function About() {
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`max-w-5xl mx-auto transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8 sm:mb-12 text-foreground tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8 sm:mb-12 text-foreground tracking-tight">
             À propos de moi
           </h2>
 
           {/* Bio + stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-start mb-12">
-            <div className="order-2 md:order-1 glass p-6 sm:p-8 rounded-2xl">
+            <div className="order-2 md:order-1 glass p-6 sm:p-8 rounded-xl">
               <Hand className="mb-4 text-accent" size={48} />
               <h3 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">
                 Salut, moi c'est {profileData.name.split(' ')[0]} !
@@ -188,7 +188,7 @@ export default function About() {
                 return (
                 <div
                   key={category}
-                  className="glass p-4 rounded-2xl"
+                  className="glass p-4 rounded-xl"
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <span className="flex items-center gap-1.5 text-sm font-semibold px-2 py-0.5 rounded-full border border-border text-foreground/80">
@@ -204,7 +204,7 @@ export default function About() {
                         return (
                         <span
                           key={skill.id}
-                          className="text-xs flex items-center gap-1.5 px-2 py-1 rounded-lg tint text-foreground/70 border border-border"
+                          className="text-xs flex items-center gap-1.5 px-2 py-1 rounded-full tint text-foreground/70 border border-border"
                         >
                           <Icon size={13} color={color} />
                           <span>{skill.name}</span>

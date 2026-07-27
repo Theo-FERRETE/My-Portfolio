@@ -64,6 +64,7 @@
   --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-space-grotesk);
   --breakpoint-xs: 30rem;
 }
 
@@ -149,20 +150,21 @@ html {
   animation-delay: 1s;
 }
 
-/* Effet glassmorphism — tous les thèmes sont sombres, un seul jeu de valeurs suffit */
+/* Habillage "chrome" — bordure fine + liseré façon reflet métallique plutôt qu'un flou lourd */
 .glass {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 /* Léger voile de surface (remplace les usages de bg-white/5) */
 .tint {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .hover-tint:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* Scrollbar personnalisée */

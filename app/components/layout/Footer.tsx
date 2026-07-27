@@ -21,7 +21,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <div
-              className="text-2xl sm:text-3xl font-bold tracking-tight cursor-default select-none"
+              className="font-display text-2xl sm:text-3xl font-bold tracking-tight cursor-default select-none"
               onDoubleClick={handleLogoDoubleClick}
               title="Portfolio"
             >

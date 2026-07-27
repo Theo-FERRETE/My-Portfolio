@@ -13,14 +13,25 @@ interface LiquidMetalSceneProps {
   metalColor?: string;
 }
 
-function PointerTilt({ children }: { children: React.ReactNode }) {
+function PointerTilt({ enabled, children }: { enabled: boolean; children: React.ReactNode }) {
   const groupRef = useRef<Group>(null);
 
   useFrame((state) => {
     if (!groupRef.current) return;
+
+    if (!enabled) {
+      // Respecte prefers-reduced-motion : aucune animation basée sur le curseur ou le scroll.
+      return;
+    }
+
     const { x, y } = state.pointer;
     groupRef.current.rotation.y += (x * 0.35 - groupRef.current.rotation.y) * 0.04;
     groupRef.current.rotation.x += (-y * 0.25 - groupRef.current.rotation.x) * 0.04;
+
+    // Parallaxe légère au scroll — lecture directe de scrollY dans la frame loop,
+    // pas de listener ni de re-render React.
+    const scrollTarget = Math.min(window.scrollY / 800, 1) * 0.3;
+    groupRef.current.position.y += (scrollTarget - groupRef.current.position.y) * 0.04;
   });
 
   return <group ref={groupRef}>{children}</group>;
@@ -39,15 +50,15 @@ export default function LiquidMetalScene({
     <Canvas
       dpr={[1, 1.5]}
       frameloop={visible ? 'always' : 'never'}
-      camera={{ position: [0, 0, isHero ? 4.4 : 3.2], fov: 38 }}
+      camera={{ position: [0, 0, isHero ? 4.2 : 3.2], fov: 38 }}
       gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
     >
       <Suspense fallback={null}>
-        <PointerTilt>
+        <PointerTilt enabled={!reducedMotion}>
           <ChromeObject
             variant={variant}
             rotationSpeed={reducedMotion ? 0 : isHero ? 0.22 : 0.16}
-            size={isHero ? 2.4 : 1.3}
+            size={isHero ? 1.15 : 0.85}
             accentColor={accentColor}
             metalColor={metalColor}
           />

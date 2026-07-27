@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "hash-password": "ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/hash-password.ts",
     "generate-secret": "ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/generate-secret.ts",
     "migrate-to-supabase": "node --env-file=.env.local -r tsconfig-paths/register ./node_modules/.bin/ts-node --project tsconfig.scripts.json scripts/migrate-to-supabase.ts"
@@ -38,12 +41,14 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.184.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   },
   "overrides": {
     "tar": ">=6.2.1"

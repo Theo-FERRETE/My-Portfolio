@@ -26,7 +26,7 @@ function ThemeMenu({ iconSize = 16 }: { iconSize?: number }) {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="p-2 border border-border rounded-full text-foreground hover:border-accent hover:text-accent transition-colors duration-300"
+        className="p-2 border border-border rounded-lg text-foreground hover:border-accent hover:text-accent transition-colors duration-300"
         aria-label="Choisir un thème"
         aria-expanded={open}
       >
@@ -92,7 +92,7 @@ export default function Header() {
     >
       <nav className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-lg sm:text-xl font-bold tracking-tight text-foreground truncate">
+          <Link href="/" className="font-display text-lg sm:text-xl font-bold tracking-tight text-foreground truncate">
             Théo FERRETE
           </Link>
 
@@ -120,7 +120,7 @@ export default function Header() {
             <a
               href="/CV_Theo_Ferrete.pdf"
               download
-              className="flex items-center gap-2 px-4 py-2 border border-border text-foreground rounded-full font-medium text-sm hover:border-accent hover:text-accent transition-colors duration-300"
+              className="flex items-center gap-2 px-4 py-2 border border-border text-foreground rounded-lg font-medium text-sm hover:border-accent hover:text-accent transition-colors duration-300"
             >
               <Download size={14} />
               CV
@@ -173,7 +173,7 @@ export default function Header() {
                 <a
                   href="/CV_Theo_Ferrete.pdf"
                   download
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-border text-foreground rounded-full font-medium text-sm hover:border-accent hover:text-accent transition-colors duration-300"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-border text-foreground rounded-lg font-medium text-sm hover:border-accent hover:text-accent transition-colors duration-300"
                 >
                   <Download size={14} />
                   Télécharger CV

@@ -87,7 +87,7 @@ export default function Projects() {
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-foreground tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-foreground tracking-tight">
             Mes Projets
           </h2>
           <p className="text-center text-foreground/60 mb-12 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base px-2">
@@ -104,7 +104,7 @@ export default function Projects() {
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <TiltCard>
-                  <div className="relative h-full glass rounded-2xl overflow-hidden hover:border-accent/40 transition-colors duration-300 flex flex-col">
+                  <div className="relative h-full glass rounded-xl overflow-hidden hover:border-accent/40 transition-colors duration-300 flex flex-col">
                     {/* Header avec image */}
                     <div className="h-40 sm:h-48 bg-surface relative overflow-hidden shrink-0">
                       <img

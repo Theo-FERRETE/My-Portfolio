@@ -1,53 +1,26 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Github, ExternalLink, ArrowLeft, Check } from 'lucide-react';
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
+import { getProjectById } from '@/lib/data';
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  tags: string[];
-  link: string;
-  github?: string;
-  featured: boolean;
-  createdAt: string;
-}
+export default async function ProjectDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const projectId = Number(id);
 
-export default function ProjectDetailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const [project, setProject] = useState<Project | null>(null);
+  if (!Number.isInteger(projectId)) {
+    notFound();
+  }
 
-  useEffect(() => {
-    const projectId = parseInt(params.id as string);
-    fetch('/api/projects')
-      .then((res) => res.json())
-      .then((data: Project[]) => {
-        const foundProject = data.find((p) => p.id === projectId);
-        if (foundProject) {
-          setProject(foundProject);
-        } else {
-          router.push('/projects');
-        }
-      })
-      .catch(() => router.push('/projects'));
-  }, [params.id, router]);
+  const project = await getProjectById(projectId);
 
   if (!project) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-foreground/60">Chargement...</p>
-        </div>
-      </div>
-    );
+    notFound();
   }
 
   return (

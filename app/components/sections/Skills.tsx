@@ -55,7 +55,7 @@ export default function Skills() {
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-foreground tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-foreground tracking-tight">
             Ma stack
           </h2>
           <p className="text-center text-foreground/60 mb-12 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base px-2">
@@ -73,8 +73,8 @@ export default function Skills() {
                   className="group"
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <div className="glass p-4 sm:p-6 rounded-2xl hover:border-accent/40 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col items-center">
-                    <div className="p-3 sm:p-4 rounded-xl tint mb-2 sm:mb-3 group-hover:bg-accent/10 transition-colors duration-300">
+                  <div className="glass p-4 sm:p-6 rounded-xl hover:border-accent/40 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col items-center">
+                    <div className="p-3 sm:p-4 rounded-lg tint mb-2 sm:mb-3 group-hover:bg-accent/10 transition-colors duration-300">
                       <Icon size={32} color={color} />
                     </div>
                     <span className="font-semibold text-foreground/90 text-xs sm:text-sm text-center line-clamp-2">

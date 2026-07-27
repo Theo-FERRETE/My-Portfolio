@@ -8,12 +8,18 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-0 bg-background">
       {/* Centerpiece 3D */}
-      <ChromeCanvas variant="hero" className="absolute inset-0 opacity-80" />
+      <ChromeCanvas variant="hero" className="absolute inset-0" />
 
       {/* Contenu principal */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center">
-        <div className="animate-fadeIn">
-          <h1 className="text-4xl xs:text-5xl sm:text-7xl md:text-8xl font-bold mb-3 sm:mb-6 text-foreground animate-slideDown leading-[0.95] tracking-tight drop-shadow-[0_2px_24px_var(--background)]">
+        <div className="animate-fadeIn relative">
+          {/* Vignette locale pour garder le texte lisible sans aplatir l'objet 3D */}
+          <div
+            className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[140%] -z-10 pointer-events-none"
+            style={{ background: 'radial-gradient(ellipse 60% 65% at 50% 50%, var(--background) 0%, transparent 70%)' }}
+            aria-hidden
+          />
+          <h1 className="font-display text-4xl xs:text-5xl sm:text-7xl md:text-8xl font-bold mb-3 sm:mb-6 text-foreground animate-slideDown leading-[0.95] tracking-tight">
             Théo Ferrete
           </h1>
           <h2 className="text-base sm:text-xl md:text-2xl font-medium text-accent mb-4 sm:mb-8 animate-slideUp uppercase tracking-[0.2em]">
@@ -28,20 +34,20 @@ export default function Hero() {
           <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row justify-center animate-fadeIn delay-700">
             <Link
               href="/projects"
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-accent text-background rounded-full font-semibold transition-all duration-300 hover:opacity-90 hover:scale-[1.02] text-xs sm:text-base"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-accent text-background rounded-lg font-semibold transition-all duration-300 hover:opacity-90 hover:scale-[1.02] text-xs sm:text-base"
             >
               Voir mes projets
             </Link>
             <Link
               href="/contact"
-              className="px-6 sm:px-8 py-3 sm:py-4 border border-border text-foreground rounded-full font-semibold hover:border-accent hover:text-accent transition-all duration-300 text-xs sm:text-base"
+              className="px-6 sm:px-8 py-3 sm:py-4 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent transition-all duration-300 text-xs sm:text-base"
             >
               Me contacter
             </Link>
             <a
               href="/CV_Theo_Ferrete.pdf"
               download
-              className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border text-foreground/70 rounded-full font-semibold hover:border-accent hover:text-accent transition-all duration-300 text-xs sm:text-base"
+              className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border text-foreground/70 rounded-lg font-semibold hover:border-accent hover:text-accent transition-all duration-300 text-xs sm:text-base"
             >
               <Download size={16} />
               <span className="hidden sm:inline">Télécharger</span> CV

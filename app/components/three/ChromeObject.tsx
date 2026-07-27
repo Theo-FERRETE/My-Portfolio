@@ -49,7 +49,7 @@ export default function ChromeObject({
         {variant === 'hero' && <icosahedronGeometry args={[1, 2]} />}
         {variant === 'skills' && <torusGeometry args={[0.7, 0.28, 16, 64]} />}
         {variant === 'projects' && <octahedronGeometry args={[1, 2]} />}
-        <meshStandardMaterial color={metalColor} metalness={0.9} roughness={0.25} envMapIntensity={1.2} />
+        <meshStandardMaterial color={metalColor} metalness={0.9} roughness={0.2} envMapIntensity={1.35} />
       </mesh>
     </>
   );

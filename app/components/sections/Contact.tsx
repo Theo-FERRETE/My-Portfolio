@@ -101,7 +101,7 @@ export default function Contact() {
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`max-w-5xl mx-auto transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-foreground tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-foreground tracking-tight">
             On discute ?
           </h2>
           <p className="text-center text-foreground/60 mb-12 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base px-2">
@@ -110,7 +110,7 @@ export default function Contact() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
             {/* Formulaire */}
-            <form onSubmit={handleSubmit} className="glass p-6 sm:p-8 rounded-2xl">
+            <form onSubmit={handleSubmit} className="glass p-6 sm:p-8 rounded-xl">
               <div className="mb-6">
                 <label htmlFor="name" className="block text-sm font-semibold text-foreground/80 mb-2">
                   Nom
@@ -182,7 +182,7 @@ export default function Contact() {
 
             {/* Informations de contact */}
             <div className="space-y-6 sm:space-y-8">
-              <div className="glass p-6 sm:p-8 rounded-2xl">
+              <div className="glass p-6 sm:p-8 rounded-xl">
                 <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
                   On se connecte ?
                 </h3>
@@ -219,7 +219,7 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="border border-accent/30 bg-accent/5 p-6 sm:p-8 rounded-2xl">
+              <div className="border border-accent/30 bg-accent/5 p-6 sm:p-8 rounded-xl">
                 <h3 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">
                   Dispo ?
                 </h3>
