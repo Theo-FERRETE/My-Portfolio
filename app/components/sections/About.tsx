@@ -127,7 +127,7 @@ export default function About() {
             <div className="order-2 md:order-1 glass p-6 sm:p-8 rounded-xl">
               <Hand className="mb-4 text-accent" size={48} />
               <h3 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">
-                Salut, moi c'est {profileData.name.split(' ')[0]} !
+                Salut, moi c&apos;est {profileData.name.split(' ')[0]} !
               </h3>
               <p className="text-sm sm:text-base text-foreground/60 leading-relaxed">
                 {profileData.bio}

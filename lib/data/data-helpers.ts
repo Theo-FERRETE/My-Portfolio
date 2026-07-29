@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { getSupabaseClient } from '@/lib/supabase';
 
 // Projects
@@ -13,7 +14,19 @@ export interface Project {
   createdAt: string;
 }
 
-function mapProjectRow(row: any): Project {
+interface ProjectRow {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  link: string;
+  github?: string;
+  featured: boolean;
+  created_at: string;
+}
+
+function mapProjectRow(row: ProjectRow): Project {
   return {
     id: row.id,
     title: row.title,
@@ -36,7 +49,7 @@ export async function getProjects(): Promise<Project[]> {
   return (data ?? []).map(mapProjectRow);
 }
 
-export async function getProjectById(id: number): Promise<Project | undefined> {
+export const getProjectById = cache(async (id: number): Promise<Project | undefined> => {
   const { data, error } = await getSupabaseClient()
     .from('projects')
     .select('*')
@@ -44,7 +57,7 @@ export async function getProjectById(id: number): Promise<Project | undefined> {
     .maybeSingle();
   if (error) throw error;
   return data ? mapProjectRow(data) : undefined;
-}
+});
 
 export async function createProject(project: Omit<Project, 'id' | 'createdAt'>): Promise<Project> {
   const { data, error } = await getSupabaseClient()
@@ -96,7 +109,16 @@ export interface Skill {
   order: number;
 }
 
-function mapSkillRow(row: any): Skill {
+interface SkillRow {
+  id: number;
+  name: string;
+  category: string;
+  icon: string;
+  description?: string | null;
+  order: number;
+}
+
+function mapSkillRow(row: SkillRow): Skill {
   return {
     id: row.id,
     name: row.name,
@@ -178,7 +200,20 @@ export interface Profile {
   updatedAt: string;
 }
 
-function mapProfileRow(row: any): Profile {
+interface ProfileRow {
+  name: string;
+  title: string;
+  bio: string;
+  email: string;
+  phone: string;
+  location: string;
+  github: string;
+  linkedin: string;
+  twitter: string;
+  updated_at: string;
+}
+
+function mapProfileRow(row: ProfileRow): Profile {
   return {
     name: row.name,
     title: row.title,
@@ -227,7 +262,18 @@ export interface ContactMessage {
   createdAt: string;
 }
 
-function mapContactMessageRow(row: any): ContactMessage {
+interface ContactMessageRow {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: 'new' | 'read' | 'replied';
+  reply_message?: string | null;
+  replied_at?: string | null;
+  created_at: string;
+}
+
+function mapContactMessageRow(row: ContactMessageRow): ContactMessage {
   return {
     id: row.id,
     name: row.name,
@@ -309,7 +355,12 @@ export interface SiteSettings {
   updatedAt: string;
 }
 
-function mapSiteSettingsRow(row: any): SiteSettings {
+interface SiteSettingsRow {
+  default_theme: DefaultTheme;
+  updated_at: string;
+}
+
+function mapSiteSettingsRow(row: SiteSettingsRow): SiteSettings {
   return {
     defaultTheme: row.default_theme,
     updatedAt: row.updated_at,

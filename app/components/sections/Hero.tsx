@@ -28,7 +28,7 @@ export default function Hero() {
           <p className="text-sm sm:text-lg text-foreground/60 max-w-xl mx-auto mb-8 sm:mb-12 animate-fadeIn delay-500">
             Je transforme du café en code.
             <br />
-            Spécialisé dans la création d'apps web qui fonctionnent vraiment bien.
+            Spécialisé dans la création d&apos;apps web qui fonctionnent vraiment bien.
           </p>
 
           <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row justify-center animate-fadeIn delay-700">

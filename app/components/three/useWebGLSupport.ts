@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
+
+let cachedSupport: boolean | null = null;
 
 function detectWebGL(): boolean {
   try {
@@ -9,12 +11,22 @@ function detectWebGL(): boolean {
   }
 }
 
+function subscribe(): () => void {
+  // Le support WebGL ne change pas après le montage — rien à écouter.
+  return () => {};
+}
+
+function getSnapshot(): boolean | null {
+  if (cachedSupport === null) {
+    cachedSupport = detectWebGL();
+  }
+  return cachedSupport;
+}
+
+function getServerSnapshot(): boolean | null {
+  return null;
+}
+
 export function useWebGLSupport(): boolean | null {
-  const [supported, setSupported] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    setSupported(detectWebGL());
-  }, []);
-
-  return supported;
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

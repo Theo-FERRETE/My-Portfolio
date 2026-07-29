@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
@@ -22,13 +22,7 @@ export default function AdminDashboard() {
     }
   }, [status, router]);
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      fetchStats();
-    }
-  }, [status]);
-
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const [projectsRes, skillsRes, messagesRes] = await Promise.all([
         fetch('/api/admin/projects'),
@@ -48,7 +42,16 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Erreur lors de la récupération des statistiques:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      // fetchStats ne modifie l'état qu'après ses appels réseau (asynchrone),
+      // pas de façon synchrone dans le corps de l'effet.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchStats();
+    }
+  }, [status, fetchStats]);
 
   const handleSignOut = async () => {
     // Clear local state
@@ -219,7 +222,7 @@ export default function AdminDashboard() {
         {/* Actions rapides */}
         <div className="admin-card p-8">
           <h2 className="text-2xl font-bold mb-6">
-            Envie d'ajouter quelque chose ?
+            Envie d&apos;ajouter quelque chose ?
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             <Link

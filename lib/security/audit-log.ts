@@ -7,13 +7,26 @@ export interface AuditLogEntry {
   action: string;
   resource: string;
   resourceId?: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   ip?: string;
   userAgent?: string;
   success: boolean;
 }
 
-function mapAuditLogRow(row: any): AuditLogEntry {
+interface AuditLogRow {
+  id: string | number;
+  timestamp: string;
+  user_id: string;
+  action: string;
+  resource: string;
+  resource_id?: string | null;
+  details?: Record<string, unknown> | null;
+  ip?: string | null;
+  user_agent?: string | null;
+  success: boolean;
+}
+
+function mapAuditLogRow(row: AuditLogRow): AuditLogEntry {
   return {
     id: String(row.id),
     timestamp: row.timestamp,

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { Github, ExternalLink } from 'lucide-react';
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 
@@ -91,7 +92,7 @@ export default function Projects() {
             Mes Projets
           </h2>
           <p className="text-center text-foreground/60 mb-12 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base px-2">
-            Quelques trucs sur lesquels j'ai bossé récemment
+            Quelques trucs sur lesquels j&apos;ai bossé récemment
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
@@ -107,11 +108,26 @@ export default function Projects() {
                   <div className="relative h-full glass rounded-xl overflow-hidden hover:border-accent/40 transition-colors duration-300 flex flex-col">
                     {/* Header avec image */}
                     <div className="h-40 sm:h-48 bg-surface relative overflow-hidden shrink-0">
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-full object-cover opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-                      />
+                      {project.image.startsWith('/') ? (
+                        // Chemin local (upload admin) : next/image optimise automatiquement.
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                        />
+                      ) : (
+                        // URL externe : domaine non garanti dans next.config.ts remotePatterns,
+                        // on reste sur <img> pour ne pas casser l'affichage si le domaine change.
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                        />
+                      )}
                     </div>
 
                     {/* Contenu */}

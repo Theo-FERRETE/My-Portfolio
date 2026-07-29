@@ -249,7 +249,7 @@ export default function TwoFactorPage() {
           ) : (
             <div className="space-y-4">
               <p className="admin-text-muted">
-                Le 2FA n'est pas encore activé. Activez-le pour renforcer la sécurité de votre compte.
+                Le 2FA n&apos;est pas encore activé. Activez-le pour renforcer la sécurité de votre compte.
               </p>
 
               <button

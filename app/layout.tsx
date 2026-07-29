@@ -5,6 +5,7 @@ import AuthProvider from "@/app/components/providers/AuthProvider";
 import { ThemeProvider } from "@/app/components/providers/ThemeProvider";
 import { THEMES, isTheme, type Theme } from "@/app/components/providers/theme-constants";
 import { getSiteSettings } from "@/lib/data/data-helpers";
+import { SITE_URL } from "@/lib/site-url";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,6 +24,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Théo FERRETE - Développeur Full Stack",
   description: "Portfolio moderne de Théo FERRETE, développeur Full Stack passionné par la création d'expériences web innovantes avec React, Next.js et TypeScript.",
   keywords: ["développeur", "full stack", "react", "next.js", "typescript", "portfolio"],

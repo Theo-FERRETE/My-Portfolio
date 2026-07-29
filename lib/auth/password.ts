@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 
 const SALT_ROUNDS = 10;
 
@@ -11,6 +12,5 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 }
 
 export function generateSecret(length: number = 32): string {
-  const crypto = require('crypto');
-  return crypto.randomBytes(length).toString('base64');
+  return randomBytes(length).toString('base64');
 }

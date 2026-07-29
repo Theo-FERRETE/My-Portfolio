@@ -119,7 +119,7 @@ export default function EditProject() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
-          <p className="admin-text-muted">J\'charge...</p>
+          <p className="admin-text-muted">Chargement...</p>
         </div>
       </div>
     );
@@ -196,7 +196,7 @@ export default function EditProject() {
 
             <div>
               <label className="block text-sm font-medium admin-text-muted mb-2">
-                URL de l'image *
+                URL de l&apos;image *
               </label>
               <input
                 type="text"

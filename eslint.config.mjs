@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Scripts CLI ponctuels (migration, génération de secrets) : exécutés
+    // hors app via ts-node/node en CommonJS, non lintés avec les règles de l'app.
+    "scripts/**",
   ]),
 ]);
 

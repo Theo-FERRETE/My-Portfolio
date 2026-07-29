@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -5,11 +6,28 @@ import { Github, ExternalLink, ArrowLeft, Check } from 'lucide-react';
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 import { getProjectById } from '@/lib/data';
 
-export default async function ProjectDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+type ProjectPageParams = { params: Promise<{ id: string }> };
+
+export async function generateMetadata({ params }: ProjectPageParams): Promise<Metadata> {
+  const { id } = await params;
+  const project = Number.isInteger(Number(id)) ? await getProjectById(Number(id)) : undefined;
+
+  if (!project) {
+    return { title: 'Projet introuvable - Théo FERRETE' };
+  }
+
+  return {
+    title: `${project.title} - Théo FERRETE`,
+    description: project.description,
+    openGraph: {
+      title: project.title,
+      description: project.description,
+      images: project.image ? [{ url: project.image }] : undefined,
+    },
+  };
+}
+
+export default async function ProjectDetailPage({ params }: ProjectPageParams) {
   const { id } = await params;
   const projectId = Number(id);
 

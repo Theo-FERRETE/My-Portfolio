@@ -98,7 +98,7 @@ export default function AuditLogsPage() {
                 ← Retour
               </Link>
               <h1 className="text-2xl font-bold admin-text-accent">
-                Logs d'Audit
+                Logs d&apos;Audit
               </h1>
             </div>
             <AdminThemeSwitcher />

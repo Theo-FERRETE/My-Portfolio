@@ -174,7 +174,7 @@ export default function NewProject() {
                 required
               />
               <p className="mt-1 text-sm admin-text-muted">
-                URL de l'image ou un chemin local
+                URL de l&apos;image ou un chemin local
               </p>
             </div>
 

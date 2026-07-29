@@ -25,8 +25,11 @@ export function ThemeProvider({
   const [theme, setThemeState] = useState<Theme>(defaultTheme);
 
   useEffect(() => {
+    // Hydratation depuis localStorage : valeur uniquement disponible côté client,
+    // impossible à calculer pendant le rendu sans provoquer un mismatch SSR/client.
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (isTheme(stored)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setThemeState(stored);
     }
   }, []);

@@ -17,8 +17,11 @@ export function AdminThemeProvider({ children }: { children: React.ReactNode }) 
   const [theme, setThemeState] = useState<AdminTheme>(DEFAULT_THEME);
 
   useEffect(() => {
+    // Hydratation depuis localStorage : valeur uniquement disponible côté client,
+    // impossible à calculer pendant le rendu sans provoquer un mismatch SSR/client.
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (isAdminTheme(stored)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setThemeState(stored);
     }
   }, []);
