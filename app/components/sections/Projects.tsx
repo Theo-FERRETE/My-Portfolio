@@ -4,8 +4,8 @@ import { useMemo, useState } from 'react';
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 import ProjectCard from '@/app/components/ui/ProjectCard';
 import SectionHeading from '@/app/components/ui/SectionHeading';
-import type { Project } from '@/lib/data/data-helpers';
-import { useInView } from '@/lib/use-in-view';
+import type { Project } from '@/lib/data';
+import { useInView } from '@/lib/hooks/use-in-view';
 
 const ALL = 'Tout';
 

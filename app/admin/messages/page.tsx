@@ -1,264 +1,149 @@
 'use client';
 
-import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
+import { useMemo, useState } from 'react';
+import {
+  AdminErrorBanner,
+  AdminGuard,
+  AdminPageHeader,
+  AdminSpinner,
+} from '@/app/admin/_components';
+import { useAdminList } from '@/app/admin/_hooks/use-admin-list';
+import MessageCard from './_components/MessageCard';
+import type { ContactMessage } from '@/lib/data';
 
-interface ContactMessage {
-  id: number;
-  name: string;
-  email: string;
-  message: string;
-  status: 'new' | 'read' | 'replied';
-  replyMessage?: string;
-  repliedAt?: string;
-  createdAt: string;
-}
+type Filter = 'all' | ContactMessage['status'];
 
-export default function AdminMessagesPage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const [messages, setMessages] = useState<ContactMessage[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+const FILTER_LABELS: Record<Filter, string> = {
+  all: 'Tous',
+  new: 'Nouveaux',
+  read: 'Lus',
+  replied: 'Répondus',
+};
+
+function MessagesScreen() {
+  const { items: messages, setItems, isLoading, error } =
+    useAdminList<ContactMessage>('/api/admin/contact-messages');
   const [replyDrafts, setReplyDrafts] = useState<Record<number, string>>({});
-  const [activeFilter, setActiveFilter] = useState<'all' | 'new' | 'read' | 'replied'>('all');
+  const [activeFilter, setActiveFilter] = useState<Filter>('all');
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/admin/login');
-    }
-  }, [status, router]);
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      void fetchMessages();
-    }
-  }, [status]);
-
-  async function fetchMessages() {
-    try {
-      const res = await fetch('/api/admin/contact-messages');
-      const data = await res.json();
-      if (res.ok) {
-        setMessages(data);
-      }
-    } catch (error) {
-      console.error('Erreur lors du chargement des messages:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function updateMessage(id: number, payload: { status?: 'new' | 'read' | 'replied'; replyMessage?: string }) {
-    const res = await fetch(`/api/admin/contact-messages/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
-      throw new Error('Echec de la mise a jour');
-    }
-
-    const updated = await res.json();
-    setMessages((prev) => prev.map((msg) => (msg.id === id ? updated : msg)));
-  }
-
-  async function handleMarkAsRead(id: number) {
-    try {
-      await updateMessage(id, { status: 'read' });
-    } catch (error) {
-      console.error(error);
-      alert('Impossible de marquer ce message comme lu.');
-    }
-  }
-
-  async function handleReply(message: ContactMessage) {
-    const draft = (replyDrafts[message.id] || '').trim();
-    if (!draft) {
-      alert('Ajoute d\'abord un texte de reponse.');
-      return;
-    }
-
-    try {
-      await updateMessage(message.id, {
-        status: 'replied',
-        replyMessage: draft,
-      });
-
-      const subject = encodeURIComponent('Reponse a votre message - Portfolio Theo Ferrete');
-      const body = encodeURIComponent(`${draft}\n\n--\nTheo Ferrete`);
-      window.location.href = `mailto:${message.email}?subject=${subject}&body=${body}`;
-    } catch (error) {
-      console.error(error);
-      alert('Impossible de preparer la reponse pour le moment.');
-    }
-  }
-
-  const filteredMessages = useMemo(() => {
-    if (activeFilter === 'all') {
-      return messages;
-    }
-    return messages.filter((msg) => msg.status === activeFilter);
-  }, [messages, activeFilter]);
-
-  const counters = useMemo(() => {
-    return {
+  const counters = useMemo(
+    () => ({
       all: messages.length,
       new: messages.filter((m) => m.status === 'new').length,
       read: messages.filter((m) => m.status === 'read').length,
       replied: messages.filter((m) => m.status === 'replied').length,
-    };
-  }, [messages]);
+    }),
+    [messages]
+  );
 
-  if (status === 'loading' || isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
-          <p className="admin-text-muted">Chargement des messages...</p>
-        </div>
-      </div>
-    );
-  }
+  const filteredMessages = useMemo(
+    () => (activeFilter === 'all' ? messages : messages.filter((m) => m.status === activeFilter)),
+    [messages, activeFilter]
+  );
 
-  if (!session) {
-    return null;
+  const updateMessage = async (
+    id: number,
+    payload: { status?: ContactMessage['status']; replyMessage?: string }
+  ) => {
+    const res = await fetch(`/api/admin/contact-messages/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) throw new Error('Échec de la mise à jour');
+
+    const updated = await res.json();
+    setItems((prev) => prev.map((msg) => (msg.id === id ? updated : msg)));
+  };
+
+  const handleMarkAsRead = async (id: number) => {
+    try {
+      await updateMessage(id, { status: 'read' });
+    } catch (err) {
+      console.error(err);
+      alert('Impossible de marquer ce message comme lu.');
+    }
+  };
+
+  const handleReply = async (message: ContactMessage) => {
+    const draft = (replyDrafts[message.id] ?? message.replyMessage ?? '').trim();
+    if (!draft) {
+      alert("Ajoute d'abord un texte de réponse.");
+      return;
+    }
+
+    try {
+      await updateMessage(message.id, { status: 'replied', replyMessage: draft });
+
+      const subject = encodeURIComponent('Réponse à votre message - Portfolio Théo Ferrete');
+      const body = encodeURIComponent(`${draft}\n\n--\nThéo Ferrete`);
+      window.location.assign(`mailto:${message.email}?subject=${subject}&body=${body}`);
+    } catch (err) {
+      console.error(err);
+      alert('Impossible de préparer la réponse pour le moment.');
+    }
+  };
+
+  if (isLoading) {
+    return <AdminSpinner label="Chargement des messages..." />;
   }
 
   return (
     <div className="min-h-screen">
-      <header className="admin-header">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link
-                href="/admin/dashboard"
-                className="admin-text-muted hover:opacity-80"
-              >
-                ← Retour
-              </Link>
-              <h1 className="text-2xl font-bold admin-text-accent">
-                Messages de contact
-              </h1>
-            </div>
-            <AdminThemeSwitcher />
-          </div>
-        </div>
-      </header>
+      <AdminPageHeader title="Messages de contact" backHref="/admin/dashboard" />
 
       <main className="container mx-auto px-6 py-10">
-        <div className="mb-8 flex flex-wrap gap-2">
-          {([
-            ['all', 'Tous', counters.all],
-            ['new', 'Nouveaux', counters.new],
-            ['read', 'Lus', counters.read],
-            ['replied', 'Repondus', counters.replied],
-          ] as const).map(([key, label, count]) => (
-            <button
-              key={key}
-              onClick={() => setActiveFilter(key)}
-              className="px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
-              style={{
-                background: activeFilter === key ? 'var(--admin-accent)' : 'var(--admin-surface)',
-                color: activeFilter === key ? 'var(--admin-background)' : 'var(--admin-foreground)',
-                border: activeFilter === key ? 'none' : '1px solid var(--admin-border)',
-              }}
-            >
-              {label} ({count})
-            </button>
-          ))}
+        <AdminErrorBanner message={error} />
+
+        <div className="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filtrer les messages">
+          {(Object.keys(FILTER_LABELS) as Filter[]).map((key) => {
+            const active = activeFilter === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setActiveFilter(key)}
+                aria-pressed={active}
+                className="px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+                style={{
+                  background: active ? 'var(--admin-accent)' : 'var(--admin-surface)',
+                  color: active ? 'var(--admin-background)' : 'var(--admin-foreground)',
+                  border: active ? 'none' : '1px solid var(--admin-border)',
+                }}
+              >
+                {FILTER_LABELS[key]} ({counters[key]})
+              </button>
+            );
+          })}
         </div>
 
         {filteredMessages.length === 0 ? (
-          <div className="admin-card p-8 text-center admin-text-muted">
-            Aucun message pour ce filtre.
-          </div>
+          <p className="admin-card p-8 text-center admin-text-muted">Aucun message pour ce filtre.</p>
         ) : (
           <div className="space-y-5">
             {filteredMessages.map((message) => (
-              <article
+              <MessageCard
                 key={message.id}
-                className="admin-card p-6"
-              >
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-4">
-                  <div>
-                    <h2 className="text-lg font-bold">
-                      {message.name}
-                    </h2>
-                    <p className="text-sm admin-text-muted">{message.email}</p>
-                    <p className="text-xs admin-text-muted mt-1">
-                      {new Date(message.createdAt).toLocaleString('fr-FR')}
-                    </p>
-                  </div>
-
-                  <span
-                    className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold w-fit ${
-                      message.status === 'new'
-                        ? 'bg-blue-500/15 text-blue-400'
-                        : message.status === 'read'
-                        ? 'bg-amber-500/15 text-amber-400'
-                        : 'bg-green-500/15 text-green-400'
-                    }`}
-                  >
-                    {message.status === 'new' ? 'Nouveau' : message.status === 'read' ? 'Lu' : 'Repondu'}
-                  </span>
-                </div>
-
-                <p className="whitespace-pre-wrap mb-4">
-                  {message.message}
-                </p>
-
-                {message.replyMessage && (
-                  <div className="mb-4 p-3 rounded-lg" style={{ background: 'var(--admin-background)', border: '1px solid var(--admin-border)' }}>
-                    <p className="text-xs font-semibold admin-text-muted mb-1">Derniere reponse enregistree</p>
-                    <p className="text-sm whitespace-pre-wrap">{message.replyMessage}</p>
-                  </div>
-                )}
-
-                <div className="mb-4">
-                  <label htmlFor={`reply-${message.id}`} className="block text-sm font-medium admin-text-muted mb-2">
-                    Reponse
-                  </label>
-                  <textarea
-                    id={`reply-${message.id}`}
-                    rows={4}
-                    value={replyDrafts[message.id] ?? message.replyMessage ?? ''}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setReplyDrafts((prev) => ({ ...prev, [message.id]: value }));
-                    }}
-                    placeholder="Ecris ta reponse ici..."
-                    className="admin-input w-full px-3 py-2"
-                  />
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {message.status === 'new' && (
-                    <button
-                      onClick={() => handleMarkAsRead(message.id)}
-                      className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium hover:bg-amber-600 transition-colors"
-                    >
-                      Marquer comme lu
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => handleReply(message)}
-                    className="admin-btn-primary px-4 py-2 text-sm transition-all"
-                  >
-                    Repondre par email
-                  </button>
-                </div>
-              </article>
+                message={message}
+                draft={replyDrafts[message.id] ?? message.replyMessage ?? ''}
+                onDraftChange={(value) =>
+                  setReplyDrafts((prev) => ({ ...prev, [message.id]: value }))
+                }
+                onMarkAsRead={() => handleMarkAsRead(message.id)}
+                onReply={() => handleReply(message)}
+              />
             ))}
           </div>
         )}
       </main>
     </div>
+  );
+}
+
+export default function AdminMessagesPage() {
+  return (
+    <AdminGuard loadingLabel="Chargement des messages...">
+      <MessagesScreen />
+    </AdminGuard>
   );
 }

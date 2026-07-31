@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Github, Linkedin, Mail, Coffee } from 'lucide-react';
+import { NAV_ITEMS } from './nav-items';
 
 export default function Footer() {
   const router = useRouter();
@@ -65,37 +66,16 @@ export default function Footer() {
           {/* Navigation Links */}
           <div>
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-foreground">Navigation</h3>
-            <nav className="flex flex-col space-y-2 sm:space-y-3">
-              <Link
-                href="/"
-                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
-              >
-                Accueil
-              </Link>
-              <Link
-                href="/about"
-                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
-              >
-                À propos
-              </Link>
-              <Link
-                href="/skills"
-                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
-              >
-                Compétences
-              </Link>
-              <Link
-                href="/projects"
-                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
-              >
-                Projets
-              </Link>
-              <Link
-                href="/contact"
-                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
-              >
-                Contact
-              </Link>
+            <nav className="flex flex-col space-y-2 sm:space-y-3" aria-label="Navigation du pied de page">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
+                >
+                  {item.label}
+                </Link>
+              ))}
             </nav>
           </div>
 

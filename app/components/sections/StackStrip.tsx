@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { getSkillIcon } from '@/lib/skill-icons';
-import type { Skill } from '@/lib/data/data-helpers';
-import { useInView } from '@/lib/use-in-view';
+import type { Skill } from '@/lib/data';
+import { useInView } from '@/lib/hooks/use-in-view';
 
 const MAX_SHOWN = 12;
 

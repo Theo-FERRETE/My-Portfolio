@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowRight, Download } from 'lucide-react';
-import { useInView } from '@/lib/use-in-view';
+import { useInView } from '@/lib/hooks/use-in-view';
 
 /** Dernier appel à l'action de l'accueil, pour ne pas finir le scroll sur un cul-de-sac. */
 export default function ContactCta() {

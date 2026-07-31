@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getSiteSettings } from '@/lib/data/data-helpers';
+import { getSiteSettings } from '@/lib/data';
 
 export async function GET() {
   try {

@@ -3,92 +3,15 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { X, Menu, Download, Palette, Check } from 'lucide-react';
-import { useTheme, THEMES } from '@/app/components/providers/ThemeProvider';
-
-const FOCUSABLE = 'a[href], button:not([disabled])';
-
-function ThemeMenu({ iconSize = 16 }: { iconSize?: number }) {
-  const { theme, setTheme } = useTheme();
-  const [open, setOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    // Échap ferme le menu et rend le focus au bouton, sinon la navigation
-    // clavier reste bloquée dans un menu qu'on ne peut pas quitter.
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setOpen(false);
-        buttonRef.current?.focus();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [open]);
-
-  return (
-    <div className="relative" ref={menuRef}>
-      <button
-        ref={buttonRef}
-        onClick={() => setOpen((prev) => !prev)}
-        className="p-2 border border-border rounded-lg text-foreground hover:border-accent hover:text-accent transition-colors duration-300"
-        aria-label="Choisir un thème"
-        aria-haspopup="menu"
-        aria-expanded={open}
-      >
-        <Palette size={iconSize} />
-      </button>
-
-      {open && (
-        <div
-          role="menu"
-          aria-label="Thèmes"
-          className="glass-raised absolute right-0 top-full mt-2 w-44 rounded-xl p-1.5 z-50"
-        >
-          {THEMES.map((t) => (
-            <button
-              key={t.value}
-              type="button"
-              role="menuitemradio"
-              aria-checked={theme === t.value}
-              onClick={() => {
-                setTheme(t.value);
-                setOpen(false);
-                buttonRef.current?.focus();
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-300 ${
-                theme === t.value ? 'tint text-foreground' : 'text-foreground/70 hover-tint hover:text-foreground'
-              }`}
-            >
-              <span className="w-3 h-3 rounded-full shrink-0" style={{ background: t.swatch }} aria-hidden />
-              <span className="flex-1 text-left">{t.label}</span>
-              {theme === t.value && <Check size={14} className="text-accent" aria-hidden />}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
+import { X, Menu, Download } from 'lucide-react';
+import ThemeMenu from './ThemeMenu';
+import MobileNav from './MobileNav';
+import { NAV_ITEMS, CV_PATH } from './nav-items';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const panelRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
   // Ferme le menu mobile au changement de route — ajustement pendant le rendu
@@ -100,63 +23,11 @@ export default function Header() {
   }
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Menu mobile ouvert : le fond ne défile plus, Échap ferme, et le focus
-  // clavier reste dans le panneau au lieu de partir derrière l'overlay.
-  useEffect(() => {
-    if (!mobileMenuOpen) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    panelRef.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setMobileMenuOpen(false);
-        toggleRef.current?.focus();
-        return;
-      }
-
-      if (e.key !== 'Tab' || !panelRef.current) return;
-
-      const items = [...panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)];
-      if (items.length === 0) return;
-
-      const first = items[0];
-      const last = items[items.length - 1];
-      const active = document.activeElement;
-
-      if (e.shiftKey && (active === first || !panelRef.current.contains(active))) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && active === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [mobileMenuOpen]);
-
-  const navItems = [
-    { href: '/', label: 'Accueil' },
-    { href: '/about', label: 'À propos' },
-    { href: '/skills', label: 'Compétences' },
-    { href: '/projects', label: 'Projets' },
-    { href: '/contact', label: 'Contact' },
-  ];
 
   return (
     <header
@@ -166,13 +37,16 @@ export default function Header() {
     >
       <nav className="container mx-auto px-4 sm:px-6 py-4" aria-label="Navigation principale">
         <div className="flex items-center justify-between">
-          <Link href="/" className="font-display text-lg sm:text-xl font-bold tracking-tight text-foreground truncate">
+          <Link
+            href="/"
+            className="font-display text-lg sm:text-xl font-bold tracking-tight text-foreground truncate"
+          >
             Théo FERRETE
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
             <ul className="flex space-x-8">
-              {navItems.map((item) => (
+              {NAV_ITEMS.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -185,7 +59,7 @@ export default function Header() {
                   >
                     {item.label}
                     {pathname === item.href && (
-                      <span className="absolute -bottom-1 left-0 w-full h-px bg-accent" aria-hidden></span>
+                      <span className="absolute -bottom-1 left-0 w-full h-px bg-accent" aria-hidden />
                     )}
                   </Link>
                 </li>
@@ -193,7 +67,7 @@ export default function Header() {
             </ul>
 
             <a
-              href="/CV_Theo_Ferrete.pdf"
+              href={CV_PATH}
               download
               className="flex items-center gap-2 px-4 py-2 border border-border text-foreground rounded-lg font-medium text-sm hover:border-accent hover:text-accent transition-colors duration-300"
             >
@@ -207,11 +81,10 @@ export default function Header() {
           <div className="flex items-center gap-2 md:hidden">
             <ThemeMenu iconSize={18} />
 
-            {/* Mobile menu button */}
             <button
               ref={toggleRef}
               className="p-2 text-foreground transition-colors duration-300"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={() => setMobileMenuOpen((open) => !open)}
               aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
               aria-expanded={mobileMenuOpen}
               aria-controls="menu-mobile"
@@ -221,50 +94,12 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile menu */}
         {mobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <div
-              className="fixed inset-0 bg-black/60 md:hidden z-40"
-              onClick={() => setMobileMenuOpen(false)}
-              aria-hidden
-            />
-            {/* Menu panel */}
-            <div
-              id="menu-mobile"
-              ref={panelRef}
-              className="glass-raised fixed top-16 left-0 right-0 md:hidden z-40"
-            >
-              <ul className="py-4 space-y-2 px-4">
-                {navItems.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      aria-current={pathname === item.href ? 'page' : undefined}
-                      className={`block px-4 py-2.5 rounded-lg transition-colors duration-300 text-sm font-medium ${
-                        pathname === item.href
-                          ? 'tint text-accent'
-                          : 'text-foreground/70 hover-tint hover:text-foreground'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <div className="px-4 pb-4">
-                <a
-                  href="/CV_Theo_Ferrete.pdf"
-                  download
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-border text-foreground rounded-lg font-medium text-sm hover:border-accent hover:text-accent transition-colors duration-300"
-                >
-                  <Download size={14} />
-                  Télécharger CV
-                </a>
-              </div>
-            </div>
-          </>
+          <MobileNav
+            pathname={pathname}
+            onClose={() => setMobileMenuOpen(false)}
+            returnFocusRef={toggleRef}
+          />
         )}
       </nav>
     </header>

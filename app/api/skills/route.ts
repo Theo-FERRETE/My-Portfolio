@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getSkills } from '@/lib/data/data-helpers';
+import { getSkills } from '@/lib/data';
 
 export async function GET() {
   try {

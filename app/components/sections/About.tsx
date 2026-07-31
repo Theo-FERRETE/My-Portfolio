@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { FolderKanban, Wrench, Target, MapPin, ArrowRight } from 'lucide-react';
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 import SectionHeading from '@/app/components/ui/SectionHeading';
-import type { Profile, Project, Skill } from '@/lib/data/data-helpers';
-import { useInView } from '@/lib/use-in-view';
+import type { Profile, Project, Skill } from '@/lib/data';
+import { useInView } from '@/lib/hooks/use-in-view';
 
 interface AboutProps {
   profile: Profile;

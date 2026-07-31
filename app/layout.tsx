@@ -4,7 +4,7 @@ import "./globals.css";
 import AuthProvider from "@/app/components/providers/AuthProvider";
 import { ThemeProvider } from "@/app/components/providers/ThemeProvider";
 import { THEMES, isTheme, type Theme } from "@/app/components/providers/theme-constants";
-import { getSiteSettings } from "@/lib/data/data-helpers";
+import { getSiteSettings } from "@/lib/data";
 import { SITE_URL } from "@/lib/site-url";
 
 const geistSans = Geist({

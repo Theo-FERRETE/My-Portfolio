@@ -13,8 +13,8 @@ import {
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 import SectionHeading from '@/app/components/ui/SectionHeading';
 import { getSkillIcon } from '@/lib/skill-icons';
-import type { Project, Skill } from '@/lib/data/data-helpers';
-import { useInView } from '@/lib/use-in-view';
+import type { Project, Skill } from '@/lib/data';
+import { useInView } from '@/lib/hooks/use-in-view';
 
 const CATEGORY_ICON: Record<string, LucideIcon> = {
   Frontend: Monitor,

@@ -4,8 +4,8 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Github, ExternalLink, Star } from 'lucide-react';
-import type { Project } from '@/lib/data/data-helpers';
-import { useReducedMotion } from '@/lib/use-reduced-motion';
+import type { Project } from '@/lib/data';
+import { useReducedMotion } from '@/lib/hooks/use-reduced-motion';
 
 /** Inclinaison au survol — neutralisée si l'utilisateur demande moins de mouvement. */
 function TiltCard({ children }: { children: React.ReactNode }) {

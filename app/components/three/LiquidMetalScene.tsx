@@ -4,7 +4,7 @@ import { Suspense, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import type { Group } from 'three';
 import ChromeObject, { type SceneVariant } from './ChromeObject';
-import { useReducedMotion } from '@/lib/use-reduced-motion';
+import { useReducedMotion } from '@/lib/hooks/use-reduced-motion';
 
 interface LiquidMetalSceneProps {
   variant: SceneVariant;

@@ -1,26 +1,21 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { signOut } from 'next-auth/react';
-import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
+import { AdminGuard, AdminPageHeader } from '@/app/admin/_components';
 
-export default function AdminDashboard() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const [stats, setStats] = useState({
-    projects: 0,
-    skills: 0,
-    messages: 0,
-  });
+interface Stats {
+  projects: number;
+  skills: number;
+  messages: number;
+}
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/admin/login');
-    }
-  }, [status, router]);
+const EMPTY_STATS: Stats = { projects: 0, skills: 0, messages: 0 };
+
+function DashboardScreen() {
+  const [stats, setStats] = useState<Stats>(EMPTY_STATS);
 
   const fetchStats = useCallback(async () => {
     try {
@@ -30,14 +25,18 @@ export default function AdminDashboard() {
         fetch('/api/admin/contact-messages'),
       ]);
 
-      const projects = await projectsRes.json();
-      const skills = await skillsRes.json();
-      const messages = await messagesRes.json();
+      const [projects, skills, messages] = await Promise.all([
+        projectsRes.json(),
+        skillsRes.json(),
+        messagesRes.json(),
+      ]);
 
       setStats({
         projects: projects.length || 0,
         skills: skills.length || 0,
-        messages: (messages || []).filter((message: { status: string }) => message.status === 'new').length,
+        messages: (messages || []).filter(
+          (message: { status: string }) => message.status === 'new'
+        ).length,
       });
     } catch (error) {
       console.error('Erreur lors de la récupération des statistiques:', error);
@@ -45,46 +44,11 @@ export default function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      // fetchStats ne modifie l'état qu'après ses appels réseau (asynchrone),
-      // pas de façon synchrone dans le corps de l'effet.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      fetchStats();
-    }
-  }, [status, fetchStats]);
-
-  const handleSignOut = async () => {
-    // Clear local state
-    setStats({ projects: 0, skills: 0, messages: 0 });
-    
-    // Sign out avec NextAuth et redirection vers l'accueil
-    await signOut({ 
-      callbackUrl: '/',
-      redirect: true 
-    });
-  };
-
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
-          <p className="admin-text-muted">Une seconde...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!session) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{ borderColor: 'var(--admin-accent)', borderTopColor: 'transparent' }}></div>
-          <p className="admin-text-muted">Chargement du dashboard...</p>
-        </div>
-      </div>
-    );
-  }
+    // fetchStats ne modifie l'état qu'après ses appels réseau (asynchrone),
+    // pas de façon synchrone dans le corps de l'effet.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchStats();
+  }, [fetchStats]);
 
   const menuItems = [
     {
@@ -124,7 +88,7 @@ export default function AdminDashboard() {
     },
     {
       title: 'Messages',
-      description: 'Lire et repondre aux messages de contact',
+      description: 'Lire et répondre aux messages de contact',
       icon: '✉️',
       href: '/admin/messages',
       count: stats.messages,
@@ -133,54 +97,25 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <header className="admin-header">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link
-                href="/"
-                className="p-2 rounded-lg hover:opacity-80 transition-colors admin-text-muted"
-                title="Retour au site"
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold admin-text-accent">
-                  Dashboard
-                </h1>
-                <p className="text-sm admin-text-muted mt-1">
-                  Content de te revoir Theo 👋
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <AdminThemeSwitcher />
-              <button
-                onClick={handleSignOut}
-                className="admin-btn-secondary px-4 py-2"
-              >
-                Déconnexion
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <AdminPageHeader
+        title="Dashboard"
+        subtitle="Content de te revoir Theo 👋"
+        backHref="/"
+        backAriaLabel="Retour au site"
+        backLabel={<ArrowLeft className="w-6 h-6" />}
+        actions={
+          <button
+            onClick={() => signOut({ callbackUrl: '/', redirect: true })}
+            className="admin-btn-secondary px-4 py-2"
+          >
+            Déconnexion
+          </button>
+        }
+      />
 
-      {/* Main content */}
       <main className="container mx-auto px-6 py-12">
-        {/* Statistiques */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold mb-6">
-            Tes contenus
-          </h2>
+          <h2 className="text-3xl font-bold mb-6">Tes contenus</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {menuItems.map((item) => (
               <Link
@@ -188,26 +123,21 @@ export default function AdminDashboard() {
                 href={item.href}
                 className="admin-card group relative overflow-hidden transition-all duration-300 hover:-translate-y-1"
               >
-                {/* Header icône */}
                 <div className="h-32 flex items-center justify-center relative overflow-hidden bg-[color-mix(in_srgb,var(--admin-accent)_15%,transparent)]">
-                  <span className="text-6xl relative z-10 transform group-hover:scale-110 transition-transform duration-300">
+                  <span
+                    className="text-6xl relative z-10 transform group-hover:scale-110 transition-transform duration-300"
+                    aria-hidden
+                  >
                     {item.icon}
                   </span>
                 </div>
 
-                {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="admin-text-muted text-sm mb-4">
-                    {item.description}
-                  </p>
+                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                  <p className="admin-text-muted text-sm mb-4">{item.description}</p>
                   {item.count !== null && (
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold admin-text-accent">
-                        {item.count}
-                      </span>
+                      <span className="text-2xl font-bold admin-text-accent">{item.count}</span>
                       <span className="text-sm admin-text-muted">
                         élément{item.count > 1 ? 's' : ''}
                       </span>
@@ -219,29 +149,38 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Actions rapides */}
         <div className="admin-card p-8">
-          <h2 className="text-2xl font-bold mb-6">
-            Envie d&apos;ajouter quelque chose ?
-          </h2>
+          <h2 className="text-2xl font-bold mb-6">Envie d&apos;ajouter quelque chose ?</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <Link
-              href="/admin/projects?action=new"
+              href="/admin/projects/new"
               className="admin-btn-primary flex items-center gap-3 p-4 transition-all duration-300 hover:scale-[1.02]"
             >
-              <span className="text-2xl">➕</span>
+              <span className="text-2xl" aria-hidden>
+                ➕
+              </span>
               <span className="font-semibold">Ajouter un projet</span>
             </Link>
             <Link
-              href="/admin/skills?action=new"
+              href="/admin/skills/new"
               className="admin-btn-primary flex items-center gap-3 p-4 transition-all duration-300 hover:scale-[1.02]"
             >
-              <span className="text-2xl">⚡</span>
+              <span className="text-2xl" aria-hidden>
+                ⚡
+              </span>
               <span className="font-semibold">Ajouter une compétence</span>
             </Link>
           </div>
         </div>
       </main>
     </div>
+  );
+}
+
+export default function AdminDashboardPage() {
+  return (
+    <AdminGuard loadingLabel="Chargement du dashboard...">
+      <DashboardScreen />
+    </AdminGuard>
   );
 }

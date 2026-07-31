@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ProjectCard from '@/app/components/ui/ProjectCard';
 import SectionHeading from '@/app/components/ui/SectionHeading';
-import type { Project } from '@/lib/data/data-helpers';
-import { useInView } from '@/lib/use-in-view';
+import type { Project } from '@/lib/data';
+import { useInView } from '@/lib/hooks/use-in-view';
 
 /**
  * Aperçu de projets pour l'accueil. Pas de ChromeCanvas ici : la page porte déjà
