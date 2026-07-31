@@ -1,220 +1,129 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import {
-  Monitor,
-  Settings,
-  Database as DatabaseIcon,
-  Code2,
-  Rocket,
-  Wrench,
-  FolderKanban,
-  Target,
-  Hand,
-  MapPin,
-  type LucideIcon,
-} from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FolderKanban, Wrench, Target, MapPin, ArrowRight } from 'lucide-react';
 import ChromeCanvas from '@/app/components/three/ChromeCanvas';
-import { getSkillIcon } from '@/lib/skill-icons';
+import SectionHeading from '@/app/components/ui/SectionHeading';
+import type { Profile, Project, Skill } from '@/lib/data/data-helpers';
+import { useInView } from '@/lib/use-in-view';
 
-interface Project {
-  id: number;
-  title: string;
-  tags: string[];
+interface AboutProps {
+  profile: Profile;
+  projects: Project[];
+  skills: Skill[];
+  headingLevel?: 'h1' | 'h2';
 }
 
-interface Skill {
-  id: number;
-  name: string;
-  category: string;
-  icon: string;
-  order: number;
-}
+export default function About({ profile, projects, skills, headingLevel = 'h2' }: AboutProps) {
+  const { ref, inView } = useInView<HTMLElement>();
 
-interface Profile {
-  name: string;
-  bio: string;
-  location: string;
-}
-
-const EMPTY_PROFILE: Profile = { name: '', bio: '', location: '' };
-
-const categoryIcon: Record<string, LucideIcon> = {
-  'Frontend': Monitor,
-  'Backend': Settings,
-  'Database': DatabaseIcon,
-  'Language': Code2,
-  'DevOps': Rocket,
-};
-
-export default function About() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [projectsData, setProjectsData] = useState<Project[]>([]);
-  const [skillsData, setSkillsData] = useState<Skill[]>([]);
-  const [profileData, setProfileData] = useState<Profile>(EMPTY_PROFILE);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    fetch('/api/projects')
-      .then((res) => res.json())
-      .then((data: Project[]) => setProjectsData(data))
-      .catch((err) => console.error('Erreur chargement projets:', err));
-
-    fetch('/api/skills')
-      .then((res) => res.json())
-      .then((data: Skill[]) => setSkillsData(data))
-      .catch((err) => console.error('Erreur chargement skills:', err));
-
-    fetch('/api/profile')
-      .then((res) => res.json())
-      .then((data: Profile) => setProfileData(data))
-      .catch((err) => console.error('Erreur chargement profil:', err));
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  // Grouper les skills par catégorie
-  const skillsByCategory = skillsData.reduce<Record<string, typeof skillsData>>((acc, skill) => {
-    if (!acc[skill.category]) acc[skill.category] = [];
-    acc[skill.category].push(skill);
-    return acc;
-  }, {});
-
-  const categoryOrder = ['Frontend', 'Language', 'Backend', 'Database', 'DevOps'];
-  const sortedCategories = categoryOrder.filter(cat => skillsByCategory[cat]);
+  const categoryCount = new Set(skills.map((s) => s.category)).size;
+  const firstName = profile.name.split(' ')[0] || profile.name;
 
   const stats = [
-    { value: projectsData.length, label: 'Projets réalisés', icon: FolderKanban },
-    { value: skillsData.length, label: 'Technologies', icon: Wrench },
-    { value: sortedCategories.length, label: 'Domaines couverts', icon: Target },
+    { value: projects.length, label: 'Projets publiés', icon: FolderKanban },
+    { value: skills.length, label: 'Technologies', icon: Wrench },
+    { value: categoryCount, label: 'Domaines couverts', icon: Target },
   ];
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-20 bg-background relative overflow-hidden"
-    >
+    <section ref={ref} className="py-20 bg-background relative overflow-hidden">
       {/* 3D plein format */}
       <ChromeCanvas
         variant="skills"
-        visible={isVisible}
+        visible={inView}
         className="absolute inset-0 opacity-60 pointer-events-none"
       />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className={`max-w-5xl mx-auto transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8 sm:mb-12 text-foreground tracking-tight">
-            À propos de moi
-          </h2>
+        <div className={`max-w-5xl mx-auto reveal ${inView ? 'reveal-in' : ''}`}>
+          <SectionHeading as={headingLevel} title="À propos de moi" className="mb-10 sm:mb-14" />
 
-          {/* Bio + stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-start mb-12">
-            <div className="order-2 md:order-1 glass p-6 sm:p-8 rounded-xl">
-              <Hand className="mb-4 text-accent" size={48} />
-              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">
-                Salut, moi c&apos;est {profileData.name.split(' ')[0]} !
-              </h3>
-              <p className="text-sm sm:text-base text-foreground/60 leading-relaxed">
-                {profileData.bio}
-              </p>
-              <div className="mt-4 text-sm text-foreground/50 flex items-center gap-1.5">
-                <MapPin size={14} />
-                <span>{profileData.location}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-start">
+            {/* Bio */}
+            <div className="order-2 md:order-1 glass-card p-6 sm:p-8 rounded-xl">
+              <div className="flex items-center gap-4 mb-5">
+                <Image
+                  src="/images/profile/avatar.png"
+                  alt={profile.name}
+                  width={72}
+                  height={72}
+                  className="rounded-full object-cover border border-border shrink-0"
+                />
+                <div className="min-w-0">
+                  <h3 className="text-xl sm:text-2xl font-bold text-foreground truncate">
+                    Salut, moi c&apos;est {firstName} !
+                  </h3>
+                  {profile.title && (
+                    <p className="text-sm text-accent truncate">{profile.title}</p>
+                  )}
+                </div>
               </div>
+
+              <p className="text-sm sm:text-base text-foreground/70 leading-relaxed">
+                {profile.bio}
+              </p>
+
+              {profile.location && (
+                <p className="mt-5 text-sm text-foreground/60 flex items-center gap-1.5">
+                  <MapPin size={14} />
+                  <span>{profile.location}</span>
+                </p>
+              )}
             </div>
 
-            {/* Stats */}
+            {/* Chiffres + raccourcis */}
             <div className="space-y-4 order-1 md:order-2">
-              {stats.map((stat, i) => (
-                <div key={i} className="flex items-center space-x-4 p-4 rounded-xl glass">
-                  <div className="p-2.5 rounded-lg tint text-accent">
+              {stats.map((stat) => (
+                <div key={stat.label} className="flex items-center gap-4 p-4 rounded-xl glass-card">
+                  <span className="p-2.5 rounded-lg tint text-accent shrink-0">
                     <stat.icon size={22} />
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-accent">
-                      {stat.value}+
-                    </div>
-                    <div className="text-sm text-foreground/50">{stat.label}</div>
-                  </div>
+                  </span>
+                  <span>
+                    <span className="block text-2xl font-bold text-accent">{stat.value}</span>
+                    <span className="block text-sm text-foreground/60">{stat.label}</span>
+                  </span>
                 </div>
               ))}
 
-              {/* Projets phares */}
-              <div className="p-4 rounded-xl glass">
-                <h4 className="font-semibold text-foreground/80 mb-3 text-sm">Projets récents</h4>
-                <div className="space-y-2">
-                  {projectsData.map((project) => (
-                    <div key={project.id} className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-medium text-foreground/90">
-                        {project.title}
-                      </span>
-                      <div className="flex flex-wrap gap-1">
-                        {project.tags.slice(0, 3).map((tag) => (
-                          <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Skills par catégorie */}
-          <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-center mb-6 text-foreground">
-              Ma stack
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {sortedCategories.map((category) => {
-                const CategoryIcon = categoryIcon[category] ?? Wrench;
-                return (
-                <div
-                  key={category}
-                  className="glass p-4 rounded-xl"
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="flex items-center gap-1.5 text-sm font-semibold px-2 py-0.5 rounded-full border border-border text-foreground/80">
-                      <CategoryIcon size={14} />
-                      {category}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {skillsByCategory[category]
-                      .sort((a, b) => a.order - b.order)
-                      .map((skill) => {
-                        const { Icon, color } = getSkillIcon(skill.name);
-                        return (
-                        <span
-                          key={skill.id}
-                          className="text-xs flex items-center gap-1.5 px-2 py-1 rounded-full tint text-foreground/70 border border-border"
+              {projects.length > 0 && (
+                <div className="p-4 rounded-xl glass-card">
+                  <h4 className="font-semibold text-foreground/80 mb-3 text-sm">Projets récents</h4>
+                  <ul className="space-y-2">
+                    {projects.slice(0, 3).map((project) => (
+                      <li key={project.id}>
+                        <Link
+                          href={`/projects/${project.id}`}
+                          className="flex flex-wrap items-center gap-2 rounded-lg -mx-1 px-1 py-1 hover-tint"
                         >
-                          <Icon size={13} color={color} />
-                          <span>{skill.name}</span>
-                        </span>
-                        );
-                      })}
-                  </div>
+                          <span className="text-sm font-medium text-foreground/90">
+                            {project.title}
+                          </span>
+                          <span className="flex flex-wrap gap-1">
+                            {project.tags.slice(0, 3).map((tag) => (
+                              <span
+                                key={tag}
+                                className="text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                );
-              })}
+              )}
+
+              <Link
+                href="/skills"
+                className="flex items-center justify-between gap-2 p-4 rounded-xl border border-border text-foreground hover:border-accent hover:text-accent font-medium text-sm"
+              >
+                Voir la stack complète
+                <ArrowRight size={16} />
+              </Link>
             </div>
           </div>
         </div>

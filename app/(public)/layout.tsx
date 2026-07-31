@@ -8,6 +8,10 @@ export default function PublicLayout({
 }) {
   return (
     <>
+      {/* Chaque page publique expose un <main id="contenu"> comme cible. */}
+      <a href="#contenu" className="skip-link">
+        Aller au contenu
+      </a>
       <Header />
       {children}
       <Footer />

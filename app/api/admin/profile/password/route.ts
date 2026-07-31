@@ -29,13 +29,8 @@ export async function PUT(request: NextRequest) {
     const authConfig = await getAuthConfig();
 
     const isCurrentPasswordValid = await verifyPassword(data.currentPassword, authConfig.adminPasswordHash);
-    const isCurrentPlainPasswordValid =
-      !isCurrentPasswordValid && authConfig.adminPasswordPlain
-        ? data.currentPassword === authConfig.adminPasswordPlain
-        : false;
 
-    // In recovery mode, allow password rotation for an already authenticated admin session.
-    if (!isCurrentPasswordValid && !isCurrentPlainPasswordValid && !authConfig.disableTwoFactor) {
+    if (!isCurrentPasswordValid) {
       return NextResponse.json(
         { error: 'Mot de passe actuel incorrect' },
         { status: 401 }

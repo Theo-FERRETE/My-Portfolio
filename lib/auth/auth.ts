@@ -24,43 +24,28 @@ export const authOptions: NextAuthOptions = {
         const inputEmail = credentials.email.trim().toLowerCase();
         const adminEmail = authConfig.adminEmail;
         const adminPasswordHash = authConfig.adminPasswordHash;
-        const adminPasswordPlain = authConfig.adminPasswordPlain;
 
         if (!adminEmail) {
           throw new Error('Configuration admin invalide: ADMIN_EMAIL est requis');
         }
-        
+
         // Vérifier l'email
         if (inputEmail !== adminEmail) {
           throw new Error('Email ou mot de passe incorrect');
         }
 
-        // Vérifier le mot de passe hashé uniquement (PRODUCTION SAFE)
+        // Vérifier le mot de passe hashé (seul mécanisme d'authentification valide)
         const isPasswordValid = await verifyPassword(
           credentials.password,
           adminPasswordHash
         );
 
-        // Temporary recovery path for hosting env issues.
-        const isRecoveryPasswordValid =
-          !isPasswordValid && adminPasswordPlain
-            ? credentials.password === adminPasswordPlain
-            : false;
-
-        // Last-resort recovery while 2FA is globally disabled.
-        const isEmergencyPasswordValid =
-          !isPasswordValid &&
-          !isRecoveryPasswordValid &&
-          authConfig.disableTwoFactor &&
-          credentials.password === 'admin123';
-
-        if (!isPasswordValid && !isRecoveryPasswordValid && !isEmergencyPasswordValid) {
+        if (!isPasswordValid) {
           // Log échec de connexion
           await auditActions.login(inputEmail, 'unknown', false);
           throw new Error('Email ou mot de passe incorrect');
         }
 
-        // Allow temporary bypass when recovering admin access.
         const disableTwoFactor = authConfig.disableTwoFactor;
 
         // 🔐 VÉRIFICATION 2FA si activé

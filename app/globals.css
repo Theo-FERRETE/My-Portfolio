@@ -76,10 +76,40 @@ body {
   overflow-x: hidden;
 }
 
-/* Smooth scrolling */
 html {
-  scroll-behavior: smooth;
   overflow-x: hidden;
+}
+
+/* Smooth scrolling — jamais imposé à qui demande moins de mouvement */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Focus clavier visible partout : sans ça, la navigation au clavier est
+   invisible sur les boutons et liens qui neutralisent l'outline par défaut. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Lien d'évitement : masqué jusqu'à ce qu'il reçoive le focus clavier */
+.skip-link {
+  position: fixed;
+  top: -6rem;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  background: var(--accent);
+  color: var(--background);
+  font-weight: 600;
+  transition: top 150ms ease-out;
+}
+
+.skip-link:focus {
+  top: 1rem;
 }
 
 /* Animations personnalisées — désactivées si prefers-reduced-motion */
@@ -150,12 +180,54 @@ html {
   animation-delay: 1s;
 }
 
+/* Apparition au scroll — une seule définition partagée, neutralisée si
+   l'utilisateur demande moins de mouvement. */
+.reveal {
+  opacity: 0;
+  transform: translateY(2rem);
+  transition: opacity 700ms ease-out, transform 700ms ease-out;
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Trois niveaux d'élévation, pour que tout ne soit pas la même surface :
+   .glass = fond de section, .glass-card = carte, .glass-raised = overlay. */
+
 /* Habillage "chrome" — bordure fine + liseré façon reflet métallique plutôt qu'un flou lourd */
 .glass {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(4px);
   border: 1px solid var(--border);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.glass-card {
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.glass-raised {
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 16px 40px rgba(0, 0, 0, 0.55);
 }
 
 /* Léger voile de surface (remplace les usages de bg-white/5) */
@@ -186,9 +258,17 @@ html {
   opacity: 1;
 }
 
-/* Améliorer les transitions */
-* {
-  transition-property: background-color, border-color, color, fill, stroke;
+/* Transitions de couleur sur les seuls éléments interactifs — appliquer ça à `*`
+   coûtait un style de transition sur chaque nœud du DOM et faisait traîner
+   le changement de thème sur toute la page. */
+a,
+button,
+input,
+select,
+textarea,
+summary,
+[role='button'] {
+  transition-property: background-color, border-color, color, fill, stroke, opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }

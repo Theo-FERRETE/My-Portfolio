@@ -24,7 +24,6 @@ function parseEnvBoolean(value: string | undefined, defaultValue: boolean): bool
 }
 
 const DEFAULT_ADMIN_EMAIL = 'theo.ferrete@gmail.com';
-const DEFAULT_ADMIN_PASSWORD_HASH = '$2b$10$m0v8SvLd2BJFWkm24qhAxe8SAgnJOqHAGqSq8xJoviBU0c6hoiHgG'; // admin123
 
 export async function saveAdminPasswordHash(hash: string): Promise<void> {
   const { error } = await getSupabaseClient()
@@ -52,17 +51,23 @@ export async function getAuthConfig() {
 
   const envPasswordHash = process.env.ADMIN_PASSWORD_HASH
     ? normalizeEnvValue(process.env.ADMIN_PASSWORD_HASH)
-    : DEFAULT_ADMIN_PASSWORD_HASH;
+    : undefined;
+
+  const adminPasswordHash = stored.adminPasswordHash || envPasswordHash;
+
+  if (!adminPasswordHash) {
+    throw new Error(
+      'Configuration admin invalide: aucun ADMIN_PASSWORD_HASH configuré (ni en variable d\'environnement, ni en base). ' +
+      'Générez-en un avec `npm run hash-password`.'
+    );
+  }
 
   return {
     adminEmail: process.env.ADMIN_EMAIL
       ? normalizeEnvValue(process.env.ADMIN_EMAIL).toLowerCase()
       : DEFAULT_ADMIN_EMAIL,
-    adminPasswordHash: stored.adminPasswordHash || envPasswordHash,
-    adminPasswordPlain: process.env.ADMIN_PASSWORD
-      ? normalizeEnvValue(process.env.ADMIN_PASSWORD)
-      : '',
-    // Keep 2FA disabled by default during current recovery phase.
-    disableTwoFactor: parseEnvBoolean(process.env.DISABLE_2FA, true),
+    adminPasswordHash,
+    // Sécurisé par défaut : le 2FA n'est désactivé que si explicitement demandé.
+    disableTwoFactor: parseEnvBoolean(process.env.DISABLE_2FA, false),
   } as const;
 }

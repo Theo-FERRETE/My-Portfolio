@@ -40,14 +40,28 @@ afterEach(() => {
 });
 
 describe('getAuthConfig', () => {
-  it('falls back to built-in defaults when nothing is set or stored', async () => {
+  it('throws when no ADMIN_PASSWORD_HASH is configured anywhere (no weak default fallback)', async () => {
     mockStoredHash(null);
+
+    await expect(getAuthConfig()).rejects.toThrow('ADMIN_PASSWORD_HASH');
+  });
+
+  it('falls back to the default admin email when ADMIN_EMAIL is unset', async () => {
+    mockStoredHash(null);
+    process.env.ADMIN_PASSWORD_HASH = '$2b$10$customhashcustomhashcustomhashcustomha';
 
     const config = await getAuthConfig();
 
     expect(config.adminEmail).toBe('theo.ferrete@gmail.com');
-    expect(config.adminPasswordHash).toMatch(/^\$2b\$10\$/);
-    expect(config.disableTwoFactor).toBe(true);
+  });
+
+  it('defaults disableTwoFactor to false (secure by default) when DISABLE_2FA is unset', async () => {
+    mockStoredHash(null);
+    process.env.ADMIN_PASSWORD_HASH = '$2b$10$customhashcustomhashcustomhashcustomha';
+
+    const config = await getAuthConfig();
+
+    expect(config.disableTwoFactor).toBe(false);
   });
 
   it('uses ADMIN_EMAIL / ADMIN_PASSWORD_HASH env vars when no row is stored', async () => {
@@ -70,17 +84,19 @@ describe('getAuthConfig', () => {
     expect(config.adminPasswordHash).toBe('$2b$10$storedhashstoredhashstoredhashstoredha');
   });
 
-  it('respects DISABLE_2FA=false', async () => {
+  it('respects DISABLE_2FA=true as an explicit opt-in', async () => {
     mockStoredHash(null);
-    process.env.DISABLE_2FA = 'false';
+    process.env.ADMIN_PASSWORD_HASH = '$2b$10$customhashcustomhashcustomhashcustomha';
+    process.env.DISABLE_2FA = 'true';
 
     const config = await getAuthConfig();
 
-    expect(config.disableTwoFactor).toBe(false);
+    expect(config.disableTwoFactor).toBe(true);
   });
 
   it('strips wrapping quotes from env values (normalizeEnvValue)', async () => {
     mockStoredHash(null);
+    process.env.ADMIN_PASSWORD_HASH = '$2b$10$customhashcustomhashcustomhashcustomha';
     process.env.ADMIN_EMAIL = '"Quoted@Example.com"';
 
     const config = await getAuthConfig();

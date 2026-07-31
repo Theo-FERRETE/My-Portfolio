@@ -27,7 +27,7 @@ export default function Footer() {
             >
               Théo FERRETE
             </div>
-            <p className="text-foreground/60 text-xs sm:text-sm leading-relaxed max-w-xs">
+            <p className="text-foreground/70 text-xs sm:text-sm leading-relaxed max-w-xs">
               Dev web qui aime créer des trucs sympas sur internet. Basé à Rognac, France.
             </p>
 
@@ -68,31 +68,31 @@ export default function Footer() {
             <nav className="flex flex-col space-y-2 sm:space-y-3">
               <Link
                 href="/"
-                className="text-foreground/60 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
+                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
               >
                 Accueil
               </Link>
               <Link
                 href="/about"
-                className="text-foreground/60 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
+                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
               >
                 À propos
               </Link>
               <Link
                 href="/skills"
-                className="text-foreground/60 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
+                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
               >
                 Compétences
               </Link>
               <Link
                 href="/projects"
-                className="text-foreground/60 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
+                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
               >
                 Projets
               </Link>
               <Link
                 href="/contact"
-                className="text-foreground/60 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
+                className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
               >
                 Contact
               </Link>
@@ -102,7 +102,7 @@ export default function Footer() {
           {/* Contact Info */}
           <div>
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-foreground">Contact</h3>
-            <div className="flex flex-col space-y-2 sm:space-y-3 text-foreground/60 text-xs sm:text-sm">
+            <div className="flex flex-col space-y-2 sm:space-y-3 text-foreground/70 text-xs sm:text-sm">
               <p className="flex items-center gap-2">
                 <Mail size={14} className="sm:size-4 text-accent shrink-0" />
                 <span className="truncate">theo.ferrete@gmail.com</span>
@@ -117,10 +117,10 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-border">
           <div className="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left gap-3 sm:gap-0">
-            <p className="text-foreground/50 text-xs sm:text-sm">
+            <p className="text-foreground/65 text-xs sm:text-sm">
               © {new Date().getFullYear()} Théo FERRETE. Tous droits réservés.
             </p>
-            <p className="text-foreground/40 text-xs sm:text-sm flex items-center justify-center sm:justify-start gap-1.5">
+            <p className="text-foreground/60 text-xs sm:text-sm flex items-center justify-center sm:justify-start gap-1.5">
               Fait avec Next.js et beaucoup de café <Coffee size={14} />
             </p>
           </div>

@@ -42,7 +42,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
   }
 
   return (
-    <main className="min-h-screen pt-20 bg-background relative overflow-hidden">
+    <main id="contenu" className="min-h-screen pt-20 bg-background relative overflow-hidden">
       {/* 3D plein format */}
       <ChromeCanvas variant="hero" className="absolute inset-0 opacity-50 pointer-events-none" />
 
@@ -65,7 +65,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
               src={project.image}
               alt={project.title}
               fill
-              className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              className="object-cover"
               sizes="(max-width: 1280px) 100vw, 1280px"
               priority
             />
@@ -80,13 +80,13 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
           </div>
 
           {/* Contenu */}
-          <div className="glass rounded-2xl p-8 md:p-12">
+          <div className="glass-card rounded-2xl p-8 md:p-12">
             {/* Titre et date */}
             <div className="mb-8">
               <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground tracking-tight">
                 {project.title}
               </h1>
-              <p className="text-foreground/50">
+              <p className="text-foreground/65">
                 Créé le {new Date(project.createdAt).toLocaleDateString('fr-FR', {
                   year: 'numeric',
                   month: 'long',
@@ -100,7 +100,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
               <h2 className="text-2xl font-bold text-foreground mb-4">
                 Description
               </h2>
-              <p className="text-lg text-foreground/60 leading-relaxed">
+              <p className="text-lg text-foreground/70 leading-relaxed">
                 {project.description}
               </p>
             </div>
@@ -130,15 +130,15 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
               <ul className="space-y-3">
                 <li className="flex items-start">
                   <Check className="text-accent mr-3 shrink-0" size={20} />
-                  <span className="text-foreground/60">Interface utilisateur moderne et responsive</span>
+                  <span className="text-foreground/70">Interface utilisateur moderne et responsive</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="text-accent mr-3 shrink-0" size={20} />
-                  <span className="text-foreground/60">Performance optimisée</span>
+                  <span className="text-foreground/70">Performance optimisée</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="text-accent mr-3 shrink-0" size={20} />
-                  <span className="text-foreground/60">Architecture scalable et maintenable</span>
+                  <span className="text-foreground/70">Architecture scalable et maintenable</span>
                 </li>
               </ul>
             </div>

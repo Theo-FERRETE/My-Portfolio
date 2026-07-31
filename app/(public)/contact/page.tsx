@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen pt-20">
-      <Contact />
+    <main id="contenu" className="min-h-screen pt-20">
+      <Contact headingLevel="h1" />
     </main>
   );
 }
