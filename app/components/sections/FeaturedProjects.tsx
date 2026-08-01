@@ -17,7 +17,7 @@ export default function FeaturedProjects({ projects }: { projects: Project[] }) 
   if (projects.length === 0) return null;
 
   return (
-    <section ref={ref} id="apercu" className="py-20 sm:py-28 bg-background scroll-mt-20">
+    <section ref={ref} id="apercu" className="pt-20 sm:pt-28 pb-14 bg-background scroll-mt-20">
       <div className="container mx-auto px-4 sm:px-6">
         <div className={`reveal ${inView ? 'reveal-in' : ''}`}>
           <SectionHeading

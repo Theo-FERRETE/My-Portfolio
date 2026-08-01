@@ -1,8 +1,7 @@
 import Hero from '@/app/components/sections/Hero';
 import FeaturedProjects from '@/app/components/sections/FeaturedProjects';
-import StackStrip from '@/app/components/sections/StackStrip';
 import ContactCta from '@/app/components/sections/ContactCta';
-import { getProjects, getSkills } from '@/lib/data';
+import { getProjects } from '@/lib/data';
 import type { Project } from '@/lib/data';
 
 export const revalidate = 60;
@@ -19,14 +18,15 @@ function pickFeatured(projects: Project[]): Project[] {
   return [...featured, ...rest].slice(0, FEATURED_COUNT);
 }
 
+// Accueil volontairement court : une vitrine de projets, puis un lien.
+// Le détail des technos vit sur /skills, le formulaire sur /contact.
 export default async function Home() {
-  const [projects, skills] = await Promise.all([getProjects(), getSkills()]);
+  const projects = await getProjects();
 
   return (
     <main id="contenu">
       <Hero hasContentBelow={projects.length > 0} />
       <FeaturedProjects projects={pickFeatured(projects)} />
-      <StackStrip skills={skills} />
       <ContactCta />
     </main>
   );
