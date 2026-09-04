@@ -24,10 +24,10 @@ export default function ContactInfo() {
         <a
           href={CV_PATH}
           download
-          className="flex items-center justify-center gap-2 sm:gap-3 w-full px-4 sm:px-6 py-3 sm:py-4 mb-6 bg-accent text-background font-semibold rounded-xl hover:opacity-90 transition-opacity text-sm sm:text-base"
+          className="flex items-center justify-center gap-2 sm:gap-3 w-full px-4 sm:px-6 py-3 sm:py-4 mb-6 bg-accent text-background font-mono font-semibold rounded-xl hover:opacity-90 transition-opacity text-sm sm:text-base"
         >
           <Download size={18} />
-          Télécharger mon CV
+          curl -O cv.pdf
         </a>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
@@ -43,7 +43,7 @@ export default function ContactInfo() {
                 size={20}
                 className="shrink-0 text-foreground/70 group-hover:text-accent transition-colors duration-300"
               />
-              <span className="font-medium text-foreground/70 group-hover:text-accent truncate text-sm sm:text-base">
+              <span className="font-mono font-medium text-foreground/70 group-hover:text-accent truncate text-sm sm:text-base">
                 {social.name}
               </span>
             </a>
@@ -52,9 +52,9 @@ export default function ContactInfo() {
       </div>
 
       <div className="border border-accent/30 bg-accent/5 p-6 sm:p-8 rounded-xl">
-        <h3 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">Dispo ?</h3>
+        <h3 className="font-mono text-xl sm:text-2xl font-bold mb-4 text-foreground">status</h3>
         <p className="text-foreground/70 leading-relaxed text-sm sm:text-base flex items-start gap-2">
-          <Circle size={10} className="fill-emerald-400 text-emerald-400 shrink-0 mt-1.5" aria-hidden />
+          <Circle size={10} className="fill-accent-green text-accent-green shrink-0 mt-1.5" aria-hidden />
           <span>
             Ouais, dispo pour de nouveaux projets ! Je réponds généralement en moins de 48h.
           </span>

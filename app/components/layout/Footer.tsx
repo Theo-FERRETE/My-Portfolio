@@ -22,11 +22,11 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <div
-              className="font-display text-2xl sm:text-3xl font-bold tracking-tight cursor-default select-none"
+              className="font-mono text-xl sm:text-2xl font-bold tracking-tight cursor-default select-none"
               onDoubleClick={handleLogoDoubleClick}
               title="Portfolio"
             >
-              Théo FERRETE
+              theo<span className="text-accent">@</span>portfolio
             </div>
             <p className="text-foreground/70 text-xs sm:text-sm leading-relaxed max-w-xs">
               Dev web qui aime créer des trucs sympas sur internet. Basé à Rognac, France.

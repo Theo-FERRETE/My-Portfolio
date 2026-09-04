@@ -2,9 +2,14 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Github, ExternalLink, ArrowLeft, Check } from 'lucide-react';
-import ChromeCanvas from '@/app/components/three/ChromeCanvas';
+import { Github, ExternalLink, ArrowLeft, Check, Star } from 'lucide-react';
 import { getProjectById } from '@/lib/data';
+
+/** Nom de fichier plausible pour l'onglet de la fenêtre d'éditeur, dérivé de l'image. */
+function previewFilename(imagePath: string): string {
+  const base = imagePath.split('/').pop() || 'preview.png';
+  return base;
+}
 
 type ProjectPageParams = { params: Promise<{ id: string }> };
 
@@ -42,11 +47,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
   }
 
   return (
-    <main id="contenu" className="min-h-screen pt-20 bg-background relative overflow-hidden">
-      {/* 3D plein format */}
-      <ChromeCanvas variant="hero" className="absolute inset-0 opacity-50 pointer-events-none" />
-
-      <div className="container mx-auto px-6 py-12 relative z-10">
+    <main id="contenu" className="min-h-screen pt-20 bg-background">
+      <div className="container mx-auto px-6 py-12">
         {/* Breadcrumb */}
         <nav className="mb-8">
           <Link
@@ -59,24 +61,32 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
         </nav>
 
         <div className="max-w-5xl mx-auto">
-          {/* Image principale */}
-          <div className="relative h-96 rounded-2xl overflow-hidden mb-12 group border border-border">
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1280px) 100vw, 1280px"
-              priority
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent"></div>
-
-            {/* Badge Featured */}
-            {project.featured && (
-              <div className="absolute top-6 right-6 px-4 py-2 bg-accent text-background rounded-full font-semibold">
-                ⭐ Projet Phare
-              </div>
-            )}
+          {/* Image principale, encadrée façon fenêtre d'éditeur */}
+          <div className="glass-raised rounded-2xl overflow-hidden mb-12">
+            <div className="flex items-center gap-2 px-4 sm:px-5 py-3 border-b border-border">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" aria-hidden />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" aria-hidden />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" aria-hidden />
+              <span className="ml-3 font-mono text-xs text-foreground/50 tint px-2.5 py-1 rounded truncate">
+                {previewFilename(project.image)}
+              </span>
+              {project.featured && (
+                <span className="ml-auto inline-flex items-center gap-1.5 text-accent-amber font-mono text-xs font-semibold shrink-0">
+                  <Star size={12} className="fill-current" />
+                  phare
+                </span>
+              )}
+            </div>
+            <div className="relative h-72 sm:h-96">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1280px) 100vw, 1280px"
+                priority
+              />
+            </div>
           </div>
 
           {/* Contenu */}
@@ -114,7 +124,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-4 py-2 bg-accent/10 text-accent rounded-lg font-medium border border-accent/20"
+                    className="px-4 py-2 bg-accent/10 text-accent rounded-lg font-mono font-medium border border-accent/20"
                   >
                     {tag}
                   </span>

@@ -51,7 +51,7 @@ describe('validatePasswordStrength', () => {
 
   it('documents that any valid password scores at least "strong"', () => {
     // A valid password requires length>=12 + all 4 character classes, which
-    // already totals a score of 5 (the "strong" threshold) — so 'medium' is
+    // already totals a score of 5 (the "strong" threshold), so 'medium' is
     // currently unreachable for isValid=true results. Documented, not fixed.
     const result = validatePasswordStrength('Abcdefgh1234!');
     expect(result.isValid).toBe(true);

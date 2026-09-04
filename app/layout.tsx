@@ -1,26 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { JetBrains_Mono, Figtree } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/app/components/providers/AuthProvider";
-import { ThemeProvider } from "@/app/components/providers/ThemeProvider";
-import { THEMES, isTheme, type Theme } from "@/app/components/providers/theme-constants";
-import { getSiteSettings } from "@/lib/data";
 import { SITE_URL } from "@/lib/site-url";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["500", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -46,39 +39,15 @@ export const metadata: Metadata = {
   },
 };
 
-const VALID_THEMES = THEMES.map((t) => t.value);
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let defaultTheme: Theme = 'obsidian';
-  try {
-    const settings = await getSiteSettings();
-    if (isTheme(settings.defaultTheme)) defaultTheme = settings.defaultTheme;
-  } catch (error) {
-    console.error('Erreur récupération du thème par défaut:', error);
-  }
-
   return (
     <html lang="fr" className="scroll-smooth" suppressHydrationWarning>
-      <head>
-        {/* Anti-flash : applique le thème (préférence visiteur ou défaut serveur) avant l'hydratation React */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var valid=${JSON.stringify(VALID_THEMES)};var t=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',valid.indexOf(t)!==-1?t:${JSON.stringify(defaultTheme)});}catch(e){}})();`,
-          }}
-        />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased`}
-      >
-        <ThemeProvider defaultTheme={defaultTheme}>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </ThemeProvider>
+      <body className={`${jetbrainsMono.variable} ${figtree.variable} antialiased`}>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

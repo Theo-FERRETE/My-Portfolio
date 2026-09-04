@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { X, Menu, Download } from 'lucide-react';
-import ThemeMenu from './ThemeMenu';
 import MobileNav from './MobileNav';
 import { NAV_ITEMS, CV_PATH } from './nav-items';
 
@@ -14,7 +13,7 @@ export default function Header() {
   const pathname = usePathname();
   const toggleRef = useRef<HTMLButtonElement>(null);
 
-  // Ferme le menu mobile au changement de route — ajustement pendant le rendu
+  // Ferme le menu mobile au changement de route, ajustement pendant le rendu
   // plutôt que dans un effect (cf. https://react.dev/learn/you-might-not-need-an-effect).
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
@@ -39,9 +38,9 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="font-display text-lg sm:text-xl font-bold tracking-tight text-foreground truncate"
+            className="font-mono text-base sm:text-lg font-bold tracking-tight text-foreground truncate"
           >
-            Théo FERRETE
+            theo<span className="text-accent">@</span>portfolio
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
@@ -74,13 +73,9 @@ export default function Header() {
               <Download size={14} />
               CV
             </a>
-
-            <ThemeMenu />
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
-            <ThemeMenu iconSize={18} />
-
             <button
               ref={toggleRef}
               className="p-2 text-foreground transition-colors duration-300"

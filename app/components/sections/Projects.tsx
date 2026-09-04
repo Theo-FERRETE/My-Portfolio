@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 import ProjectCard from '@/app/components/ui/ProjectCard';
 import SectionHeading from '@/app/components/ui/SectionHeading';
 import type { Project } from '@/lib/data';
@@ -38,17 +37,11 @@ export default function Projects({ projects, headingLevel = 'h2' }: ProjectsProp
 
   return (
     <section ref={ref} className="py-20 bg-background relative overflow-hidden">
-      {/* 3D plein format */}
-      <ChromeCanvas
-        variant="projects"
-        visible={inView}
-        className="absolute inset-0 opacity-60 pointer-events-none"
-      />
-
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`reveal ${inView ? 'reveal-in' : ''}`}>
           <SectionHeading
             as={headingLevel}
+            eyebrow="ls ./projets"
             title="Mes Projets"
             subtitle="Quelques trucs sur lesquels j'ai bossé récemment"
             className="mb-10 sm:mb-12"

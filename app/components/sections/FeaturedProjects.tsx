@@ -7,10 +7,7 @@ import SectionHeading from '@/app/components/ui/SectionHeading';
 import type { Project } from '@/lib/data';
 import { useInView } from '@/lib/hooks/use-in-view';
 
-/**
- * Aperçu de projets pour l'accueil. Pas de ChromeCanvas ici : la page porte déjà
- * celui du Hero, et chaque canvas supplémentaire est un contexte WebGL de plus.
- */
+/** Aperçu de projets pour l'accueil. */
 export default function FeaturedProjects({ projects }: { projects: Project[] }) {
   const { ref, inView } = useInView<HTMLElement>();
 
@@ -21,6 +18,7 @@ export default function FeaturedProjects({ projects }: { projects: Project[] }) 
       <div className="container mx-auto px-4 sm:px-6">
         <div className={`reveal ${inView ? 'reveal-in' : ''}`}>
           <SectionHeading
+            eyebrow="ls ./projets --recent"
             title="Projets récents"
             subtitle="Un aperçu de ce que je construis en ce moment."
             className="mb-10 sm:mb-14"

@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { FolderKanban, Wrench, Target, MapPin, ArrowRight } from 'lucide-react';
-import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 import SectionHeading from '@/app/components/ui/SectionHeading';
 import type { Profile, Project, Skill } from '@/lib/data';
 import { useInView } from '@/lib/hooks/use-in-view';
@@ -29,16 +28,14 @@ export default function About({ profile, projects, skills, headingLevel = 'h2' }
 
   return (
     <section ref={ref} className="py-20 bg-background relative overflow-hidden">
-      {/* 3D plein format */}
-      <ChromeCanvas
-        variant="skills"
-        visible={inView}
-        className="absolute inset-0 opacity-60 pointer-events-none"
-      />
-
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`max-w-5xl mx-auto reveal ${inView ? 'reveal-in' : ''}`}>
-          <SectionHeading as={headingLevel} title="À propos de moi" className="mb-10 sm:mb-14" />
+          <SectionHeading
+            as={headingLevel}
+            eyebrow="cat ./about.md"
+            title="À propos de moi"
+            className="mb-10 sm:mb-14"
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-start">
             {/* Bio */}

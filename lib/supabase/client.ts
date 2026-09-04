@@ -2,7 +2,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 let _client: SupabaseClient | undefined;
 
-// Server-only client using the service role key — bypasses RLS entirely.
+// Server-only client using the service role key, bypasses RLS entirely.
 // Never import this from a 'use client' component.
 export function getSupabaseClient(): SupabaseClient {
   if (_client) return _client;

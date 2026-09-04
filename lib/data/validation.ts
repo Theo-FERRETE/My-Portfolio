@@ -45,10 +45,6 @@ export const profileSchema = z.object({
   twitter: z.string().url('URL invalide').optional().or(z.literal('')),
 });
 
-export const settingsSchema = z.object({
-  defaultTheme: z.enum(['obsidian', 'nebula', 'emerald', 'crimson', 'amber', 'sapphire', 'rose']),
-});
-
 export const loginSchema = z.object({
   email: z.string().email('Email invalide'),
   password: z.string().min(1, 'Mot de passe requis'),
@@ -66,6 +62,5 @@ export type ProjectUpdate = z.infer<typeof projectUpdateSchema>;
 export type SkillInput = z.infer<typeof skillSchema>;
 export type SkillUpdate = z.infer<typeof skillUpdateSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
-export type SettingsInput = z.infer<typeof settingsSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type ContactInput = z.infer<typeof contactSchema>;

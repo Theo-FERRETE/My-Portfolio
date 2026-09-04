@@ -15,7 +15,6 @@
     "migrate-to-supabase": "node --env-file=.env.local -r tsconfig-paths/register ./node_modules/.bin/ts-node --project tsconfig.scripts.json scripts/migrate-to-supabase.ts"
   },
   "dependencies": {
-    "@react-three/fiber": "^9.6.1",
     "@supabase/supabase-js": "^2.108.2",
     "@types/qrcode": "^1.5.6",
     "@types/speakeasy": "^2.0.10",
@@ -28,7 +27,6 @@
     "react-dom": "19.2.3",
     "react-icons": "^5.7.0",
     "speakeasy": "^2.0.0",
-    "three": "^0.184.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -37,7 +35,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.184.1",
     "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",

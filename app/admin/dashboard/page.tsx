@@ -80,13 +80,6 @@ function DashboardScreen() {
       count: null,
     },
     {
-      title: 'Apparence',
-      description: 'Thème par défaut vu par les visiteurs',
-      icon: '🎨',
-      href: '/admin/settings',
-      count: null,
-    },
-    {
       title: 'Messages',
       description: 'Lire et répondre aux messages de contact',
       icon: '✉️',

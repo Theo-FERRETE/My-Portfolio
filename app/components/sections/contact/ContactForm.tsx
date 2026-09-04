@@ -108,8 +108,8 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} noValidate className="glass-card p-6 sm:p-8 rounded-xl">
       <div className="mb-6">
-        <label htmlFor="name" className="block text-sm font-semibold text-foreground/80 mb-2">
-          Nom
+        <label htmlFor="name" className="block font-mono text-sm font-semibold text-foreground/80 mb-2">
+          name
         </label>
         <input
           type="text"
@@ -128,8 +128,8 @@ export default function ContactForm() {
       </div>
 
       <div className="mb-6">
-        <label htmlFor="email" className="block text-sm font-semibold text-foreground/80 mb-2">
-          Email
+        <label htmlFor="email" className="block font-mono text-sm font-semibold text-foreground/80 mb-2">
+          email
         </label>
         <input
           type="email"
@@ -148,8 +148,8 @@ export default function ContactForm() {
       </div>
 
       <div className="mb-6">
-        <label htmlFor="message" className="block text-sm font-semibold text-foreground/80 mb-2">
-          Message
+        <label htmlFor="message" className="block font-mono text-sm font-semibold text-foreground/80 mb-2">
+          message
         </label>
         <textarea
           id="message"
@@ -170,15 +170,15 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-accent text-background font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+        className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-accent text-background font-mono font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
       >
-        {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
+        {isSubmitting ? 'send(message) …' : 'send(message)'}
       </button>
 
       {submitStatus && (
         <p
-          className={`mt-4 text-sm font-medium ${
-            submitStatus.type === 'success' ? 'text-accent' : 'text-red-400'
+          className={`mt-4 font-mono text-sm font-medium ${
+            submitStatus.type === 'success' ? 'text-accent-green' : 'text-red-400'
           }`}
           role="status"
           aria-live="polite"

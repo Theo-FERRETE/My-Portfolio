@@ -12,7 +12,7 @@ const INPUT_CLASS = 'admin-input w-full px-4 py-2';
 
 /**
  * Libellé + champ + précision. Le `children` est une fonction pour que le champ
- * reçoive l'`id` généré et reste correctement associé à son `<label>` — c'est ce
+ * reçoive l'`id` généré et reste correctement associé à son `<label>`, ce
  * qui manquait aux formulaires de l'admin.
  */
 export default function AdminField({ label, required, hint, children }: AdminFieldProps) {

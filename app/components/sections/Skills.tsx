@@ -10,7 +10,6 @@ import {
   Wrench,
   type LucideIcon,
 } from 'lucide-react';
-import ChromeCanvas from '@/app/components/three/ChromeCanvas';
 import SectionHeading from '@/app/components/ui/SectionHeading';
 import { getSkillIcon } from '@/lib/skill-icons';
 import type { Project, Skill } from '@/lib/data';
@@ -25,6 +24,9 @@ const CATEGORY_ICON: Record<string, LucideIcon> = {
 };
 
 const CATEGORY_ORDER = ['Frontend', 'Language', 'Backend', 'Database', 'DevOps'];
+
+/** Rotation des accents "syntaxe" par catégorie, plutôt qu'un unique --accent. */
+const CATEGORY_ACCENT = ['text-accent-green', 'text-accent-amber', 'text-accent-teal'];
 
 /** Trie les catégories connues d'abord, puis les autres par ordre alphabétique. */
 function sortCategories(categories: string[]): string[] {
@@ -75,17 +77,11 @@ export default function Skills({ skills, projects = [], headingLevel = 'h2' }: S
 
   return (
     <section ref={ref} className="py-20 bg-background relative overflow-hidden">
-      {/* 3D plein format */}
-      <ChromeCanvas
-        variant="skills"
-        visible={inView}
-        className="absolute inset-0 opacity-60 pointer-events-none"
-      />
-
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`reveal ${inView ? 'reveal-in' : ''}`}>
           <SectionHeading
             as={headingLevel}
+            eyebrow="cat ./stack.json"
             title="Ma stack"
             subtitle="Les technologies avec lesquelles je travaille au quotidien, regroupées par domaine."
             className="mb-12 sm:mb-16"
@@ -97,12 +93,13 @@ export default function Skills({ skills, projects = [], headingLevel = 'h2' }: S
             </p>
           ) : (
             <div className="max-w-6xl mx-auto space-y-10">
-              {grouped.map(({ category, items }) => {
+              {grouped.map(({ category, items }, index) => {
                 const CategoryIcon = CATEGORY_ICON[category] ?? Wrench;
+                const accent = CATEGORY_ACCENT[index % CATEGORY_ACCENT.length];
                 return (
                   <div key={category}>
-                    <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.15em] text-foreground/60 mb-4">
-                      <CategoryIcon size={16} className="text-accent" />
+                    <h3 className="flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.15em] text-foreground/60 mb-4">
+                      <CategoryIcon size={16} className={accent} />
                       {category}
                       <span className="grow h-px bg-border ml-2" aria-hidden />
                     </h3>
@@ -120,7 +117,7 @@ export default function Skills({ skills, projects = [], headingLevel = 'h2' }: S
                               <Icon size={24} color={color} />
                             </span>
                             <span className="min-w-0">
-                              <span className="block font-semibold text-foreground text-sm truncate">
+                              <span className="block font-mono font-semibold text-foreground text-sm truncate">
                                 {skill.name}
                               </span>
                               {usage > 0 && (
