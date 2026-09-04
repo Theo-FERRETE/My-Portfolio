@@ -21,6 +21,10 @@ interface ProjectFormValues extends Record<string, unknown> {
   link: string;
   github: string;
   featured: boolean;
+  context: string;
+  myRole: string;
+  challenge: string;
+  result: string;
 }
 
 const EMPTY: ProjectFormValues = {
@@ -31,6 +35,10 @@ const EMPTY: ProjectFormValues = {
   link: '',
   github: '',
   featured: false,
+  context: '',
+  myRole: '',
+  challenge: '',
+  result: '',
 };
 
 /** Formulaire de projet, en création (`id` absent) comme en édition. */
@@ -50,6 +58,10 @@ export default function ProjectForm({ id }: { id?: string }) {
         link: (data.link as string) || '',
         github: (data.github as string) || '',
         featured: Boolean(data.featured),
+        context: (data.context as string) || '',
+        myRole: (data.myRole as string) || '',
+        challenge: (data.challenge as string) || '',
+        result: (data.result as string) || '',
       }),
       toApi: (v) => ({
         ...v,
@@ -155,6 +167,58 @@ export default function ProjectForm({ id }: { id?: string }) {
                   value={values.github}
                   onChange={handleChange}
                   placeholder="https://github.com/..."
+                  className={className}
+                />
+              )}
+            </AdminField>
+
+            <AdminField label="Contexte" hint="Le projet en une phrase : pour qui, pourquoi">
+              {({ id: fieldId, className }) => (
+                <textarea
+                  id={fieldId}
+                  name="context"
+                  value={values.context}
+                  onChange={handleChange}
+                  rows={2}
+                  className={className}
+                />
+              )}
+            </AdminField>
+
+            <AdminField label="Ton rôle" hint="Ce que tu as fait concrètement sur ce projet">
+              {({ id: fieldId, className }) => (
+                <textarea
+                  id={fieldId}
+                  name="myRole"
+                  value={values.myRole}
+                  onChange={handleChange}
+                  rows={2}
+                  className={className}
+                />
+              )}
+            </AdminField>
+
+            <AdminField label="Difficulté rencontrée" hint="Un vrai problème technique ou produit, et comment tu l'as résolu">
+              {({ id: fieldId, className }) => (
+                <textarea
+                  id={fieldId}
+                  name="challenge"
+                  value={values.challenge}
+                  onChange={handleChange}
+                  rows={3}
+                  className={className}
+                />
+              )}
+            </AdminField>
+
+            <AdminField label="Résultat" hint="L'impact concret (chiffres si possible)">
+              {({ id: fieldId, className }) => (
+                <textarea
+                  id={fieldId}
+                  name="result"
+                  value={values.result}
+                  onChange={handleChange}
+                  rows={2}
                   className={className}
                 />
               )}

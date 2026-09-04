@@ -11,6 +11,11 @@ export interface Project {
   github?: string;
   featured: boolean;
   createdAt: string;
+  /** Mini étude de cas, propre à chaque projet — vide tant que non renseignée. */
+  context: string;
+  myRole: string;
+  challenge: string;
+  result: string;
 }
 
 interface ProjectRow {
@@ -23,6 +28,10 @@ interface ProjectRow {
   github?: string;
   featured: boolean;
   created_at: string;
+  context: string;
+  my_role: string;
+  challenge: string;
+  result: string;
 }
 
 function mapProjectRow(row: ProjectRow): Project {
@@ -36,6 +45,10 @@ function mapProjectRow(row: ProjectRow): Project {
     github: row.github,
     featured: row.featured,
     createdAt: row.created_at,
+    context: row.context,
+    myRole: row.my_role,
+    challenge: row.challenge,
+    result: row.result,
   };
 }
 
@@ -69,6 +82,10 @@ export async function createProject(project: Omit<Project, 'id' | 'createdAt'>):
       link: project.link,
       github: project.github ?? '',
       featured: project.featured,
+      context: project.context ?? '',
+      my_role: project.myRole ?? '',
+      challenge: project.challenge ?? '',
+      result: project.result ?? '',
     })
     .select('*')
     .single();
@@ -77,10 +94,13 @@ export async function createProject(project: Omit<Project, 'id' | 'createdAt'>):
 }
 
 export async function updateProject(id: number, updates: Partial<Project>): Promise<Project | null> {
-  const { id: _id, createdAt: _createdAt, ...rest } = updates;
+  const { id: _id, createdAt: _createdAt, myRole, ...rest } = updates;
+  const payload: Record<string, unknown> = { ...rest };
+  if (myRole !== undefined) payload.my_role = myRole;
+
   const { data, error } = await getSupabaseClient()
     .from('projects')
-    .update(rest)
+    .update(payload)
     .eq('id', id)
     .select('*')
     .maybeSingle();

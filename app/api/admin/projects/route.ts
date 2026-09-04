@@ -31,6 +31,10 @@ export async function POST(request: NextRequest) {
       link: data.link || '',
       github: data.github || '',
       featured: data.featured || false,
+      context: data.context || '',
+      myRole: data.myRole || '',
+      challenge: data.challenge || '',
+      result: data.result || '',
     });
 
     const ip = getClientIp(request);

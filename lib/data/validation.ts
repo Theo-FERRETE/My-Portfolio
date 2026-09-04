@@ -15,6 +15,10 @@ export const projectSchema = z.object({
   link: z.string().url('URL invalide').optional().or(z.literal('')),
   github: z.string().url('URL invalide').optional().or(z.literal('')),
   featured: z.boolean().optional().default(false),
+  context: z.string().max(1000, 'Trop long').optional().or(z.literal('')),
+  myRole: z.string().max(500, 'Trop long').optional().or(z.literal('')),
+  challenge: z.string().max(1000, 'Trop long').optional().or(z.literal('')),
+  result: z.string().max(1000, 'Trop long').optional().or(z.literal('')),
 });
 
 export const projectUpdateSchema = projectSchema.partial().extend({

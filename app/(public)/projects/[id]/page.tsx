@@ -132,26 +132,38 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
               </div>
             </div>
 
-            {/* Caractéristiques */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
-                Caractéristiques principales
-              </h2>
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <Check className="text-accent mr-3 shrink-0" size={20} />
-                  <span className="text-foreground/70">Interface utilisateur moderne et responsive</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="text-accent mr-3 shrink-0" size={20} />
-                  <span className="text-foreground/70">Performance optimisée</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="text-accent mr-3 shrink-0" size={20} />
-                  <span className="text-foreground/70">Architecture scalable et maintenable</span>
-                </li>
-              </ul>
-            </div>
+            {/* Étude de cas — propre à chaque projet, absente tant que non renseignée en admin */}
+            {(project.context || project.myRole || project.challenge || project.result) && (
+              <div className="mb-8 space-y-6">
+                {project.context && (
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground mb-2">Contexte</h2>
+                    <p className="text-foreground/70 leading-relaxed">{project.context}</p>
+                  </div>
+                )}
+                {project.myRole && (
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground mb-2">Mon rôle</h2>
+                    <p className="text-foreground/70 leading-relaxed">{project.myRole}</p>
+                  </div>
+                )}
+                {project.challenge && (
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground mb-2">Difficulté rencontrée</h2>
+                    <p className="text-foreground/70 leading-relaxed">{project.challenge}</p>
+                  </div>
+                )}
+                {project.result && (
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
+                      <Check className="text-accent" size={22} />
+                      Résultat
+                    </h2>
+                    <p className="text-foreground/70 leading-relaxed">{project.result}</p>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-border">
