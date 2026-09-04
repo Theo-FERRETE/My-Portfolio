@@ -8,6 +8,10 @@ import { useInView } from '@/lib/hooks/use-in-view';
 
 const ALL = 'Tout';
 
+/** Décalage vertical par colonne pour casser l'alignement trop régulier de la grille. */
+const SM_OFFSET = ['sm:translate-y-0', 'sm:translate-y-8'];
+const LG_OFFSET = ['lg:translate-y-0', 'lg:translate-y-10', 'lg:-translate-y-6'];
+
 interface ProjectsProps {
   projects: Project[];
   headingLevel?: 'h1' | 'h2';
@@ -81,9 +85,14 @@ export default function Projects({ projects, headingLevel = 'h2' }: ProjectsProp
                 : `Aucun projet ne correspond à « ${activeTag} ».`}
             </p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
-              {visibleProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-14 sm:gap-y-16 max-w-7xl mx-auto">
+              {visibleProjects.map((project, index) => (
+                <div
+                  key={project.id}
+                  className={`transition-transform duration-300 ${SM_OFFSET[index % 2]} ${LG_OFFSET[index % 3]}`}
+                >
+                  <ProjectCard project={project} />
+                </div>
               ))}
             </div>
           )}

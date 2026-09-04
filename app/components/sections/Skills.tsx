@@ -28,6 +28,11 @@ const CATEGORY_ORDER = ['Frontend', 'Language', 'Backend', 'Database', 'DevOps']
 /** Rotation des accents "syntaxe" par catégorie, plutôt qu'un unique --accent. */
 const CATEGORY_ACCENT = ['text-accent-green', 'text-accent-amber', 'text-accent-teal'];
 
+/** Décalage vertical par colonne, cohérent avec l'effet appliqué aux grilles de projets. */
+const OFFSET_2COL = ['translate-y-0', 'translate-y-4'];
+const OFFSET_3COL = ['sm:translate-y-0', 'sm:translate-y-4', 'sm:-translate-y-3'];
+const OFFSET_4COL = ['md:translate-y-0', 'md:translate-y-5', 'md:-translate-y-3', 'md:translate-y-2'];
+
 /** Trie les catégories connues d'abord, puis les autres par ordre alphabétique. */
 function sortCategories(categories: string[]): string[] {
   return [...categories].sort((a, b) => {
@@ -92,7 +97,7 @@ export default function Skills({ skills, projects = [], headingLevel = 'h2' }: S
               Les compétences arrivent bientôt.
             </p>
           ) : (
-            <div className="max-w-6xl mx-auto space-y-10">
+            <div className="max-w-6xl mx-auto space-y-14 sm:space-y-16">
               {grouped.map(({ category, items }, index) => {
                 const CategoryIcon = CATEGORY_ICON[category] ?? Wrench;
                 const accent = CATEGORY_ACCENT[index % CATEGORY_ACCENT.length];
@@ -104,14 +109,14 @@ export default function Skills({ skills, projects = [], headingLevel = 'h2' }: S
                       <span className="grow h-px bg-border ml-2" aria-hidden />
                     </h3>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-                      {items.map((skill) => {
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-3 sm:gap-x-4 gap-y-8 sm:gap-y-10">
+                      {items.map((skill, skillIndex) => {
                         const { Icon, color } = getSkillIcon(skill.name);
                         const usage = usageBySkill.get(skill.name.toLowerCase()) ?? 0;
                         return (
                           <div
                             key={skill.id}
-                            className="group glass-card p-4 rounded-xl flex items-center gap-3 transition-colors duration-300 hover:border-accent/40"
+                            className={`group glass-card p-4 rounded-xl flex items-center gap-3 transition-all duration-300 hover:border-accent/40 ${OFFSET_2COL[skillIndex % 2]} ${OFFSET_3COL[skillIndex % 3]} ${OFFSET_4COL[skillIndex % 4]}`}
                           >
                             <span className="p-2.5 rounded-lg tint shrink-0 group-hover:bg-accent/10 transition-colors duration-300">
                               <Icon size={24} color={color} />

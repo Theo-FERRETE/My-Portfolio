@@ -90,29 +90,26 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
             </div>
           </div>
 
-          {/* CTA façon commandes shell */}
           <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center justify-center mt-8 sm:mt-10 animate-fadeIn delay-500">
             <Link
               href="/projects"
-              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-accent text-background rounded-lg font-mono font-semibold hover:opacity-90 transition-opacity text-sm sm:text-base"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity text-sm sm:text-base"
             >
-              cd ./projets
-              <span aria-hidden>↵</span>
+              Voir les projets
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border text-foreground rounded-lg font-mono font-semibold hover:border-accent hover:text-accent text-sm sm:text-base"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent text-sm sm:text-base"
             >
-              mail --to theo
-              <span aria-hidden>↵</span>
+              Me contacter
             </Link>
             <a
               href="/CV_Theo_Ferrete.pdf"
               download
-              className="inline-flex items-center justify-center gap-2 px-2 py-3 sm:py-4 font-mono text-foreground/70 font-medium hover:text-accent text-sm sm:text-base"
+              className="inline-flex items-center justify-center gap-2 px-2 py-3 sm:py-4 text-foreground/70 font-medium hover:text-accent text-sm sm:text-base"
             >
               <Download size={16} />
-              curl -O cv.pdf
+              Télécharger le CV
             </a>
           </div>
         </div>

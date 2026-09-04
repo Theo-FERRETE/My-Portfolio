@@ -24,10 +24,10 @@ export default function ContactInfo() {
         <a
           href={CV_PATH}
           download
-          className="flex items-center justify-center gap-2 sm:gap-3 w-full px-4 sm:px-6 py-3 sm:py-4 mb-6 bg-accent text-background font-mono font-semibold rounded-xl hover:opacity-90 transition-opacity text-sm sm:text-base"
+          className="flex items-center justify-center gap-2 sm:gap-3 w-full px-4 sm:px-6 py-3 sm:py-4 mb-6 bg-accent text-background font-semibold rounded-xl hover:opacity-90 transition-opacity text-sm sm:text-base"
         >
           <Download size={18} />
-          curl -O cv.pdf
+          Télécharger le CV
         </a>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4">

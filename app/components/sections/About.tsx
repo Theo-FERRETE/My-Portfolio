@@ -84,35 +84,13 @@ export default function About({ profile, projects, skills, headingLevel = 'h2' }
                 </div>
               ))}
 
-              {projects.length > 0 && (
-                <div className="p-4 rounded-xl glass-card">
-                  <h4 className="font-semibold text-foreground/80 mb-3 text-sm">Projets récents</h4>
-                  <ul className="space-y-2">
-                    {projects.slice(0, 3).map((project) => (
-                      <li key={project.id}>
-                        <Link
-                          href={`/projects/${project.id}`}
-                          className="flex flex-wrap items-center gap-2 rounded-lg -mx-1 px-1 py-1 hover-tint"
-                        >
-                          <span className="text-sm font-medium text-foreground/90">
-                            {project.title}
-                          </span>
-                          <span className="flex flex-wrap gap-1">
-                            {project.tags.slice(0, 3).map((tag) => (
-                              <span
-                                key={tag}
-                                className="text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <Link
+                href="/projects"
+                className="flex items-center justify-between gap-2 p-4 rounded-xl border border-border text-foreground hover:border-accent hover:text-accent font-medium text-sm"
+              >
+                Voir mes projets
+                <ArrowRight size={16} />
+              </Link>
 
               <Link
                 href="/skills"
