@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Plus, Trash2, Zap } from 'lucide-react';
 import {
   AdminErrorBanner,
   AdminGuard,
@@ -44,10 +45,16 @@ function SkillsScreen() {
     <div className="min-h-screen">
       <AdminPageHeader
         title="Gestion des Compétences"
+        icon={Zap}
+        color="#ffb86b"
         backHref="/admin/dashboard"
         actions={
-          <Link href="/admin/skills/new" className="admin-btn-primary px-4 py-2 transition-all">
-            ➕ Nouvelle compétence
+          <Link
+            href="/admin/skills/new"
+            className="admin-btn-primary px-4 py-2 transition-all inline-flex items-center gap-2"
+          >
+            <Plus size={18} aria-hidden />
+            Nouvelle compétence
           </Link>
         }
       />
@@ -94,7 +101,7 @@ function SkillsScreen() {
                           aria-label={`Supprimer ${skill.name}`}
                           className="admin-btn-danger px-4 py-2 text-sm"
                         >
-                          🗑️
+                          <Trash2 size={16} aria-hidden />
                         </button>
                       </div>
                     </div>

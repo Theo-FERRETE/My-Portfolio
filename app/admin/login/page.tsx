@@ -4,7 +4,6 @@ import { useState, useRef } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Shield } from 'lucide-react';
-import AdminThemeSwitcher from '@/app/admin/_theme/AdminThemeSwitcher';
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -56,8 +55,6 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <AdminThemeSwitcher className="fixed top-4 right-4" />
-
       <div className="max-w-md w-full">
         {/* Logo et titre */}
         <div className="text-center mb-8">
@@ -80,7 +77,7 @@ export default function AdminLogin() {
 
             {/* Message 2FA */}
             {error && error.includes('2FA') && (
-              <div className="bg-blue-500/10 border border-blue-500/30 text-blue-400 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+              <div className="bg-teal-500/10 border border-teal-500/30 text-teal-400 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 <span>{error}</span>
               </div>

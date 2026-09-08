@@ -2,6 +2,9 @@
  * Configuration ts-node pour les scripts
  */
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
     "module": "commonjs",
     "target": "ES2020",
@@ -12,5 +15,6 @@
     "paths": {
       "@/*": ["./*"]
     }
-  }
+  },
+  "include": ["scripts/**/*.ts", "lib/**/*.ts", "types/**/*.d.ts"]
 }

@@ -1,34 +1,13 @@
-[data-admin-theme='slate-console'] {
-  --admin-background: #0b0e12;
-  --admin-foreground: #e8edf2;
-  --admin-surface: #11151a;
-  --admin-accent: #38bdf8;
+/* Identité admin alignée sur le site public : rouge/noir/teal, un seul thème fixe. */
+.admin-shell {
+  --admin-background: #0a0a0d;
+  --admin-foreground: #f2f0f7;
+  --admin-surface: #151318;
+  --admin-accent: #ff3b3b;
   --admin-border: rgba(255, 255, 255, 0.08);
   --admin-radius: 0.75rem;
   --admin-font: inherit;
-}
 
-[data-admin-theme='carbon-fiber'] {
-  --admin-background: #0a0a0a;
-  --admin-foreground: #e6e6e6;
-  --admin-surface: #121212;
-  --admin-accent: #4ade80;
-  --admin-border: rgba(255, 255, 255, 0.1);
-  --admin-radius: 0px;
-  --admin-font: var(--font-geist-mono), ui-monospace, monospace;
-}
-
-[data-admin-theme='graphite-soft'] {
-  --admin-background: #14161a;
-  --admin-foreground: #eceef1;
-  --admin-surface: #1b1e23;
-  --admin-accent: #818cf8;
-  --admin-border: rgba(255, 255, 255, 0.07);
-  --admin-radius: 1rem;
-  --admin-font: inherit;
-}
-
-.admin-shell {
   background: var(--admin-background);
   color: var(--admin-foreground);
   min-height: 100vh;

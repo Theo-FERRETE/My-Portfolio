@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { AlertCircle, CheckCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle, Shield } from 'lucide-react';
 import { AdminGuard, AdminPageHeader } from '@/app/admin/_components';
 import TwoFactorStatusCard from './_components/TwoFactorStatusCard';
 import TwoFactorSetupWizard from './_components/TwoFactorSetupWizard';
@@ -103,6 +103,8 @@ function TwoFactorScreen() {
       <AdminPageHeader
         title="Authentification à deux facteurs"
         subtitle="Renforcez la sécurité de votre compte avec Google Authenticator"
+        icon={Shield}
+        color="#4fd6b0"
         backHref="/admin/dashboard"
       />
 
@@ -145,8 +147,9 @@ function TwoFactorScreen() {
         {newBackupCodes && (
           <div className="admin-card p-6">
             <h2 className="text-lg font-semibold mb-4">Nouveaux codes de secours</h2>
-            <p className="text-sm admin-text-muted mb-4">
-              ⚠️ Les anciens codes ne fonctionnent plus. Sauvegardez ces nouveaux codes :
+            <p className="text-sm admin-text-muted mb-4 flex items-center gap-2">
+              <AlertCircle size={16} className="shrink-0" aria-hidden />
+              Les anciens codes ne fonctionnent plus. Sauvegardez ces nouveaux codes :
             </p>
             <BackupCodesList codes={newBackupCodes} downloadLabel="Télécharger" />
             <button

@@ -77,8 +77,8 @@ export default function ProfileForm({ onLoaded }: { onLoaded: () => void }) {
 
       setMessage(
         res.ok
-          ? { type: 'success', text: "C'est bon, c'est sauvegardé ! 🚀" }
-          : { type: 'error', text: "Oups, j'ai pas pu sauvegarder 😅" }
+          ? { type: 'success', text: "C'est bon, c'est sauvegardé !" }
+          : { type: 'error', text: "Oups, j'ai pas pu sauvegarder" }
       );
     } catch (error) {
       console.error('Erreur:', error);

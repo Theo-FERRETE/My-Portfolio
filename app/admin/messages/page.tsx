@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { Mail } from 'lucide-react';
 import {
   AdminErrorBanner,
   AdminGuard,
@@ -91,7 +92,12 @@ function MessagesScreen() {
 
   return (
     <div className="min-h-screen">
-      <AdminPageHeader title="Messages de contact" backHref="/admin/dashboard" />
+      <AdminPageHeader
+        title="Messages de contact"
+        icon={Mail}
+        color="#ff3b3b"
+        backHref="/admin/dashboard"
+      />
 
       <main className="container mx-auto px-6 py-10">
         <AdminErrorBanner message={error} />

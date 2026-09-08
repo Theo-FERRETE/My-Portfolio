@@ -1,5 +1,6 @@
 'use client';
 
+import { Zap } from 'lucide-react';
 import {
   AdminErrorBanner,
   AdminField,
@@ -53,6 +54,8 @@ export default function SkillForm({ id }: { id?: string }) {
     <div className="min-h-screen">
       <AdminPageHeader
         title={isEditing ? 'Modifier la compétence' : 'Ajouter une compétence'}
+        icon={Zap}
+        color="#ffb86b"
         backHref={LIST_PATH}
       />
 

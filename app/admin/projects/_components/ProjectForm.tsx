@@ -1,5 +1,6 @@
 'use client';
 
+import { Rocket } from 'lucide-react';
 import {
   AdminErrorBanner,
   AdminField,
@@ -77,6 +78,7 @@ export default function ProjectForm({ id }: { id?: string }) {
     <div className="min-h-screen">
       <AdminPageHeader
         title={isEditing ? 'Modifier le projet' : 'Ajouter un projet'}
+        icon={Rocket}
         backHref={LIST_PATH}
       />
 

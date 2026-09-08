@@ -3,7 +3,7 @@
 import type { ContactMessage } from '@/lib/data';
 
 const STATUS_STYLES: Record<ContactMessage['status'], { label: string; className: string }> = {
-  new: { label: 'Nouveau', className: 'bg-blue-500/15 text-blue-400' },
+  new: { label: 'Nouveau', className: 'bg-teal-500/15 text-teal-400' },
   read: { label: 'Lu', className: 'bg-amber-500/15 text-amber-400' },
   replied: { label: 'Répondu', className: 'bg-green-500/15 text-green-400' },
 };

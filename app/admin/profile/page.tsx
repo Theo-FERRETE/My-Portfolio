@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { User } from 'lucide-react';
 import { AdminGuard, AdminPageHeader, AdminSpinner } from '@/app/admin/_components';
 import ProfileForm from './_components/ProfileForm';
 import PasswordForm from './_components/PasswordForm';
@@ -11,7 +12,7 @@ function ProfileScreen() {
 
   return (
     <div className="min-h-screen">
-      <AdminPageHeader title="Mon Profil" backHref="/admin/dashboard" />
+      <AdminPageHeader title="Mon Profil" icon={User} color="#7ee787" backHref="/admin/dashboard" />
 
       <main className="container mx-auto px-6 py-12">
         <div className="max-w-3xl mx-auto">

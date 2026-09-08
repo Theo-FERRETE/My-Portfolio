@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { Plus, Trash2, Rocket } from 'lucide-react';
 import {
   AdminErrorBanner,
   AdminGuard,
@@ -35,10 +36,15 @@ function ProjectsScreen() {
     <div className="min-h-screen">
       <AdminPageHeader
         title="Gestion des Projets"
+        icon={Rocket}
         backHref="/admin/dashboard"
         actions={
-          <Link href="/admin/projects/new" className="admin-btn-primary px-4 py-2 transition-all">
-            ➕ Nouveau projet
+          <Link
+            href="/admin/projects/new"
+            className="admin-btn-primary px-4 py-2 transition-all inline-flex items-center gap-2"
+          >
+            <Plus size={18} aria-hidden />
+            Nouveau projet
           </Link>
         }
       />
@@ -105,7 +111,7 @@ function ProjectsScreen() {
                       aria-label={`Supprimer ${project.title}`}
                       className="admin-btn-danger px-4 py-2 text-sm"
                     >
-                      🗑️
+                      <Trash2 size={16} aria-hidden />
                     </button>
                   </div>
                 </div>

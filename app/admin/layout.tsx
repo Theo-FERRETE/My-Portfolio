@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import AuthProvider from "@/app/components/providers/AuthProvider";
-import { AdminThemeProvider } from "@/app/admin/_theme/AdminThemeProvider";
 import "./admin-theme.css";
 
 export const metadata: Metadata = {
@@ -16,7 +15,7 @@ export default function AdminLayout({
 }) {
   return (
     <AuthProvider>
-      <AdminThemeProvider>{children}</AdminThemeProvider>
+      <div className="admin-shell">{children}</div>
     </AuthProvider>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, LayoutDashboard, Rocket, Zap, User, Shield, Mail, Plus, type LucideIcon } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { AdminGuard, AdminPageHeader } from '@/app/admin/_components';
 
@@ -50,41 +50,40 @@ function DashboardScreen() {
     fetchStats();
   }, [fetchStats]);
 
-  const menuItems = [
-    {
-      title: 'Projets',
-      description: 'Ajouter ou modifier tes projets',
-      icon: '🚀',
-      href: '/admin/projects',
-      count: stats.projects,
-    },
+  const compactItems: { title: string; description: string; icon: LucideIcon; color: string; href: string; count: number | null; alert?: boolean; createHref?: string }[] = [
     {
       title: 'Compétences',
-      description: 'Gérer ta stack technique',
-      icon: '⚡',
+      description: 'Ta stack technique',
+      icon: Zap,
+      color: '#ffb86b',
       href: '/admin/skills',
       count: stats.skills,
+      createHref: '/admin/skills/new',
     },
     {
       title: 'Profil',
-      description: 'Mettre à jour tes infos perso',
-      icon: '👤',
+      description: 'Tes infos perso',
+      icon: User,
+      color: '#7ee787',
       href: '/admin/profile',
       count: null,
     },
     {
       title: 'Sécurité 2FA',
-      description: 'Authentification à deux facteurs',
-      icon: '🔐',
+      description: 'Double authentification',
+      icon: Shield,
+      color: '#4fd6b0',
       href: '/admin/2fa',
       count: null,
     },
     {
       title: 'Messages',
-      description: 'Lire et répondre aux messages de contact',
-      icon: '✉️',
+      description: 'Messages de contact',
+      icon: Mail,
+      color: '#ff3b3b',
       href: '/admin/messages',
       count: stats.messages,
+      alert: stats.messages > 0,
     },
   ];
 
@@ -92,7 +91,8 @@ function DashboardScreen() {
     <div className="min-h-screen">
       <AdminPageHeader
         title="Dashboard"
-        subtitle="Content de te revoir Theo 👋"
+        subtitle="Content de te revoir Theo"
+        icon={LayoutDashboard}
         backHref="/"
         backAriaLabel="Retour au site"
         backLabel={<ArrowLeft className="w-6 h-6" />}
@@ -107,63 +107,98 @@ function DashboardScreen() {
       />
 
       <main className="container mx-auto px-6 py-12">
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold mb-6">Tes contenus</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {menuItems.map((item) => (
-              <Link
-                key={item.title}
-                href={item.href}
-                className="admin-card group relative overflow-hidden transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="h-32 flex items-center justify-center relative overflow-hidden bg-[color-mix(in_srgb,var(--admin-accent)_15%,transparent)]">
-                  <span
-                    className="text-6xl relative z-10 transform group-hover:scale-110 transition-transform duration-300"
-                    aria-hidden
-                  >
-                    {item.icon}
-                  </span>
-                </div>
+        <h2 className="text-3xl font-bold mb-6">Tes contenus</h2>
 
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                  <p className="admin-text-muted text-sm mb-4">{item.description}</p>
-                  {item.count !== null && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold admin-text-accent">{item.count}</span>
-                      <span className="text-sm admin-text-muted">
-                        élément{item.count > 1 ? 's' : ''}
-                      </span>
-                    </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 md:auto-rows-[152px]">
+          {/* Carte vedette : Projets, sur 2 colonnes et 2 rangées. Lien étiré (pas de <Link> imbriqué) : la carte
+              mène aux projets, le bouton + reste cliquable indépendamment grâce à son z-index supérieur. */}
+          <div className="admin-card group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 col-span-2 row-span-2 flex flex-col">
+            <div
+              className="flex-1 flex items-center justify-center relative overflow-hidden min-h-24"
+              style={{ background: 'color-mix(in srgb, var(--admin-accent) 15%, transparent)' }}
+            >
+              <Rocket
+                size={56}
+                className="relative z-0 transform group-hover:scale-110 transition-transform duration-300"
+                style={{ color: 'var(--admin-accent)' }}
+                aria-hidden
+              />
+              <Link
+                href="/admin/projects/new"
+                aria-label="Ajouter un projet"
+                className="admin-btn-primary absolute top-3 right-3 p-2 z-10 hover:scale-110 transition-transform"
+              >
+                <Plus size={18} aria-hidden />
+              </Link>
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl font-bold mb-1">
+                <Link href="/admin/projects" className="after:absolute after:inset-0">
+                  Projets
+                </Link>
+              </h3>
+              <p className="admin-text-muted text-sm mb-4">Ajouter ou modifier tes projets</p>
+              <div className="flex items-center justify-between">
+                <span className="text-3xl font-bold admin-text-accent">{stats.projects}</span>
+                <span className="text-sm admin-text-muted">
+                  projet{stats.projects > 1 ? 's' : ''}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Les 4 autres, compactes autour de la vedette */}
+          {compactItems.map((item) => (
+            <div
+              key={item.title}
+              className="admin-card group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 p-4 flex flex-col justify-between"
+            >
+              <div className="flex items-start justify-between">
+                <div
+                  className="p-2.5 rounded-lg relative"
+                  style={{ background: `color-mix(in srgb, ${item.color} 15%, transparent)` }}
+                >
+                  <item.icon
+                    size={20}
+                    className="transform group-hover:scale-110 transition-transform duration-300"
+                    style={{ color: item.color }}
+                    aria-hidden
+                  />
+                  {item.alert && (
+                    <span
+                      className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full"
+                      style={{ background: item.color }}
+                      aria-hidden
+                    />
                   )}
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="admin-card p-8">
-          <h2 className="text-2xl font-bold mb-6">Envie d&apos;ajouter quelque chose ?</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <Link
-              href="/admin/projects/new"
-              className="admin-btn-primary flex items-center gap-3 p-4 transition-all duration-300 hover:scale-[1.02]"
-            >
-              <span className="text-2xl" aria-hidden>
-                ➕
-              </span>
-              <span className="font-semibold">Ajouter un projet</span>
-            </Link>
-            <Link
-              href="/admin/skills/new"
-              className="admin-btn-primary flex items-center gap-3 p-4 transition-all duration-300 hover:scale-[1.02]"
-            >
-              <span className="text-2xl" aria-hidden>
-                ⚡
-              </span>
-              <span className="font-semibold">Ajouter une compétence</span>
-            </Link>
-          </div>
+                <div className="flex items-center gap-2 relative z-10">
+                  {item.count !== null && (
+                    <span className="text-2xl font-bold" style={{ color: item.color }}>
+                      {item.count}
+                    </span>
+                  )}
+                  {item.createHref && (
+                    <Link
+                      href={item.createHref}
+                      aria-label={`Ajouter : ${item.title}`}
+                      className="admin-btn-secondary p-1.5 hover:scale-110 transition-transform"
+                    >
+                      <Plus size={14} aria-hidden />
+                    </Link>
+                  )}
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold">
+                  <Link href={item.href} className="after:absolute after:inset-0">
+                    {item.title}
+                  </Link>
+                </h3>
+                <p className="admin-text-muted text-xs">{item.description}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </main>
     </div>

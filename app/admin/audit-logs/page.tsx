@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { Check, X, History } from 'lucide-react';
 import { AdminGuard, AdminPageHeader, AdminSpinner } from '@/app/admin/_components';
 import { useAdminList } from '@/app/admin/_hooks/use-admin-list';
 
@@ -17,9 +18,9 @@ interface AuditLog {
 
 const ACTION_COLORS: Record<string, string> = {
   CREATE: 'bg-green-500/15 text-green-400',
-  UPDATE: 'bg-blue-500/15 text-blue-400',
+  UPDATE: 'bg-teal-500/15 text-teal-400',
   DELETE: 'bg-red-500/15 text-red-400',
-  LOGIN: 'bg-purple-500/15 text-purple-400',
+  LOGIN: 'bg-amber-500/15 text-amber-400',
 };
 
 const DEFAULT_ACTION_COLOR = 'bg-white/10 admin-text-muted';
@@ -48,7 +49,12 @@ function AuditLogsScreen() {
 
   return (
     <div className="min-h-screen">
-      <AdminPageHeader title="Logs d'Audit" backHref="/admin/dashboard" />
+      <AdminPageHeader
+        title="Logs d'Audit"
+        icon={History}
+        color="#4fd6b0"
+        backHref="/admin/dashboard"
+      />
 
       <main className="container mx-auto px-6 py-12">
         <div className="admin-card p-6 mb-6">
@@ -136,13 +142,9 @@ function AuditLogsScreen() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {log.success ? (
-                          <span className="text-green-400" title="Succès">
-                            ✓
-                          </span>
+                          <Check size={16} className="text-green-400" aria-label="Succès" />
                         ) : (
-                          <span className="text-red-400" title="Échec">
-                            ✗
-                          </span>
+                          <X size={16} className="text-red-400" aria-label="Échec" />
                         )}
                       </td>
                     </tr>
