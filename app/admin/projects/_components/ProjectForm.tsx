@@ -115,7 +115,7 @@ export default function ProjectForm({ id }: { id?: string }) {
               )}
             </AdminField>
 
-            <AdminField label="Image" required hint="URL de l'image ou un chemin local">
+            <AdminField label="Image" hint="Optionnel — URL de l'image ou un chemin local">
               {({ id: fieldId, className }) => (
                 <input
                   id={fieldId}
@@ -125,7 +125,6 @@ export default function ProjectForm({ id }: { id?: string }) {
                   onChange={handleChange}
                   placeholder="https://unsplash.com/... ou /images/projects/mon-image.webp"
                   className={className}
-                  required
                 />
               )}
             </AdminField>

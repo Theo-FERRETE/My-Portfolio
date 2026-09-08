@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Github, ExternalLink, ArrowLeft, Check, Star } from 'lucide-react';
+import { Github, ExternalLink, ArrowLeft, Check, Star, ImageOff } from 'lucide-react';
 import { getProjectById } from '@/lib/data';
 
 /** Nom de fichier plausible pour l'onglet de la fenêtre d'éditeur, dérivé de l'image. */
 function previewFilename(imagePath: string): string {
+  if (!imagePath) return 'aucun-aperçu';
   const base = imagePath.split('/').pop() || 'preview.png';
   return base;
 }
@@ -78,14 +79,21 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
               )}
             </div>
             <div className="relative h-72 sm:h-96">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1280px) 100vw, 1280px"
-                priority
-              />
+              {project.image ? (
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1280px) 100vw, 1280px"
+                  priority
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-foreground/30 bg-[color-mix(in_srgb,var(--surface)_60%,transparent)]">
+                  <ImageOff size={40} aria-hidden />
+                  <span className="text-sm font-mono">Pas d&apos;aperçu pour ce projet</span>
+                </div>
+              )}
             </div>
           </div>
 

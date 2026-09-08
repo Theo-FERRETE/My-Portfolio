@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     const skill = await createSkill({
       name: data.name,
       category: data.category,
-      icon: data.icon,
+      icon: data.icon || '',
       description: data.description,
       order: data.order || 0,
     });

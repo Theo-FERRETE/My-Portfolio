@@ -10,7 +10,7 @@ export default function AdminLogin() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    token: '', // 🔐 Code 2FA
+    token: '', // Code 2FA
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +45,7 @@ export default function AdminLogin() {
         return;
       }
       
-      // ✅ Connexion réussie - navigation complète pour fiabiliser l'hydratation de session
+      // Connexion réussie - navigation complète pour fiabiliser l'hydratation de session
       window.location.assign('/admin/dashboard');
     } catch (err) {
       setError('Une erreur est survenue');
@@ -58,6 +58,13 @@ export default function AdminLogin() {
       <div className="max-w-md w-full">
         {/* Logo et titre */}
         <div className="text-center mb-8">
+          <span
+            className="inline-flex p-3 rounded-xl mb-4"
+            style={{ background: 'color-mix(in srgb, var(--admin-accent) 15%, transparent)' }}
+            aria-hidden
+          >
+            <Shield className="w-8 h-8" style={{ color: 'var(--admin-accent)' }} />
+          </span>
           <h1 className="text-4xl font-bold admin-text-accent mb-2">
             Admin Portfolio
           </h1>

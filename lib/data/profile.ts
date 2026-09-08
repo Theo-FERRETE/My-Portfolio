@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { getSupabaseClient } from '@/lib/supabase';
 
 export interface Profile {
@@ -41,7 +42,7 @@ function mapProfileRow(row: ProfileRow): Profile {
   };
 }
 
-export async function getProfile(): Promise<Profile> {
+export const getProfile = cache(async (): Promise<Profile> => {
   const { data, error } = await getSupabaseClient()
     .from('profile')
     .select('*')
@@ -49,7 +50,7 @@ export async function getProfile(): Promise<Profile> {
     .single();
   if (error) throw error;
   return mapProfileRow(data);
-}
+});
 
 export async function updateProfile(updates: Partial<Profile>): Promise<Profile> {
   const { updatedAt: _updatedAt, ...rest } = updates;

@@ -1,5 +1,5 @@
 /**
- * 🔒 Politique de sécurité des mots de passe
+ * Politique de sécurité des mots de passe
  * Validation stricte des mots de passe pour l'authentification admin
  */
 

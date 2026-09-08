@@ -18,14 +18,12 @@ export const SKILL_CATEGORIES = ['Frontend', 'Backend', 'DevOps', 'Database', 'T
 interface SkillFormValues extends Record<string, unknown> {
   name: string;
   category: string;
-  icon: string;
   description: string;
 }
 
 const EMPTY: SkillFormValues = {
   name: '',
   category: '',
-  icon: '⚡',
   description: '',
 };
 
@@ -41,7 +39,6 @@ export default function SkillForm({ id }: { id?: string }) {
       fromApi: (data) => ({
         name: (data.name as string) || '',
         category: (data.category as string) || '',
-        icon: (data.icon as string) || '⚡',
         description: (data.description as string) || '',
       }),
     });
@@ -96,21 +93,6 @@ export default function SkillForm({ id }: { id?: string }) {
                     </option>
                   ))}
                 </select>
-              )}
-            </AdminField>
-
-            <AdminField label="Icône" required hint="Un emoji qui représente la techno">
-              {({ id: fieldId, className }) => (
-                <input
-                  id={fieldId}
-                  type="text"
-                  name="icon"
-                  value={values.icon}
-                  onChange={handleChange}
-                  placeholder="⚛️ ou 🚀"
-                  className={className}
-                  required
-                />
               )}
             </AdminField>
 

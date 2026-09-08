@@ -3,6 +3,7 @@ import { JetBrains_Mono, Figtree } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/app/components/providers/AuthProvider";
 import { SITE_URL } from "@/lib/site-url";
+import { getProfile } from "@/lib/data";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -39,14 +40,37 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const profile = await getProfile();
+
+  const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: profile.name,
+    jobTitle: profile.title,
+    description: profile.bio,
+    url: SITE_URL,
+    image: `${SITE_URL}/images/profile/avatar.png`,
+    email: profile.email || undefined,
+    address: profile.location
+      ? { '@type': 'PostalAddress', addressLocality: profile.location }
+      : undefined,
+    sameAs: [profile.github, profile.linkedin, profile.twitter].filter(Boolean),
+  };
+
   return (
     <html lang="fr" className="scroll-smooth" suppressHydrationWarning>
       <body className={`${jetbrainsMono.variable} ${figtree.variable} antialiased`}>
+        <script
+          type="application/ld+json"
+          // Échappe `<` pour empêcher toute clôture prématurée de la balise <script>
+          // si jamais un champ texte (bio...) contenait "</script>".
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, '\\u003c') }}
+        />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

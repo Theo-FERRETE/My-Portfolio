@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Trash2, Rocket } from 'lucide-react';
+import { Plus, Trash2, Rocket, ImageOff } from 'lucide-react';
 import {
   AdminErrorBanner,
   AdminGuard,
@@ -67,13 +67,19 @@ function ProjectsScreen() {
             {projects.map((project) => (
               <div key={project.id} className="admin-card overflow-hidden">
                 <div className="relative h-48" style={{ background: 'var(--admin-background)' }}>
-                  <Image
-                    src={project.image}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
+                  {project.image ? (
+                    <Image
+                      src={project.image}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center admin-text-muted">
+                      <ImageOff size={28} aria-hidden />
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-6">

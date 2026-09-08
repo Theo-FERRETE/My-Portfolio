@@ -10,6 +10,7 @@ import {
 } from '@/app/admin/_components';
 import { useAdminList } from '@/app/admin/_hooks/use-admin-list';
 import type { Skill } from '@/lib/data';
+import { getSkillIcon } from '@/lib/skill-icons';
 
 function groupByCategory(skills: Skill[]): [string, Skill[]][] {
   const byCategory = new Map<string, Skill[]>();
@@ -78,11 +79,13 @@ function SkillsScreen() {
               <section key={category}>
                 <h2 className="text-2xl font-bold mb-4">{category}</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {categorySkills.map((skill) => (
+                  {categorySkills.map((skill) => {
+                    const { Icon, color } = getSkillIcon(skill.name);
+                    return (
                     <div key={skill.id} className="admin-card p-6">
                       <div className="flex items-center gap-3 mb-3">
-                        <span className="text-3xl" aria-hidden>
-                          {skill.icon}
+                        <span className="p-2 rounded-lg tint" aria-hidden>
+                          <Icon size={24} color={color} />
                         </span>
                         <h3 className="text-lg font-bold">{skill.name}</h3>
                       </div>
@@ -105,7 +108,8 @@ function SkillsScreen() {
                         </button>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </section>
             ))}

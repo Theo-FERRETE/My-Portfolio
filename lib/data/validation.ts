@@ -28,7 +28,7 @@ export const projectUpdateSchema = projectSchema.partial().extend({
 export const skillSchema = z.object({
   name: z.string().min(1, 'Nom requis').max(50, 'Trop long'),
   category: z.string().min(1, 'Catégorie requise'),
-  icon: z.string().min(1, 'Icône requise').max(10, 'Trop long'),
+  icon: z.string().max(10, 'Trop long').optional().or(z.literal('')),
   description: z.string().max(500, 'Trop long').optional().or(z.literal('')),
   order: z.number().int().min(0).optional().default(0),
 });

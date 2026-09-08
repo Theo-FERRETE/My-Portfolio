@@ -1,5 +1,5 @@
 /**
- * 🔐 Authentification à Deux Facteurs (2FA)
+ * Authentification à Deux Facteurs (2FA)
  * Gestion complète du 2FA avec Google Authenticator
  */
 

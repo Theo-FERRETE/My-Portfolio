@@ -63,7 +63,7 @@ function cleanupExpiredEntries(): void {
 }
 
 /**
- * 🔒 Récupère l'IP réelle du client de manière sécurisée
+ * Récupère l'IP réelle du client de manière sécurisée
  * Protège contre le spoofing d'IP en validant les proxies de confiance
  */
 export function getClientIp(request: Request): string {

@@ -1,160 +1,80 @@
-Bienvenue sur mon Portfolio
+# Portfolio — Théo FERRETE
 
-## 📦 Installation et Lancement
+Portfolio full-stack avec un espace admin pour gérer le contenu (projets, compétences, profil) sans toucher au code.
+
+## Installation
 
 ```bash
-# Installer les dépendances
 npm install
-
-# Lancer en mode développement
-npm run dev
-
-# Compiler pour la production
-npm run build
-
-# Lancer la version production
-npm start
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000) dans votre navigateur.
+### Variables d'environnement
 
-## 🎨 Personnalisation
+Crée un fichier `.env.local` à la racine avec :
 
-### 1. Informations personnelles
+```bash
+# Supabase (Project Settings → API dans le dashboard Supabase)
+SUPABASE_URL=https://xxxxx.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
-Modifier les fichiers dans `app/components/` :
+# NextAuth — génère une valeur avec `npm run generate-secret`
+NEXTAUTH_SECRET=...
 
-#### **Hero.tsx**
-```tsx
-<h1>Votre Nom</h1>
-<h2>Votre Titre</h2>
-<p>Votre description...</p>
+# Identifiants admin (facultatif si déjà en base, voir plus bas)
+ADMIN_EMAIL=ton-email@exemple.com
+ADMIN_PASSWORD_HASH=...  # généré avec `npm run hash-password`
 ```
 
-#### **About.tsx**
-Personnaliser votre présentation et vos points forts.
+Sans `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`, le site ne peut pas charger les projets/compétences/profil. Sans `NEXTAUTH_SECRET`, la connexion admin échoue.
 
-#### **Skills.tsx**
-Modifier le tableau `skills` :
-```tsx
-const skills = [
-  { name: 'Votre Techno', level: 90, icon: '🚀', color: 'from-blue-500 to-cyan-500' },
-  // ...
-];
+Le mot de passe admin peut aussi être stocké directement en base (table `admin_auth`, prioritaire sur `ADMIN_PASSWORD_HASH`) — pratique pour le changer sans redéployer.
+
+### Base de données
+
+Les migrations SQL sont dans `supabase/migrations/`, à exécuter dans l'éditeur SQL du dashboard Supabase, dans l'ordre numéroté.
+
+### Lancer le projet
+
+```bash
+npm run dev      # développement — http://localhost:3000
+npm run build    # build de production
+npm start        # lancer le build
+npm test         # tests (Vitest)
 ```
 
-#### **Projects.tsx**
-Modifier le tableau `projects` :
-```tsx
-const projects = [
-  {
-    title: 'Nom du Projet',
-    description: 'Description...',
-    image: '🎨', // Emoji ou chemin vers image
-    tags: ['Tech1', 'Tech2'],
-    gradient: 'from-purple-500 to-pink-500',
-    link: 'https://votre-projet.com',
-  },
-  // ...
-];
+## Structure
+
+```text
+app/
+├── (public)/          # Pages publiques : accueil, projets, compétences, contact
+├── admin/              # Espace admin (protégé par NextAuth) : dashboard, CRUD projets/compétences,
+│                        profil, sécurité 2FA, messages de contact, logs d'audit
+├── api/                # Routes API (publiques + /api/admin protégées)
+├── components/
+│   ├── sections/        # Sections de page (Hero, About, Skills, Projects, Contact...)
+│   ├── ui/               # Composants réutilisables (cartes, boutons...)
+│   ├── layout/           # Header, Footer, navigation
+│   └── providers/        # Contexts (auth...)
+lib/
+├── data/                # Accès aux données Supabase + validation (Zod)
+├── auth/                # NextAuth, 2FA, politique de mots de passe
+├── security/             # Rate limiting, audit log, IP
+└── supabase/              # Client Supabase (service role, bypasse RLS)
+supabase/migrations/     # Schéma SQL, à appliquer manuellement
 ```
 
-#### **Contact.tsx**
-Modifier les liens sociaux :
-```tsx
-const socialLinks = [
-  { name: 'GitHub', icon: '💻', url: 'https://github.com/votre-username', color: 'hover:text-gray-700' },
-  // ...
-];
-```
+## Contenu géré depuis l'admin
 
-### 2. Couleurs et Thème
+Le contenu du site (projets, compétences, profil, réglages) vit en base Supabase, pas dans le code. Connecte-toi sur `/admin/login` pour tout gérer : ajouter/modifier des projets (avec une mini étude de cas par projet), des compétences, ton profil, activer la 2FA, et consulter les messages de contact reçus.
 
-Les couleurs principales sont définies avec des classes Tailwind :
-- **Gradient principal** : `from-purple-600 to-pink-600`
-- **Fond clair** : Nuances de blanc et gris
-- **Fond sombre** : Nuances de noir et gris foncé
+## Identité visuelle
 
-Pour changer le thème, modifier les gradients dans les composants :
-```tsx
-className="bg-gradient-to-r from-votre-couleur to-votre-couleur"
-```
+Thème fixe façon éditeur de code : fond quasi-noir, rouge en accent principal (`--accent` dans `app/globals.css`), teal/ambre/vert en accents secondaires pour les tags et statuts. Les icônes de compétences sont déduites automatiquement du nom de la techno (`lib/skill-icons.tsx`), pas saisies à la main.
 
-### 3. Métadonnées SEO
+## Stack
 
-Modifier `app/layout.tsx` :
-```tsx
-export const metadata: Metadata = {
-  title: "Votre Nom - Votre Titre",
-  description: "Votre description...",
-  keywords: ["vos", "mots", "clés"],
-  // ...
-};
-```
-
-## 🎯 Structure du Projet
-
-```
-portfolio/
-├── app/
-│   ├── components/
-│   │   ├── Header.tsx      # Navigation fixe
-│   │   ├── Hero.tsx        # Section d'accueil
-│   │   ├── About.tsx       # À propos
-│   │   ├── Skills.tsx      # Compétences
-│   │   ├── Projects.tsx    # Projets
-│   │   ├── Contact.tsx     # Contact
-│   │   └── Footer.tsx      # Footer
-│   ├── globals.css         # Styles globaux et animations
-│   ├── layout.tsx          # Layout principal
-│   └── page.tsx            # Page d'accueil
-├── public/                 # Fichiers statiques
-└── package.json
-```
-
-## 🛠️ Technologies Utilisées
-
-- **Next.js 16** - Framework React
-- **React 19** - Bibliothèque UI
-- **TypeScript** - JavaScript typé
-- **Tailwind CSS 4** - Framework CSS utility-first
-- **Geist Font** - Typographie moderne
-
-## 📱 Features Avancées
-
-### Animations
-- Fade in au scroll
-- Slide animations
-- Effet shimmer sur les compétences
-- Particules suivant la souris
-- Bounce animations
-
-### Interactions
-- Navigation smooth scroll
-- Détection de la section active
-- Formulaire de contact
-- Hover effects sur tous les éléments interactifs
-
-### Performance
-- Intersection Observer pour animations au scroll
-- Composants client optimisés
-- Images et polices optimisées
-
-## 🎨 Palette de Couleurs
-
-- **Purple** : `#9333ea` (purple-600)
-- **Pink** : `#ec4899` (pink-600)
-- **Blue** : `#3b82f6` (blue-600)
-- **Gradients** : Combinaisons harmonieuses de ces couleurs
-
-## 📄 License
-
-Ce projet est libre d'utilisation pour votre portfolio personnel.
-
-## 🤝 Support
-
-Pour toute question ou suggestion, n'hésitez pas à ouvrir une issue ou à me contacter !
-
----
-
-**Fait avec ❤️ et React**
+- **Next.js 16** (App Router) / **React 19** / **TypeScript**
+- **Tailwind CSS 4**
+- **Supabase** (Postgres) pour les données
+- **NextAuth** (credentials + 2FA optionnel) pour l'admin
+- **Vitest** pour les tests

@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
-        token: { label: '2FA Token', type: 'text' }, // 🔐 Code 2FA optionnel
+        token: { label: '2FA Token', type: 'text' }, // Code 2FA optionnel
       },
       async authorize(credentials, req) {
         if (!credentials?.email || !credentials?.password) {
@@ -48,7 +48,7 @@ export const authOptions: NextAuthOptions = {
 
         const disableTwoFactor = authConfig.disableTwoFactor;
 
-        // 🔐 VÉRIFICATION 2FA si activé
+        // Vérification 2FA si activé
         const twoFactorEnabled = disableTwoFactor
           ? false
           : await isTwoFactorEnabled(adminEmail);
