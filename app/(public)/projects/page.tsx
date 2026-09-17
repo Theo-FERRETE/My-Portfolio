@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Projects from '@/app/components/sections/Projects';
+import ContactCta from '@/app/components/sections/ContactCta';
+import PageHero from '@/app/components/ui/PageHero';
 import { getProjects } from '@/lib/data';
 
 export const metadata: Metadata = {
@@ -15,8 +17,17 @@ export default async function ProjectsPage() {
   const projects = await getProjects();
 
   return (
-    <main id="contenu" className="min-h-screen pt-20">
-      <Projects projects={projects} headingLevel="h1" />
+    <main id="contenu" className="min-h-screen">
+      <PageHero
+        title={
+          <>
+            Mes <span className="text-accent">projets</span>
+          </>
+        }
+        subtitle="Une sélection d'applications web sur lesquelles j'ai travaillé."
+      />
+      <Projects projects={projects} />
+      <ContactCta />
     </main>
   );
 }

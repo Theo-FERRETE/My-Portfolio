@@ -1,23 +1,23 @@
 import Hero from '@/app/components/sections/Hero';
-import About from '@/app/components/sections/About';
+import ProofBand from '@/app/components/sections/ProofBand';
+import FeaturedProjects from '@/app/components/sections/FeaturedProjects';
+import Services from '@/app/components/sections/Services';
 import ContactCta from '@/app/components/sections/ContactCta';
-import { getProfile, getProjects, getSkills } from '@/lib/data';
+import { getProjects, getSkills } from '@/lib/data';
 
 export const revalidate = 60;
 
-// Accueil volontairement court : le profil en un coup d'œil, puis un lien.
+// Accueil façon landing : promesse, stack, réalisations, offre, puis contact.
 // Le détail des projets vit sur /projects, celui des technos sur /skills.
 export default async function Home() {
-  const [profile, projects, skills] = await Promise.all([
-    getProfile(),
-    getProjects(),
-    getSkills(),
-  ]);
+  const [projects, skills] = await Promise.all([getProjects(), getSkills()]);
 
   return (
     <main id="contenu">
       <Hero hasContentBelow />
-      <About profile={profile} projects={projects} skills={skills} />
+      <ProofBand skills={skills} />
+      <FeaturedProjects projects={projects} />
+      <Services />
       <ContactCta />
     </main>
   );

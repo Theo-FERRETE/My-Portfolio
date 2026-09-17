@@ -91,7 +91,7 @@ export default function ContactForm() {
 
       setSubmitStatus({
         type: 'success',
-        message: 'Message envoyé avec succès. Je reviens vers vous rapidement !',
+        message: 'Message envoyé, merci ! Je vous répondrai par email.',
       });
       setFormData({ name: '', email: '', message: '' });
       setTouched({});
@@ -106,10 +106,11 @@ export default function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="glass-card p-6 sm:p-8 rounded-xl">
+    <form onSubmit={handleSubmit} noValidate className="glass-raised p-6 sm:p-8 rounded-2xl">
+      <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6">Envoyer un message</h2>
       <div className="mb-6">
-        <label htmlFor="name" className="block font-mono text-sm font-semibold text-foreground/80 mb-2">
-          name
+        <label htmlFor="name" className="block text-sm font-semibold text-foreground/80 mb-2">
+          Nom
         </label>
         <input
           type="text"
@@ -128,8 +129,8 @@ export default function ContactForm() {
       </div>
 
       <div className="mb-6">
-        <label htmlFor="email" className="block font-mono text-sm font-semibold text-foreground/80 mb-2">
-          email
+        <label htmlFor="email" className="block text-sm font-semibold text-foreground/80 mb-2">
+          Email
         </label>
         <input
           type="email"
@@ -148,8 +149,8 @@ export default function ContactForm() {
       </div>
 
       <div className="mb-6">
-        <label htmlFor="message" className="block font-mono text-sm font-semibold text-foreground/80 mb-2">
-          message
+        <label htmlFor="message" className="block text-sm font-semibold text-foreground/80 mb-2">
+          Message
         </label>
         <textarea
           id="message"
@@ -158,7 +159,7 @@ export default function ContactForm() {
           onChange={handleChange}
           onBlur={handleBlur}
           required
-          rows={5}
+          rows={7}
           aria-invalid={errorFor('message') ? true : undefined}
           aria-describedby={errorFor('message') ? 'message-error' : undefined}
           className={`${fieldClass(!!errorFor('message'))} resize-none`}
@@ -177,7 +178,7 @@ export default function ContactForm() {
 
       {submitStatus && (
         <p
-          className={`mt-4 font-mono text-sm font-medium ${
+          className={`mt-4 text-sm font-medium ${
             submitStatus.type === 'success' ? 'text-accent-green' : 'text-red-400'
           }`}
           role="status"

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import StatusPage, { PRIMARY_ACTION, SECONDARY_ACTION } from '@/app/components/ui/StatusPage';
 
 export default function PublicError({
   error,
@@ -15,29 +16,17 @@ export default function PublicError({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-6">
-      <div className="glass rounded-2xl p-8 md:p-12 text-center max-w-md">
-        <h1 className="text-2xl font-bold text-foreground mb-4">
-          Une erreur est survenue
-        </h1>
-        <p className="text-foreground/60 mb-8">
-          Cette page n&apos;a pas pu s&apos;afficher correctement. Merci de réessayer.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => reset()}
-            className="px-6 py-3 bg-accent text-background rounded-xl font-semibold hover:opacity-90 transition-opacity"
-          >
-            Réessayer
-          </button>
-          <Link
-            href="/"
-            className="px-6 py-3 border border-border text-foreground rounded-xl font-semibold hover:border-accent hover:text-accent transition-all"
-          >
-            Retour à l&apos;accueil
-          </Link>
-        </div>
-      </div>
-    </div>
+    <StatusPage
+      code="Oups"
+      title="Une erreur est survenue"
+      message="Cette page n'a pas pu s'afficher correctement. Merci de réessayer."
+    >
+      <button type="button" onClick={() => reset()} className={PRIMARY_ACTION}>
+        Réessayer
+      </button>
+      <Link href="/" className={SECONDARY_ACTION}>
+        Retour à l&apos;accueil
+      </Link>
+    </StatusPage>
   );
 }

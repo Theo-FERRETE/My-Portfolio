@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { X, Menu, Download } from 'lucide-react';
+import { X, Menu, Download, ArrowRight } from 'lucide-react';
 import MobileNav from './MobileNav';
-import { NAV_ITEMS, CV_PATH } from './nav-items';
+import Logo from '@/app/components/ui/Logo';
+import { HEADER_NAV_ITEMS, CV_PATH } from './nav-items';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -36,21 +37,18 @@ export default function Header() {
     >
       <nav className="container mx-auto px-4 sm:px-6 py-4" aria-label="Navigation principale">
         <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="font-mono text-base sm:text-lg font-bold tracking-tight text-foreground truncate"
-          >
-            theo<span className="text-accent">@</span>portfolio
+          <Link href="/" className="shrink-0 rounded-lg" aria-label="Théo Ferrete, accueil">
+            <Logo />
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
-            <ul className="flex space-x-8">
-              {NAV_ITEMS.map((item) => (
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            <ul className="flex gap-6 lg:gap-8">
+              {HEADER_NAV_ITEMS.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     aria-current={pathname === item.href ? 'page' : undefined}
-                    className={`relative text-sm font-medium transition-colors duration-300 ${
+                    className={`relative text-sm font-medium whitespace-nowrap transition-colors duration-300 ${
                       pathname === item.href
                         ? 'text-accent'
                         : 'text-foreground/70 hover:text-foreground'
@@ -65,14 +63,23 @@ export default function Header() {
               ))}
             </ul>
 
-            <a
-              href={CV_PATH}
-              download
-              className="flex items-center gap-2 px-4 py-2 border border-border text-foreground rounded-lg font-medium text-sm hover:border-accent hover:text-accent transition-colors duration-300"
-            >
-              <Download size={14} />
-              CV
-            </a>
+            <div className="flex items-center gap-2 lg:gap-3 whitespace-nowrap">
+              <a
+                href={CV_PATH}
+                download
+                className="flex items-center gap-2 px-3 py-2 text-foreground/70 rounded-lg font-medium text-sm hover:text-accent transition-colors duration-300"
+              >
+                <Download size={14} />
+                CV
+              </a>
+              <Link
+                href="/contact"
+                className="group flex items-center gap-1.5 px-4 py-2 bg-accent text-background rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity"
+              >
+                Me contacter
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">

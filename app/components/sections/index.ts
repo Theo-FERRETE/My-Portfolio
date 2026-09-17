@@ -1,5 +1,8 @@
 export { default as Hero } from '@/app/components/sections/Hero';
-export { default as About } from '@/app/components/sections/About';
+export { default as ProofBand } from '@/app/components/sections/ProofBand';
+export { default as FeaturedProjects } from '@/app/components/sections/FeaturedProjects';
+export { default as Services } from '@/app/components/sections/Services';
+export { default as ContactCta } from '@/app/components/sections/ContactCta';
 export { default as Projects } from '@/app/components/sections/Projects';
 export { default as Skills } from '@/app/components/sections/Skills';
 export { default as Contact } from '@/app/components/sections/Contact';

@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Download } from 'lucide-react';
-import { NAV_ITEMS, CV_PATH } from './nav-items';
+import { Download, ArrowRight } from 'lucide-react';
+import { HEADER_NAV_ITEMS, CV_PATH } from './nav-items';
 
 const FOCUSABLE = 'a[href], button:not([disabled])';
 
@@ -65,7 +65,7 @@ export default function MobileNav({ pathname, onClose, returnFocusRef }: MobileN
 
       <div id="menu-mobile" ref={panelRef} className="glass-raised fixed top-16 left-0 right-0 md:hidden z-40">
         <ul className="py-4 space-y-2 px-4">
-          {NAV_ITEMS.map((item) => (
+          {HEADER_NAV_ITEMS.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
@@ -81,15 +81,22 @@ export default function MobileNav({ pathname, onClose, returnFocusRef }: MobileN
             </li>
           ))}
         </ul>
-        <div className="px-4 pb-4">
+        <div className="px-4 pb-4 grid grid-cols-2 gap-2">
           <a
             href={CV_PATH}
             download
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-border text-foreground rounded-lg font-medium text-sm hover:border-accent hover:text-accent transition-colors duration-300"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 border border-border text-foreground rounded-lg font-medium text-sm hover:border-accent hover:text-accent transition-colors duration-300"
           >
             <Download size={14} />
-            Télécharger CV
+            CV
           </a>
+          <Link
+            href="/contact"
+            className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-accent text-background rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity"
+          >
+            Me contacter
+            <ArrowRight size={14} />
+          </Link>
         </div>
       </div>
     </>

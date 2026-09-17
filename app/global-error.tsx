@@ -15,8 +15,8 @@ export default function GlobalError({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#0a0a0a',
-          color: '#f2f2f0',
+          background: '#0a0a0d',
+          color: '#f2f0f7',
           fontFamily: 'system-ui, sans-serif',
         }}
       >
@@ -31,12 +31,13 @@ export default function GlobalError({
             onClick={() => reset()}
             style={{
               padding: '0.75rem 2rem',
-              borderRadius: '0.75rem',
-              border: '1px solid rgba(255,255,255,0.2)',
-              background: 'transparent',
-              color: '#f2f2f0',
+              borderRadius: '0.5rem',
+              border: 'none',
+              background: '#ff3b3b',
+              color: '#0a0a0d',
               cursor: 'pointer',
               fontSize: '1rem',
+              fontWeight: 600,
             }}
           >
             Réessayer

@@ -1,29 +1,23 @@
 'use client';
 
-import SectionHeading from '@/app/components/ui/SectionHeading';
 import ContactForm from './contact/ContactForm';
 import ContactInfo from './contact/ContactInfo';
 import { useInView } from '@/lib/hooks/use-in-view';
 
-export default function Contact({ headingLevel = 'h2' }: { headingLevel?: 'h1' | 'h2' }) {
+/** Formulaire + coordonnées. L'en-tête vit dans la page. */
+export default function Contact() {
   const { ref, inView } = useInView<HTMLElement>();
 
   return (
-    <section ref={ref} className="py-20 bg-background relative overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className={`max-w-5xl mx-auto reveal ${inView ? 'reveal-in' : ''}`}>
-          <SectionHeading
-            as={headingLevel}
-            eyebrow="mail --compose"
-            title="On discute ?"
-            subtitle="Un projet en tête ? Une question ? Ou juste envie de parler code ? Envoyez-moi un message !"
-            className="mb-12 sm:mb-16"
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
-            <ContactForm />
-            <ContactInfo />
-          </div>
+    <section ref={ref} aria-label="Formulaire et coordonnées" className="pb-20 sm:pb-24 bg-background">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div
+          className={`max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-8 sm:gap-10 items-start reveal ${
+            inView ? 'reveal-in' : ''
+          }`}
+        >
+          <ContactForm />
+          <ContactInfo />
         </div>
       </div>
     </section>

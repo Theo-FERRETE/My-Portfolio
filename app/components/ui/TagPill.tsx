@@ -20,6 +20,6 @@ export default function TagPill({ children, size = 'sm', muted = false }: TagPil
     : 'bg-accent/10 text-accent border border-accent/20';
 
   return (
-    <span className={`font-mono font-medium ${SIZE_CLASSES[size]} ${tone}`}>{children}</span>
+    <span className={`font-medium ${SIZE_CLASSES[size]} ${tone}`}>{children}</span>
   );
 }

@@ -2,9 +2,17 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Github, Linkedin, Mail, Coffee } from 'lucide-react';
+import { Github, Linkedin, Mail } from 'lucide-react';
 import { NAV_ITEMS } from './nav-items';
+import Logo from '@/app/components/ui/Logo';
 
+const SOCIAL_LINKS = [
+  { label: 'GitHub', icon: Github, href: 'https://github.com/Theo-FERRETE', external: true },
+  { label: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/theo-ferrete/', external: true },
+  { label: 'Email', icon: Mail, href: '/contact', external: false },
+];
+
+/** Pied de page compact : l'appel à l'action vit déjà dans le bloc de contact au-dessus. */
 export default function Footer() {
   const router = useRouter();
 
@@ -13,98 +21,43 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-background text-foreground border-t border-border">
-      {/* Ligne d'accent */}
-      <div className="h-px bg-accent/40"></div>
-
-      <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-12 mb-12">
-          {/* Brand Section */}
-          <div className="space-y-4">
-            <div
-              className="font-mono text-xl sm:text-2xl font-bold tracking-tight cursor-default select-none"
-              onDoubleClick={handleLogoDoubleClick}
-              title="Portfolio"
-            >
-              theo<span className="text-accent">@</span>portfolio
-            </div>
-            <p className="text-foreground/70 text-xs sm:text-sm leading-relaxed max-w-xs">
-              Dev web qui aime créer des trucs sympas sur internet. Basé à Rognac, France.
-            </p>
-
-            {/* Social Links */}
-            <div className="flex space-x-3 sm:space-x-4 pt-2">
-              <a
-                href="https://github.com/Theo-FERRETE"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 border border-border hover:border-accent hover:text-accent rounded-lg transition-colors duration-300"
-                aria-label="GitHub"
-              >
-                <Github size={18} />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/theo-ferrete/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 border border-border hover:border-accent hover:text-accent rounded-lg transition-colors duration-300"
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={18} />
-              </a>
-
-              <a
-                href="/contact"
-                className="p-2 border border-border hover:border-accent hover:text-accent rounded-lg transition-colors duration-300"
-                aria-label="Email"
-              >
-                <Mail size={18} />
-              </a>
-            </div>
+    <footer className="bg-background text-foreground border-t border-border">
+      <div className="container mx-auto px-4 sm:px-6 py-8">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="w-fit cursor-default select-none" onDoubleClick={handleLogoDoubleClick}>
+            <Logo />
           </div>
 
-          {/* Navigation Links */}
-          <div>
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-foreground">Navigation</h3>
-            <nav className="flex flex-col space-y-2 sm:space-y-3" aria-label="Navigation du pied de page">
+          <nav aria-label="Navigation du pied de page">
+            <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
               {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-foreground/70 hover:text-accent transition-colors duration-300 inline-block text-sm sm:text-base"
-                >
-                  {item.label}
-                </Link>
+                <li key={item.href}>
+                  <Link href={item.href} className="text-sm text-foreground/70 hover:text-accent">
+                    {item.label}
+                  </Link>
+                </li>
               ))}
-            </nav>
-          </div>
+            </ul>
+          </nav>
 
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-foreground">Contact</h3>
-            <div className="flex flex-col space-y-2 sm:space-y-3 text-foreground/70 text-xs sm:text-sm">
-              <p className="flex items-center gap-2">
-                <Mail size={14} className="sm:size-4 text-accent shrink-0" />
-                <span className="truncate">theo.ferrete@gmail.com</span>
-              </p>
-              <p className="mt-2 sm:mt-4 leading-relaxed">
-                Dispo pour discuter de projets web ou opportunités de collab.
-              </p>
-            </div>
+          <div className="flex gap-2">
+            {SOCIAL_LINKS.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                {...(social.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                className="p-2 rounded-lg text-foreground/70 hover:text-accent hover-tint"
+                aria-label={social.label}
+              >
+                <social.icon size={18} />
+              </a>
+            ))}
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border">
-          <div className="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left gap-3 sm:gap-0">
-            <p className="text-foreground/65 text-xs sm:text-sm">
-              © {new Date().getFullYear()} Théo FERRETE. Tous droits réservés.
-            </p>
-            <p className="text-foreground/60 text-xs sm:text-sm flex items-center justify-center sm:justify-start gap-1.5">
-              Fait avec Next.js et beaucoup de café <Coffee size={14} />
-            </p>
-          </div>
-        </div>
+        <p className="mt-6 pt-6 border-t border-border text-center text-foreground/50 text-xs">
+          © {new Date().getFullYear()} Théo Ferrete · Développeur Full Stack · Rognac, France
+        </p>
       </div>
     </footer>
   );

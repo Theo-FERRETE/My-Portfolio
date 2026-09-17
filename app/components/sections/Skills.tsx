@@ -10,7 +10,6 @@ import {
   Wrench,
   type LucideIcon,
 } from 'lucide-react';
-import SectionHeading from '@/app/components/ui/SectionHeading';
 import { getSkillIcon } from '@/lib/skill-icons';
 import type { Project, Skill } from '@/lib/data';
 import { useInView } from '@/lib/hooks/use-in-view';
@@ -49,10 +48,10 @@ interface SkillsProps {
   skills: Skill[];
   /** Sert à indiquer sur combien de projets chaque techno a servi. */
   projects?: Project[];
-  headingLevel?: 'h1' | 'h2';
 }
 
-export default function Skills({ skills, projects = [], headingLevel = 'h2' }: SkillsProps) {
+/** Stack groupée par domaine. L'en-tête vit dans la page. */
+export default function Skills({ skills, projects = [] }: SkillsProps) {
   const { ref, inView } = useInView<HTMLElement>();
 
   const usageBySkill = useMemo(() => {
@@ -81,17 +80,9 @@ export default function Skills({ skills, projects = [], headingLevel = 'h2' }: S
   }, [skills]);
 
   return (
-    <section ref={ref} className="py-20 bg-background relative overflow-hidden">
+    <section ref={ref} aria-label="Technologies par domaine" className="pb-20 sm:pb-24 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className={`reveal ${inView ? 'reveal-in' : ''}`}>
-          <SectionHeading
-            as={headingLevel}
-            eyebrow="cat ./stack.json"
-            title="Ma stack"
-            subtitle="Les technologies avec lesquelles je travaille au quotidien, regroupées par domaine."
-            className="mb-12 sm:mb-16"
-          />
-
           {grouped.length === 0 ? (
             <p className="text-center text-foreground/60 py-16">
               Les compétences arrivent bientôt.
@@ -103,7 +94,7 @@ export default function Skills({ skills, projects = [], headingLevel = 'h2' }: S
                 const accent = CATEGORY_ACCENT[index % CATEGORY_ACCENT.length];
                 return (
                   <div key={category}>
-                    <h3 className="flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.15em] text-foreground/60 mb-4">
+                    <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.15em] text-foreground/60 mb-4">
                       <CategoryIcon size={16} className={accent} />
                       {category}
                       <span className="grow h-px bg-border ml-2" aria-hidden />
@@ -122,7 +113,7 @@ export default function Skills({ skills, projects = [], headingLevel = 'h2' }: S
                               <Icon size={24} color={color} />
                             </span>
                             <span className="min-w-0">
-                              <span className="block font-mono font-semibold text-foreground text-sm truncate">
+                              <span className="block font-semibold text-foreground text-sm truncate">
                                 {skill.name}
                               </span>
                               {usage > 0 && (
