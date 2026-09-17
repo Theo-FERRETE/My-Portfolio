@@ -101,7 +101,7 @@ export default function ProjectForm({ id }: { id?: string }) {
               )}
             </AdminField>
 
-            <AdminField label="Description" required>
+            <AdminField label="Description">
               {({ id: fieldId, className }) => (
                 <textarea
                   id={fieldId}
@@ -110,7 +110,6 @@ export default function ProjectForm({ id }: { id?: string }) {
                   onChange={handleChange}
                   rows={4}
                   className={className}
-                  required
                 />
               )}
             </AdminField>
@@ -129,7 +128,7 @@ export default function ProjectForm({ id }: { id?: string }) {
               )}
             </AdminField>
 
-            <AdminField label="Technos utilisées" required hint="Séparées par des virgules">
+            <AdminField label="Technos utilisées" hint="Séparées par des virgules">
               {({ id: fieldId, className }) => (
                 <input
                   id={fieldId}
@@ -139,12 +138,11 @@ export default function ProjectForm({ id }: { id?: string }) {
                   onChange={handleChange}
                   placeholder="React, Node.js, PostgreSQL..."
                   className={className}
-                  required
                 />
               )}
             </AdminField>
 
-            <AdminField label="Lien" required>
+            <AdminField label="Lien" hint="Optionnel — le bouton « Visiter le site » n'apparaît que si renseigné">
               {({ id: fieldId, className }) => (
                 <input
                   id={fieldId}
@@ -154,7 +152,6 @@ export default function ProjectForm({ id }: { id?: string }) {
                   onChange={handleChange}
                   placeholder="https://..."
                   className={className}
-                  required
                 />
               )}
             </AdminField>

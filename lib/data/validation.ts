@@ -9,9 +9,9 @@ const imagePathSchema = z
 
 export const projectSchema = z.object({
   title: z.string().min(1, 'Titre requis').max(100, 'Trop long'),
-  description: z.string().min(1, 'Description requise').max(1000, 'Trop long'),
+  description: z.string().max(1000, 'Trop long').optional().or(z.literal('')),
   image: imagePathSchema.optional(),
-  tags: z.array(z.string()).min(1, 'Minimum 1 tag').max(20, 'Max 20 tags'),
+  tags: z.array(z.string()).max(20, 'Max 20 tags').optional().default([]),
   link: z.string().url('URL invalide').optional().or(z.literal('')),
   github: z.string().url('URL invalide').optional().or(z.literal('')),
   featured: z.boolean().optional().default(false),

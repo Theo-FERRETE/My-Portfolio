@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Download, ChevronDown } from 'lucide-react';
+import EditorWindow from '@/app/components/ui/EditorWindow';
 
 /** Une ligne de code, pré-découpée en tokens colorés façon coloration syntaxique. */
 function CodeLine({ children }: { children: React.ReactNode }) {
@@ -26,16 +27,7 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
       <div className="relative z-10 container mx-auto px-4 sm:px-6">
         <div className="max-w-3xl mx-auto animate-fadeIn">
           {/* Fenêtre d'éditeur */}
-          <div className="glass-raised rounded-2xl overflow-hidden animate-slideDown">
-            <div className="flex items-center gap-2 px-4 sm:px-5 py-3 border-b border-border">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" aria-hidden />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" aria-hidden />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" aria-hidden />
-              <span className="ml-3 font-mono text-xs text-foreground/50 tint px-2.5 py-1 rounded">
-                profil.ts
-              </span>
-            </div>
-
+          <EditorWindow filename="profil.ts" className="glass-raised rounded-2xl overflow-hidden animate-slideDown">
             <div className="grid grid-cols-[auto_1fr] gap-x-4 sm:gap-x-6 px-4 sm:px-8 py-6 sm:py-8 font-mono text-[13px] xs:text-sm sm:text-lg md:text-xl leading-7 sm:leading-9 overflow-x-auto">
               <div className="text-right text-foreground/25 select-none">
                 <div>1</div>
@@ -88,7 +80,7 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
                 </CodeLine>
               </div>
             </div>
-          </div>
+          </EditorWindow>
 
           <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center justify-center mt-8 sm:mt-10 animate-fadeIn delay-500">
             <Link

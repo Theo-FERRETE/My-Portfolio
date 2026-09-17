@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     const project = await createProject({
       title: data.title,
-      description: data.description,
+      description: data.description || '',
       image: data.image || '',
       tags: data.tags,
       link: data.link || '',

@@ -1,16 +1,14 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProjectCard from '@/app/components/ui/ProjectCard';
 import SectionHeading from '@/app/components/ui/SectionHeading';
 import type { Project } from '@/lib/data';
 import { useInView } from '@/lib/hooks/use-in-view';
+import { useReducedMotion } from '@/lib/hooks/use-reduced-motion';
 
 const ALL = 'Tout';
-
-/** Décalage vertical par colonne pour casser l'alignement trop régulier de la grille. */
-const SM_OFFSET = ['sm:translate-y-0', 'sm:translate-y-8'];
-const LG_OFFSET = ['lg:translate-y-0', 'lg:translate-y-10', 'lg:-translate-y-6'];
 
 interface ProjectsProps {
   projects: Project[];
@@ -20,6 +18,10 @@ interface ProjectsProps {
 export default function Projects({ projects, headingLevel = 'h2' }: ProjectsProps) {
   const { ref, inView } = useInView<HTMLElement>();
   const [activeTag, setActiveTag] = useState(ALL);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   // Un filtre n'a d'intérêt qu'au-delà de quelques projets et de quelques technos.
   const tags = useMemo(() => {
@@ -38,6 +40,25 @@ export default function Projects({ projects, headingLevel = 'h2' }: ProjectsProp
     () => (activeTag === ALL ? projects : projects.filter((p) => p.tags.includes(activeTag))),
     [projects, activeTag]
   );
+
+  const updateScrollState = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    setCanScrollPrev(el.scrollLeft > 4);
+    setCanScrollNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
+  };
+
+  // Un filtre plus court ne doit pas laisser l'utilisateur au milieu d'un scroll vide.
+  useEffect(() => {
+    trackRef.current?.scrollTo({ left: 0 });
+    updateScrollState();
+  }, [activeTag, visibleProjects.length]);
+
+  const scrollByPage = (direction: 1 | -1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    el.scrollBy({ left: el.clientWidth * 0.9 * direction, behavior: reducedMotion ? 'auto' : 'smooth' });
+  };
 
   return (
     <section ref={ref} className="py-20 bg-background relative overflow-hidden">
@@ -85,15 +106,43 @@ export default function Projects({ projects, headingLevel = 'h2' }: ProjectsProp
                 : `Aucun projet ne correspond à « ${activeTag} ».`}
             </p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-14 sm:gap-y-16 max-w-7xl mx-auto">
-              {visibleProjects.map((project, index) => (
-                <div
-                  key={project.id}
-                  className={`transition-transform duration-300 ${SM_OFFSET[index % 2]} ${LG_OFFSET[index % 3]}`}
+            <div className="max-w-7xl mx-auto">
+              {/* Navigation du carrousel : au clavier/pointeur sur desktop, le tactile suffit en dessous */}
+              <div className="hidden sm:flex justify-end gap-2 mb-4">
+                <button
+                  type="button"
+                  onClick={() => scrollByPage(-1)}
+                  disabled={!canScrollPrev}
+                  aria-label="Projet précédent"
+                  className="p-2 rounded-lg border border-border text-foreground/70 hover:border-accent hover:text-accent disabled:opacity-30 disabled:pointer-events-none"
                 >
-                  <ProjectCard project={project} />
-                </div>
-              ))}
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollByPage(1)}
+                  disabled={!canScrollNext}
+                  aria-label="Projet suivant"
+                  className="p-2 rounded-lg border border-border text-foreground/70 hover:border-accent hover:text-accent disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+
+              <div
+                ref={trackRef}
+                onScroll={updateScrollState}
+                role="region"
+                aria-label="Liste des projets, défilement horizontal"
+                tabIndex={0}
+                className={`flex gap-6 sm:gap-8 overflow-x-auto snap-x snap-mandatory pb-4 ${reducedMotion ? '' : 'scroll-smooth'}`}
+              >
+                {visibleProjects.map((project) => (
+                  <div key={project.id} className="shrink-0 snap-start w-[85%] xs:w-[22rem] sm:w-[24rem]">
+                    <ProjectCard project={project} />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

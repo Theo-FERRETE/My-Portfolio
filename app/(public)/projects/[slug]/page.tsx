@@ -1,22 +1,40 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Github, ExternalLink, ArrowLeft, Check, Star, ImageOff } from 'lucide-react';
-import { getProjectById } from '@/lib/data';
+import { getProjectById, getProjectBySlug } from '@/lib/data';
+import { previewFilename } from '@/lib/preview-filename';
+import EditorWindow from '@/app/components/ui/EditorWindow';
+import TagPill from '@/app/components/ui/TagPill';
+import type { ReactNode } from 'react';
 
-/** Nom de fichier plausible pour l'onglet de la fenêtre d'éditeur, dérivé de l'image. */
-function previewFilename(imagePath: string): string {
-  if (!imagePath) return 'aucun-aperçu';
-  const base = imagePath.split('/').pop() || 'preview.png';
-  return base;
+/** En-tête de section façon titre markdown commenté, cohérent avec l'eyebrow `// ` de SectionHeading. */
+function SectionHeader({
+  children,
+  icon,
+  className = 'mb-4',
+}: {
+  children: ReactNode;
+  icon?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <h2 className={`flex items-center gap-2 font-mono text-lg sm:text-xl font-semibold text-foreground tracking-tight ${className}`}>
+      <span className="text-accent-amber/70 text-sm sm:text-base" aria-hidden>
+        ##
+      </span>
+      {children}
+      {icon}
+    </h2>
+  );
 }
 
-type ProjectPageParams = { params: Promise<{ id: string }> };
+type ProjectPageParams = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: ProjectPageParams): Promise<Metadata> {
-  const { id } = await params;
-  const project = Number.isInteger(Number(id)) ? await getProjectById(Number(id)) : undefined;
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     return { title: 'Projet introuvable - Théo FERRETE' };
@@ -34,16 +52,18 @@ export async function generateMetadata({ params }: ProjectPageParams): Promise<M
 }
 
 export default async function ProjectDetailPage({ params }: ProjectPageParams) {
-  const { id } = await params;
-  const projectId = Number(id);
-
-  if (!Number.isInteger(projectId)) {
-    notFound();
-  }
-
-  const project = await getProjectById(projectId);
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
+    // Filet pour d'anciens liens partagés avec l'id numérique : redirige vers le slug
+    // plutôt que de renvoyer un 404 sur une URL qui fonctionnait avant.
+    if (/^\d+$/.test(slug)) {
+      const legacyProject = await getProjectById(Number(slug));
+      if (legacyProject) {
+        permanentRedirect(`/projects/${legacyProject.slug}`);
+      }
+    }
     notFound();
   }
 
@@ -63,21 +83,18 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
 
         <div className="max-w-5xl mx-auto">
           {/* Image principale, encadrée façon fenêtre d'éditeur */}
-          <div className="glass-raised rounded-2xl overflow-hidden mb-12">
-            <div className="flex items-center gap-2 px-4 sm:px-5 py-3 border-b border-border">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" aria-hidden />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" aria-hidden />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" aria-hidden />
-              <span className="ml-3 font-mono text-xs text-foreground/50 tint px-2.5 py-1 rounded truncate">
-                {previewFilename(project.image)}
-              </span>
-              {project.featured && (
-                <span className="ml-auto inline-flex items-center gap-1.5 text-accent-amber font-mono text-xs font-semibold shrink-0">
+          <EditorWindow
+            filename={previewFilename(project.image)}
+            action={
+              project.featured ? (
+                <span className="inline-flex items-center gap-1.5 text-accent-amber font-mono text-xs font-semibold">
                   <Star size={12} className="fill-current" />
                   phare
                 </span>
-              )}
-            </div>
+              ) : undefined
+            }
+            className="glass-raised rounded-2xl overflow-hidden mb-12"
+          >
             <div className="relative h-72 sm:h-96">
               {project.image ? (
                 <Image
@@ -95,7 +112,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
                 </div>
               )}
             </div>
-          </div>
+          </EditorWindow>
 
           {/* Contenu */}
           <div className="glass-card rounded-2xl p-8 md:p-12">
@@ -114,59 +131,55 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
             </div>
 
             {/* Description */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
-                Description
-              </h2>
-              <p className="text-lg text-foreground/70 leading-relaxed">
-                {project.description}
-              </p>
-            </div>
+            {project.description && (
+              <div className="mb-8">
+                <SectionHeader>Description</SectionHeader>
+                <p className="text-lg text-foreground/70 leading-relaxed">
+                  {project.description}
+                </p>
+              </div>
+            )}
 
             {/* Technologies */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
-                Technologies utilisées
-              </h2>
-              <div className="flex flex-wrap gap-3">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-4 py-2 bg-accent/10 text-accent rounded-lg font-mono font-medium border border-accent/20"
-                  >
-                    {tag}
-                  </span>
-                ))}
+            {project.tags.length > 0 && (
+              <div className="mb-8">
+                <SectionHeader>Technologies utilisées</SectionHeader>
+                <div className="flex flex-wrap gap-3">
+                  {project.tags.map((tag) => (
+                    <TagPill key={tag} size="md">
+                      {tag}
+                    </TagPill>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Étude de cas — propre à chaque projet, absente tant que non renseignée en admin */}
             {(project.context || project.myRole || project.challenge || project.result) && (
               <div className="mb-8 space-y-6">
                 {project.context && (
                   <div>
-                    <h2 className="text-2xl font-bold text-foreground mb-2">Contexte</h2>
+                    <SectionHeader className="mb-2">Contexte</SectionHeader>
                     <p className="text-foreground/70 leading-relaxed">{project.context}</p>
                   </div>
                 )}
                 {project.myRole && (
                   <div>
-                    <h2 className="text-2xl font-bold text-foreground mb-2">Mon rôle</h2>
+                    <SectionHeader className="mb-2">Mon rôle</SectionHeader>
                     <p className="text-foreground/70 leading-relaxed">{project.myRole}</p>
                   </div>
                 )}
                 {project.challenge && (
                   <div>
-                    <h2 className="text-2xl font-bold text-foreground mb-2">Difficulté rencontrée</h2>
+                    <SectionHeader className="mb-2">Difficulté rencontrée</SectionHeader>
                     <p className="text-foreground/70 leading-relaxed">{project.challenge}</p>
                   </div>
                 )}
                 {project.result && (
                   <div>
-                    <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
-                      <Check className="text-accent" size={22} />
+                    <SectionHeader className="mb-2" icon={<Check className="text-accent" size={20} />}>
                       Résultat
-                    </h2>
+                    </SectionHeader>
                     <p className="text-foreground/70 leading-relaxed">{project.result}</p>
                   </div>
                 )}
@@ -175,15 +188,17 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
 
             {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-border">
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 px-8 py-4 bg-accent text-background text-center rounded-xl font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-              >
-                <ExternalLink size={18} />
-                Visiter le site
-              </a>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 px-8 py-4 bg-accent text-background text-center rounded-xl font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                >
+                  <ExternalLink size={18} />
+                  Visiter le site
+                </a>
+              )}
               {project.github && (
                 <a
                   href={project.github}
