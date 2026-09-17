@@ -14,23 +14,22 @@ import { getSkillIcon } from '@/lib/skill-icons';
 import type { Project, Skill } from '@/lib/data';
 import { useInView } from '@/lib/hooks/use-in-view';
 
-const CATEGORY_ICON: Record<string, LucideIcon> = {
-  Frontend: Monitor,
-  Backend: Settings,
-  Database: DatabaseIcon,
-  Language: Code2,
-  DevOps: Rocket,
+interface CategoryMeta {
+  label: string;
+  /** Ce que le domaine apporte, en une phrase neutre. */
+  pitch: string;
+  icon: LucideIcon;
+}
+
+const CATEGORY_META: Record<string, CategoryMeta> = {
+  Frontend: { label: 'Front-end', pitch: "L'interface que voient vos utilisateurs.", icon: Monitor },
+  Language: { label: 'Langages', pitch: 'Les bases sur lesquelles tout repose.', icon: Code2 },
+  Backend: { label: 'Back-end', pitch: 'La logique serveur et les API.', icon: Settings },
+  Database: { label: 'Bases de données', pitch: 'Le stockage et la structure des données.', icon: DatabaseIcon },
+  DevOps: { label: 'Outils & déploiement', pitch: 'De mon poste à la mise en ligne.', icon: Rocket },
 };
 
 const CATEGORY_ORDER = ['Frontend', 'Language', 'Backend', 'Database', 'DevOps'];
-
-/** Rotation des accents "syntaxe" par catégorie, plutôt qu'un unique --accent. */
-const CATEGORY_ACCENT = ['text-accent-green', 'text-accent-amber', 'text-accent-teal'];
-
-/** Décalage vertical par colonne, cohérent avec l'effet appliqué aux grilles de projets. */
-const OFFSET_2COL = ['translate-y-0', 'translate-y-4'];
-const OFFSET_3COL = ['sm:translate-y-0', 'sm:translate-y-4', 'sm:-translate-y-3'];
-const OFFSET_4COL = ['md:translate-y-0', 'md:translate-y-5', 'md:-translate-y-3', 'md:translate-y-2'];
 
 /** Trie les catégories connues d'abord, puis les autres par ordre alphabétique. */
 function sortCategories(categories: string[]): string[] {
@@ -50,7 +49,7 @@ interface SkillsProps {
   projects?: Project[];
 }
 
-/** Stack groupée par domaine. L'en-tête vit dans la page. */
+/** Stack groupée par domaine, une carte par domaine. L'en-tête vit dans la page. */
 export default function Skills({ skills, projects = [] }: SkillsProps) {
   const { ref, inView } = useInView<HTMLElement>();
 
@@ -80,58 +79,55 @@ export default function Skills({ skills, projects = [] }: SkillsProps) {
   }, [skills]);
 
   return (
-    <section ref={ref} aria-label="Technologies par domaine" className="pb-20 sm:pb-24 bg-background relative overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className={`reveal ${inView ? 'reveal-in' : ''}`}>
-          {grouped.length === 0 ? (
-            <p className="text-center text-foreground/60 py-16">
-              Les compétences arrivent bientôt.
-            </p>
-          ) : (
-            <div className="max-w-6xl mx-auto space-y-14 sm:space-y-16">
-              {grouped.map(({ category, items }, index) => {
-                const CategoryIcon = CATEGORY_ICON[category] ?? Wrench;
-                const accent = CATEGORY_ACCENT[index % CATEGORY_ACCENT.length];
-                return (
-                  <div key={category}>
-                    <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.15em] text-foreground/60 mb-4">
-                      <CategoryIcon size={16} className={accent} />
-                      {category}
-                      <span className="grow h-px bg-border ml-2" aria-hidden />
-                    </h3>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-3 sm:gap-x-4 gap-y-8 sm:gap-y-10">
-                      {items.map((skill, skillIndex) => {
-                        const { Icon, color } = getSkillIcon(skill.name);
-                        const usage = usageBySkill.get(skill.name.toLowerCase()) ?? 0;
-                        return (
-                          <div
-                            key={skill.id}
-                            className={`group glass-card p-4 rounded-xl flex items-center gap-3 transition-all duration-300 hover:border-accent/40 ${OFFSET_2COL[skillIndex % 2]} ${OFFSET_3COL[skillIndex % 3]} ${OFFSET_4COL[skillIndex % 4]}`}
-                          >
-                            <span className="p-2.5 rounded-lg tint shrink-0 group-hover:bg-accent/10 transition-colors duration-300">
-                              <Icon size={24} color={color} />
-                            </span>
-                            <span className="min-w-0">
-                              <span className="block font-semibold text-foreground text-sm truncate">
-                                {skill.name}
-                              </span>
-                              {usage > 0 && (
-                                <span className="block text-xs text-foreground/60">
-                                  {usage} projet{usage > 1 ? 's' : ''}
-                                </span>
-                              )}
-                            </span>
-                          </div>
-                        );
-                      })}
+    <section ref={ref} aria-label="Technologies par domaine" className="pb-20 sm:pb-24 bg-background">
+      <div className={`container mx-auto px-4 sm:px-6 reveal ${inView ? 'reveal-in' : ''}`}>
+        {grouped.length === 0 ? (
+          <p className="text-center text-foreground/60 py-16">Les compétences arrivent bientôt.</p>
+        ) : (
+          <ul className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {grouped.map(({ category, items }) => {
+              const meta = CATEGORY_META[category];
+              const CategoryIcon = meta?.icon ?? Wrench;
+              return (
+                <li
+                  key={category}
+                  className="glass-card rounded-xl p-6 sm:p-7 transition-colors duration-300 hover:border-accent/40"
+                >
+                  <div className="flex items-start gap-4">
+                    <span className="inline-flex w-11 h-11 shrink-0 items-center justify-center rounded-lg bg-accent/15 text-accent">
+                      <CategoryIcon size={22} aria-hidden />
+                    </span>
+                    <div className="min-w-0">
+                      <h2 className="text-lg sm:text-xl font-bold text-foreground">{meta?.label ?? category}</h2>
+                      {meta?.pitch && <p className="mt-0.5 text-sm text-foreground/60">{meta.pitch}</p>}
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+
+                  <ul className="mt-6 space-y-1">
+                    {items.map((skill) => {
+                      const { Icon, color } = getSkillIcon(skill.name);
+                      const usage = usageBySkill.get(skill.name.toLowerCase()) ?? 0;
+                      return (
+                        <li
+                          key={skill.id}
+                          className="flex items-center gap-3 -mx-2 px-2 py-2 rounded-lg hover-tint"
+                        >
+                          <Icon size={22} color={color} aria-hidden className="shrink-0" />
+                          <span className="font-semibold text-foreground text-sm truncate">{skill.name}</span>
+                          {usage > 0 && (
+                            <span className="ml-auto shrink-0 text-xs text-foreground/50">
+                              {usage} projet{usage > 1 ? 's' : ''}
+                            </span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </section>
   );

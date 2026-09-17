@@ -2,29 +2,13 @@ import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Github, ExternalLink, ArrowLeft, Check, Star, ImageOff } from 'lucide-react';
-import { getProjectById, getProjectBySlug } from '@/lib/data';
+import { Github, ExternalLink, ArrowLeft, ArrowRight, Star, ImageOff, CalendarDays } from 'lucide-react';
+import { getProjectById, getProjectBySlug, getProjects } from '@/lib/data';
 import TagPill from '@/app/components/ui/TagPill';
+import ProjectCard from '@/app/components/ui/ProjectCard';
 import ContactCta from '@/app/components/sections/ContactCta';
-import type { ReactNode } from 'react';
 
-/** En-tête de section de la fiche projet. */
-function SectionHeader({
-  children,
-  icon,
-  className = 'mb-4',
-}: {
-  children: ReactNode;
-  icon?: ReactNode;
-  className?: string;
-}) {
-  return (
-    <h2 className={`flex items-center gap-2 text-lg sm:text-xl font-bold text-foreground tracking-tight ${className}`}>
-      {children}
-      {icon}
-    </h2>
-  );
-}
+const OTHER_PROJECTS_COUNT = 3;
 
 type ProjectPageParams = { params: Promise<{ slug: string }> };
 
@@ -63,42 +47,97 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
     notFound();
   }
 
+  // Autres projets : les phares d'abord, pour garder le visiteur sur ce qu'il y a de mieux.
+  const otherProjects = (await getProjects())
+    .filter((p) => p.id !== project.id)
+    .sort((a, b) => Number(b.featured) - Number(a.featured))
+    .slice(0, OTHER_PROJECTS_COUNT);
+
+  // Étude de cas, propre à chaque projet : seules les étapes renseignées en admin s'affichent.
+  const caseStudy = [
+    { title: 'Le contexte', text: project.context },
+    { title: 'Mon rôle', text: project.myRole },
+    { title: 'Le défi', text: project.challenge },
+    { title: 'Le résultat', text: project.result },
+  ].filter((step) => step.text);
+
+  const createdAt = new Date(project.createdAt).toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+  });
+
   return (
     <main id="contenu" className="relative min-h-screen bg-background">
       <div
-        className="absolute inset-x-0 top-0 h-[32rem] pointer-events-none"
+        className="absolute inset-x-0 top-0 h-[36rem] pointer-events-none"
         style={{ background: 'radial-gradient(ellipse 50% 70% at 50% 0%, color-mix(in srgb, var(--accent) 12%, transparent) 0%, transparent 70%)' }}
         aria-hidden
       />
-      <div className="relative container mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-20">
-        {/* Breadcrumb */}
-        <nav className="max-w-5xl mx-auto mb-8">
-          <Link
-            href="/projects"
-            className="inline-flex items-center gap-2 text-foreground/70 hover:text-accent transition-colors"
-          >
-            <ArrowLeft size={18} />
-            Retour aux projets
-          </Link>
-        </nav>
 
+      <div className="relative container mx-auto px-4 sm:px-6 pt-28 sm:pt-32">
         <div className="max-w-5xl mx-auto">
-          {/* Image principale */}
-          <div className="glass-raised rounded-2xl overflow-hidden mb-12">
-            <div className="relative h-72 sm:h-96">
-              {project.featured && (
-                <span className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-background/80 backdrop-blur text-accent-amber text-xs sm:text-sm font-semibold">
-                  <Star size={14} className="fill-current" aria-hidden />
-                  Projet phare
-                </span>
-              )}
+          <nav className="mb-8">
+            <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-foreground/70 hover:text-accent">
+              <ArrowLeft size={16} />
+              Tous les projets
+            </Link>
+          </nav>
+
+          {/* En-tête : l'essentiel avant de scroller */}
+          <header className="text-center animate-fadeIn">
+            {project.featured && (
+              <p className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-accent-amber/30 bg-accent-amber/10 text-accent-amber text-xs sm:text-sm font-semibold">
+                <Star size={14} className="fill-current" aria-hidden />
+                Projet phare
+              </p>
+            )}
+            <h1 className="mt-5 text-4xl xs:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.05]">
+              {project.title}
+            </h1>
+            {project.description && (
+              <p className="mt-5 text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed">
+                {project.description}
+              </p>
+            )}
+
+            {(project.link || project.github) && (
+              <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-[0_8px_30px_-8px_var(--accent)]"
+                  >
+                    <ExternalLink size={18} />
+                    Voir le site en ligne
+                  </a>
+                )}
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent"
+                  >
+                    <Github size={18} />
+                    Voir le code
+                  </a>
+                )}
+              </div>
+            )}
+          </header>
+
+          {/* Visuel */}
+          <div className="mt-12 glass-raised rounded-2xl overflow-hidden animate-slideUp">
+            <div className="relative aspect-[16/9]">
               {project.image ? (
                 <Image
                   src={project.image}
                   alt={project.title}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 1280px) 100vw, 1280px"
+                  sizes="(max-width: 1024px) 100vw, 1024px"
                   priority
                 />
               ) : (
@@ -110,112 +149,106 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
             </div>
           </div>
 
-          {/* Contenu */}
-          <div className="glass-card rounded-2xl p-6 sm:p-8 md:p-12">
-            {/* Titre et date */}
-            <div className="mb-8">
-              <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-foreground tracking-tight leading-[1.05]">
-                {project.title}
-              </h1>
-              <p className="text-foreground/65">
-                Créé le {new Date(project.createdAt).toLocaleDateString('fr-FR', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </p>
-            </div>
-
-            {/* Description */}
-            {project.description && (
-              <div className="mb-8">
-                <SectionHeader>Description</SectionHeader>
-                <p className="text-lg text-foreground/70 leading-relaxed">
-                  {project.description}
-                </p>
-              </div>
-            )}
-
-            {/* Technologies */}
-            {project.tags.length > 0 && (
-              <div className="mb-8">
-                <SectionHeader>Technologies utilisées</SectionHeader>
-                <div className="flex flex-wrap gap-3">
+          {/* Sans étude de cas : une ligne récap suffit, la description est déjà dans l'en-tête */}
+          {caseStudy.length === 0 && (
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm">
+              <span className="flex items-center gap-2 text-foreground/70 capitalize">
+                <CalendarDays size={14} className="text-accent" aria-hidden />
+                {createdAt}
+              </span>
+              {project.tags.length > 0 && (
+                <span className="flex flex-wrap justify-center gap-1.5">
                   {project.tags.map((tag) => (
-                    <TagPill key={tag} size="md">
+                    <TagPill key={tag} size="sm">
                       {tag}
                     </TagPill>
                   ))}
-                </div>
-              </div>
-            )}
-
-            {/* Étude de cas — propre à chaque projet, absente tant que non renseignée en admin */}
-            {(project.context || project.myRole || project.challenge || project.result) && (
-              <div className="mb-8 space-y-6">
-                {project.context && (
-                  <div>
-                    <SectionHeader className="mb-2">Contexte</SectionHeader>
-                    <p className="text-foreground/70 leading-relaxed">{project.context}</p>
-                  </div>
-                )}
-                {project.myRole && (
-                  <div>
-                    <SectionHeader className="mb-2">Mon rôle</SectionHeader>
-                    <p className="text-foreground/70 leading-relaxed">{project.myRole}</p>
-                  </div>
-                )}
-                {project.challenge && (
-                  <div>
-                    <SectionHeader className="mb-2">Difficulté rencontrée</SectionHeader>
-                    <p className="text-foreground/70 leading-relaxed">{project.challenge}</p>
-                  </div>
-                )}
-                {project.result && (
-                  <div>
-                    <SectionHeader className="mb-2" icon={<Check className="text-accent" size={20} />}>
-                      Résultat
-                    </SectionHeader>
-                    <p className="text-foreground/70 leading-relaxed">{project.result}</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Boutons d'action */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-border">
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 px-8 py-4 bg-accent text-background text-center rounded-xl font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-[0_8px_30px_-8px_var(--accent)]"
-                >
-                  <ExternalLink size={18} />
-                  Visiter le site
-                </a>
+                </span>
               )}
-              {project.github && (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 px-8 py-4 border border-border text-foreground text-center rounded-xl font-semibold hover:border-accent hover:text-accent transition-all flex items-center justify-center gap-2"
-                >
-                  <Github size={18} />
-                  Voir le code
-                </a>
-              )}
-              <Link
-                href="/contact"
-                className="flex-1 px-8 py-4 border border-border text-foreground text-center rounded-xl font-semibold hover:border-accent hover:text-accent transition-all flex items-center justify-center"
-              >
-                Discuter du projet
-              </Link>
             </div>
-          </div>
+          )}
+
+          {/* Étude de cas + fiche récap */}
+          {caseStudy.length > 0 && (
+            <div className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-[1fr_18rem] gap-8 lg:gap-12 items-start">
+              <ol className="space-y-8">
+                {caseStudy.map((step, index) => (
+                  <li key={step.title} className="flex gap-4 sm:gap-6">
+                    <span
+                      className="inline-flex w-10 h-10 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent font-bold"
+                      aria-hidden
+                    >
+                      {index + 1}
+                    </span>
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">{step.title}</h2>
+                      <p className="mt-2 text-foreground/70 leading-relaxed whitespace-pre-line">{step.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              <aside className="glass-card rounded-xl p-6 lg:sticky lg:top-24">
+                <h2 className="text-sm font-semibold uppercase tracking-[0.15em] text-foreground/50">Fiche projet</h2>
+
+                <dl className="mt-5 space-y-5 text-sm">
+                  <div>
+                    <dt className="text-foreground/50">Date</dt>
+                    <dd className="mt-1 flex items-center gap-2 font-medium text-foreground capitalize">
+                      <CalendarDays size={14} className="text-accent" aria-hidden />
+                      {createdAt}
+                    </dd>
+                  </div>
+                  {project.tags.length > 0 && (
+                    <div>
+                      <dt className="text-foreground/50">Technologies</dt>
+                      <dd className="mt-2 flex flex-wrap gap-1.5">
+                        {project.tags.map((tag) => (
+                          <TagPill key={tag} size="sm">
+                            {tag}
+                          </TagPill>
+                        ))}
+                      </dd>
+                    </div>
+                  )}
+                </dl>
+
+                <Link
+                  href="/contact"
+                  className="group mt-6 pt-5 border-t border-border flex items-center justify-between gap-2 text-sm font-semibold text-accent"
+                >
+                  Un projet similaire ?
+                  <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              </aside>
+            </div>
+          )}
         </div>
       </div>
+
+      {otherProjects.length > 0 && (
+        <section aria-labelledby="autres-projets" className="container mx-auto px-4 sm:px-6 mt-20 sm:mt-24">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-end justify-between gap-4 mb-8">
+              <h2 id="autres-projets" className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+                Autres projets
+              </h2>
+              <Link href="/projects" className="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground/70 hover:text-accent shrink-0">
+                Tout voir
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {otherProjects.map((other) => (
+                <li key={other.id}>
+                  <ProjectCard project={other} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
       <ContactCta />
     </main>
   );
