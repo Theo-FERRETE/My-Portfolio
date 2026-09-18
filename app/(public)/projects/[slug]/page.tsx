@@ -84,7 +84,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
           </nav>
 
           {/* En-tête : l'essentiel avant de scroller */}
-          <header className="text-center animate-fadeIn">
+          <header className="text-center animate-rise">
             {project.featured && (
               <p className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-accent-amber/30 bg-accent-amber/10 text-accent-amber text-xs sm:text-sm font-semibold">
                 <Star size={14} className="fill-current" aria-hidden />
@@ -129,7 +129,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
           </header>
 
           {/* Visuel */}
-          <div className="mt-12 glass-raised rounded-2xl overflow-hidden animate-slideUp">
+          <div className="mt-12 glass-raised rounded-2xl overflow-hidden animate-rise">
             <div className="relative aspect-[16/9]">
               {project.image ? (
                 <Image

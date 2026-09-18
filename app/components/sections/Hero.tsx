@@ -28,7 +28,7 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
       <div className="relative z-10 container mx-auto px-4 sm:px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-14 items-center">
           {/* Message : ce que j'apporte avant qui je suis */}
-          <div className="text-center lg:text-left animate-fadeIn">
+          <div className="text-center lg:text-left animate-rise">
             <p className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent-green/30 bg-accent-green/10 text-accent-green text-xs sm:text-sm font-medium">
               <span className="w-2 h-2 rounded-full bg-accent-green" aria-hidden />
               {AVAILABILITY_LABEL}
@@ -89,7 +89,7 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
           </div>
 
           {/* Visuel : l'identité "éditeur de code" en illustration */}
-          <div className="animate-slideUp">
+          <div className="animate-rise">
             <EditorWindow
               filename="profil.ts"
               className="glass-raised rounded-2xl overflow-hidden"

@@ -75,72 +75,22 @@ html {
   top: 1rem;
 }
 
-/* Animations personnalisées, désactivées si prefers-reduced-motion */
+/* Entrée du haut de page : mouvement seul, jamais d'opacité. Un élément qui
+   démarre à opacity: 0 n'est pas retenu comme Largest Contentful Paint par
+   Chrome, et Lighthouse finit alors en erreur NO_LCP sans score de performance. */
 @media (prefers-reduced-motion: no-preference) {
-  @keyframes fadeIn {
+  @keyframes rise {
     from {
-      opacity: 0;
+      transform: translateY(16px);
     }
     to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-30px);
-    }
-    to {
-      opacity: 1;
       transform: translateY(0);
     }
   }
 
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .animate-rise {
+    animation: rise 0.6s ease-out;
   }
-
-  .animate-fadeIn {
-    animation: fadeIn 1s ease-out;
-  }
-
-  .animate-slideDown {
-    animation: slideDown 0.8s ease-out;
-  }
-
-  .animate-slideUp {
-    animation: slideUp 0.8s ease-out;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-fadeIn,
-  .animate-slideDown,
-  .animate-slideUp {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.delay-500 {
-  animation-delay: 0.5s;
-}
-
-.delay-700 {
-  animation-delay: 0.7s;
-}
-
-.delay-1000 {
-  animation-delay: 1s;
 }
 
 /* Apparition au scroll, une seule définition partagée, neutralisée si

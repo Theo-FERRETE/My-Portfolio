@@ -21,7 +21,7 @@ export default function StatusPage({ code, title, message, children }: StatusPag
         style={{ background: 'radial-gradient(ellipse 45% 50% at 50% 45%, color-mix(in srgb, var(--accent) 7%, transparent) 0%, transparent 70%)' }}
         aria-hidden
       />
-      <div className="relative text-center max-w-xl animate-fadeIn">
+      <div className="relative text-center max-w-xl animate-rise">
         <p className="text-5xl sm:text-6xl font-bold tracking-tight text-accent leading-none" aria-hidden>
           {code}
         </p>

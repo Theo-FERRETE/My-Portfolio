@@ -28,7 +28,7 @@ export default function PageHero({
         style={{ background: 'radial-gradient(ellipse 50% 70% at 50% 0%, color-mix(in srgb, var(--accent) 7%, transparent) 0%, transparent 70%)' }}
         aria-hidden
       />
-      <div className="relative container mx-auto px-4 sm:px-6 text-center animate-fadeIn">
+      <div className="relative container mx-auto px-4 sm:px-6 text-center animate-rise">
         {showAvailability && (
           <p className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 rounded-full border border-accent-green/30 bg-accent-green/10 text-accent-green text-xs sm:text-sm font-medium">
             <span className="w-2 h-2 rounded-full bg-accent-green" aria-hidden />
