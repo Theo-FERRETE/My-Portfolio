@@ -11,7 +11,7 @@ import { useReducedMotion } from '@/lib/hooks/use-reduced-motion';
  * sur grand écran. La piste reste focalisable pour le défilement au clavier.
  */
 export default function ProjectCarousel({ projects }: { projects: Project[] }) {
-  const trackRef = useRef<HTMLUListElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
   const reducedMotion = useReducedMotion();
@@ -65,22 +65,29 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
         </div>
       )}
 
-      <ul
+      {/* La zone de défilement porte le rôle region ; la liste garde sa sémantique
+          de liste, qu'un role sur le <ul> lui-même casserait. */}
+      <div
         ref={trackRef}
         onScroll={updateScrollState}
         role="region"
         aria-label="Projets, défilement horizontal"
         tabIndex={0}
-        className={`flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 ${
+        // scroll-px doit suivre px : sinon le navigateur aligne la première carte en
+        // faisant défiler la piste au chargement, et Chrome, qui arrête de mesurer le
+        // Largest Contentful Paint au premier défilement, finit en NO_LCP (mobile).
+        className={`overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 sm:scroll-px-0 ${
           reducedMotion ? '' : 'scroll-smooth'
         }`}
       >
-        {projects.map((project) => (
-          <li key={project.id} className="shrink-0 snap-start w-[80%] xs:w-[20rem] sm:w-[22rem]">
-            <ProjectCard project={project} />
-          </li>
-        ))}
-      </ul>
+        <ul className="flex gap-6">
+          {projects.map((project) => (
+            <li key={project.id} className="shrink-0 snap-start w-[80%] xs:w-[20rem] sm:w-[22rem]">
+              <ProjectCard project={project} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

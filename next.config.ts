@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: '2mb', // Limite les uploads pour éviter les attaques DoS
     },
+    // CSS intégré au HTML : plus de feuille de style bloquante avant le premier
+    // affichage, ce qui compte pour le LCP mobile (la CSP autorise déjà les styles inline).
+    inlineCss: true,
   },
   
   // Headers de sécurité

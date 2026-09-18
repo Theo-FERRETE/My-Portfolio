@@ -37,7 +37,7 @@ export default function Header() {
     >
       <nav className="container mx-auto px-4 sm:px-6 py-4" aria-label="Navigation principale">
         <div className="flex items-center justify-between">
-          <Link href="/" className="shrink-0 rounded-lg" aria-label="Théo Ferrete, accueil">
+          <Link href="/" className="shrink-0 rounded-lg">
             <Logo />
           </Link>
 

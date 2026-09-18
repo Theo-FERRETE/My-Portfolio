@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Figtree } from "next/font/google";
 import "./globals.css";
-import AuthProvider from "@/app/components/providers/AuthProvider";
 import { SITE_URL } from "@/lib/site-url";
 import { getProfile } from "@/lib/data";
 
@@ -74,7 +73,9 @@ export default async function RootLayout({
           // si jamais un champ texte (bio...) contenait "</script>".
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, '\\u003c') }}
         />
-        <AuthProvider>{children}</AuthProvider>
+        {/* Pas de SessionProvider ici : seul l'admin en a besoin (voir app/admin/layout.tsx).
+            Le monter à la racine chargeait next-auth et /api/auth/session sur tout le site public. */}
+        {children}
       </body>
     </html>
   );
