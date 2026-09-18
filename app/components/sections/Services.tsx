@@ -49,8 +49,8 @@ const SERVICES: Service[] = [
 const REASONS = [
   {
     icon: UserRound,
-    title: 'Un seul interlocuteur',
-    text: "Interface, API, base de données, mise en ligne : pas besoin de coordonner plusieurs prestataires.",
+    title: 'Autonome de bout en bout',
+    text: 'Interface, API, base de données, mise en ligne : je peux intervenir sur toute la chaîne.',
   },
   {
     icon: Layers,

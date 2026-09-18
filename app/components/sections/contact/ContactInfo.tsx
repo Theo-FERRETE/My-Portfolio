@@ -11,8 +11,8 @@ const SOCIAL_LINKS = [
 
 /** Ce qu'il est utile de préciser dans un premier message. */
 const MESSAGE_TIPS = [
-  'Le contexte : mission, poste ou autre',
-  'Le besoin en quelques lignes',
+  'Le contexte : alternance, poste ou mission',
+  'Le besoin ou les missions en quelques lignes',
   'Le calendrier envisagé',
 ];
 

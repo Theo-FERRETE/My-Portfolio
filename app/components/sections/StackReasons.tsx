@@ -8,7 +8,7 @@ const REASONS = [
   {
     icon: Boxes,
     title: 'Des outils standards',
-    text: 'Next.js, TypeScript et Node font partie des technologies les plus utilisées du web. Votre projet ne dépend pas d’un outil confidentiel.',
+    text: 'Next.js, TypeScript et Node font partie des technologies les plus utilisées du web : peu de temps d’adaptation pour rejoindre une équipe ou démarrer un projet.',
   },
   {
     icon: Users,
@@ -18,7 +18,7 @@ const REASONS = [
   {
     icon: Wrench,
     title: 'Une seule stack de bout en bout',
-    text: 'Le même langage côté interface et côté serveur : moins d’allers-retours, un seul interlocuteur pour l’ensemble.',
+    text: 'Le même langage côté interface et côté serveur : je peux contribuer partout, du front au back.',
   },
 ];
 

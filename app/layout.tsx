@@ -18,13 +18,13 @@ const figtree = Figtree({
 });
 
 const SITE_DESCRIPTION =
-  "Théo FERRETE, développeur Full Stack : applications web de l'interface à l'API avec Next.js, TypeScript et Node. Ouvert aux opportunités, en poste ou en freelance.";
+  "Théo FERRETE, développeur Full Stack : applications web de l'interface à l'API avec Next.js, TypeScript et Node. Ouvert aux opportunités : alternance, poste ou mission freelance.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Théo FERRETE - Développeur Full Stack Next.js & TypeScript",
   description: SITE_DESCRIPTION,
-  keywords: ["développeur", "full stack", "freelance", "react", "next.js", "typescript", "node.js", "portfolio"],
+  keywords: ["développeur", "full stack", "alternance", "freelance", "react", "next.js", "typescript", "node.js", "portfolio"],
   authors: [{ name: "Théo FERRETE" }],
   creator: "Théo FERRETE",
   openGraph: {

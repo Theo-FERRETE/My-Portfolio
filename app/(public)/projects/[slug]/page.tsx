@@ -217,7 +217,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
                   href="/contact"
                   className="group mt-6 pt-5 border-t border-border flex items-center justify-between gap-2 text-sm font-semibold text-accent"
                 >
-                  Un projet similaire ?
+                  Travaillons ensemble
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </aside>

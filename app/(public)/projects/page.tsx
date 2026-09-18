@@ -34,7 +34,7 @@ export default async function ProjectsPage() {
           href="/contact"
           className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-[0_8px_30px_-8px_var(--accent)]"
         >
-          Lancer votre projet
+          Me contacter
           <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
         </Link>
       </PageHero>

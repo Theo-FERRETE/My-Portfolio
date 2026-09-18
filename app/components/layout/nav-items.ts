@@ -11,5 +11,9 @@ export const HEADER_NAV_ITEMS = NAV_ITEMS.filter((item) => item.href !== '/conta
 
 export const CV_PATH = '/CV_Theo_Ferrete.pdf';
 
-/** Libellé de disponibilité affiché sur le site (Hero, Contact, pied de page). */
-export const AVAILABILITY_LABEL = 'Ouvert aux opportunités · poste ou freelance';
+/**
+ * Statut affiché dans les badges (Hero, pages internes, Contact, bloc de fin).
+ * C'est la seule ligne à changer quand la situation évolue, par exemple :
+ * 'Recherche une alternance · Bachelor CDA' ou 'Disponible pour des missions freelance'.
+ */
+export const AVAILABILITY_LABEL = 'Ouvert aux opportunités · alternance, poste ou mission';

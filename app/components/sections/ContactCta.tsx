@@ -34,12 +34,12 @@ export default function ContactCta() {
               {AVAILABILITY_LABEL}
             </p>
             <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
-              Un projet ou un poste à pourvoir ?
+              Alternance, poste ou projet ?
               <br />
               <span className="text-accent">Parlons-en.</span>
             </h2>
             <p className="mt-4 text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto">
-              Décrivez-moi votre besoin en quelques lignes, on voit ensemble comment avancer.
+              Écrivez-moi en quelques lignes : on voit ensemble comment je peux vous être utile.
             </p>
 
             <div className="mt-8 flex flex-col items-center gap-4">

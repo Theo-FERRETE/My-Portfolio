@@ -15,10 +15,10 @@ export default function ContactPage() {
         showSignature
         title={
           <>
-            Parlons de votre <span className="text-accent">projet</span>.
+            Travaillons <span className="text-accent">ensemble</span>.
           </>
         }
-        subtitle="Une mission, un poste ou une simple question : décrivez votre besoin en quelques lignes, je vous réponds par email."
+        subtitle="Alternance, poste, mission ou simple question : décrivez votre besoin en quelques lignes, je vous réponds par email."
       />
       <Contact />
     </main>

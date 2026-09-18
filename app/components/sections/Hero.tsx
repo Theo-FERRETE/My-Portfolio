@@ -12,7 +12,6 @@ function CodeLine({ children }: { children: React.ReactNode }) {
 const KEYWORD = 'text-accent';
 const PROP = 'text-accent-amber';
 const STRING = 'text-accent-green';
-const STATUS = 'text-accent-teal';
 const BOOL = 'text-accent-teal';
 const PUNCT = 'text-foreground/40';
 
@@ -39,14 +38,15 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
             </p>
 
             <h1 className="mt-6 text-4xl xs:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.05]">
-              Vos idées deviennent des <span className="text-accent">applications web</span>.
+              Des applications web <span className="text-accent">complètes</span>, de l&apos;interface à l&apos;API.
             </h1>
 
             <p className="mt-6 text-base sm:text-lg text-foreground/70 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Développeur Full Stack, je prends en charge votre projet de A à Z : conception, interface,
-              API, base de données et mise en ligne, avec <span className="font-semibold text-foreground">Next.js</span>,{' '}
+              Développeur full stack, je conçois et développe des applications web avec{' '}
+              <span className="font-semibold text-foreground">Next.js</span>,{' '}
               <span className="font-semibold text-foreground">TypeScript</span> et{' '}
-              <span className="font-semibold text-foreground">Node</span>.
+              <span className="font-semibold text-foreground">Node</span>. Alternance, poste ou mission : voyons
+              ce que je peux apporter à votre équipe ou à votre projet.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-center lg:justify-start mt-8 sm:mt-10">
@@ -54,24 +54,25 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
                 href="/contact"
                 className="group inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity text-sm sm:text-base shadow-[0_8px_30px_-8px_var(--accent)]"
               >
-                Travaillons ensemble
+                Me contacter
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                href="/projects"
-                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent text-sm sm:text-base"
-              >
-                Voir les projets
               </Link>
               <a
                 href={CV_PATH}
                 download
-                className="inline-flex items-center justify-center gap-2 px-2 py-3 sm:py-4 text-foreground/70 font-medium hover:text-accent text-sm sm:text-base"
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent text-sm sm:text-base"
               >
-                <Download size={16} />
-                CV
+                <Download size={18} />
+                Télécharger mon CV
               </a>
             </div>
+            <Link
+              href="/projects"
+              className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-foreground/70 hover:text-accent"
+            >
+              ou voir mes projets
+              <ArrowRight size={14} />
+            </Link>
 
             {/* Signature : un visage et un nom, pour ne pas vendre qu'une stack */}
             <div className="mt-10 flex items-center justify-center lg:justify-start gap-3">
@@ -129,13 +130,16 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
                   </CodeLine>
                   <CodeLine>
                     {'  '}
-                    <span className={PROP}>status</span>
-                    <span className={PUNCT}>:</span> <span className={STATUS}>&quot;ouvert aux opportunités&quot;</span>
-                    <span className={PUNCT}>,</span>
+                    <span className={PROP}>ouvertA</span>
+                    <span className={PUNCT}>:</span> <span className={PUNCT}>[</span>
+                    <span className={STRING}>&quot;alternance&quot;</span>
+                    <span className={PUNCT}>,</span> <span className={STRING}>&quot;poste&quot;</span>
+                    <span className={PUNCT}>,</span> <span className={STRING}>&quot;mission&quot;</span>
+                    <span className={PUNCT}>],</span>
                   </CodeLine>
                   <CodeLine>
                     {'  '}
-                    <span className={PROP}>openToWork</span>
+                    <span className={PROP}>disponible</span>
                     <span className={PUNCT}>:</span> <span className={BOOL}>true</span>
                     <span className={PUNCT}>,</span>
                   </CodeLine>
