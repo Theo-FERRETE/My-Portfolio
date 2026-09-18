@@ -37,7 +37,7 @@ function ProjectSpotlight({ project }: { project: Project }) {
           <Star size={12} className="fill-current" aria-hidden />
           À la une
         </p>
-        <h2 className="mt-4 text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+        <h2 className="mt-4 text-xl sm:text-2xl font-bold tracking-tight text-foreground">
           {/* Lien étiré : toute la carte mène au détail */}
           <Link
             href={`/projects/${project.slug}`}
@@ -100,7 +100,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
   const gridProjects = spotlight ? visibleProjects.slice(1) : visibleProjects;
 
   return (
-    <section ref={ref} aria-label="Liste des projets" className="pb-20 sm:pb-24 bg-background">
+    <section ref={ref} aria-label="Liste des projets" className="pb-14 sm:pb-16 bg-background">
       <div className={`container mx-auto px-4 sm:px-6 reveal ${inView ? 'reveal-in' : ''}`}>
         {showFilters && (
           <div

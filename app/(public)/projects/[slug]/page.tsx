@@ -70,7 +70,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
     <main id="contenu" className="relative min-h-screen bg-background">
       <div
         className="absolute inset-x-0 top-0 h-[36rem] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 50% 70% at 50% 0%, color-mix(in srgb, var(--accent) 12%, transparent) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(ellipse 50% 70% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)' }}
         aria-hidden
       />
 
@@ -91,11 +91,11 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
                 Projet phare
               </p>
             )}
-            <h1 className="mt-5 text-4xl xs:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.05]">
+            <h1 className="mt-5 text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight text-foreground leading-tight">
               {project.title}
             </h1>
             {project.description && (
-              <p className="mt-5 text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed">
+              <p className="mt-5 text-sm sm:text-base text-foreground/70 max-w-2xl mx-auto leading-relaxed">
                 {project.description}
               </p>
             )}
@@ -107,7 +107,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-[0_8px_30px_-8px_var(--accent)]"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity"
                   >
                     <ExternalLink size={18} />
                     Voir le site en ligne
@@ -118,7 +118,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent"
                   >
                     <Github size={18} />
                     Voir le code
@@ -170,7 +170,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
 
           {/* Étude de cas + fiche récap */}
           {caseStudy.length > 0 && (
-            <div className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-[1fr_18rem] gap-8 lg:gap-12 items-start">
+            <div className="mt-10 sm:mt-12 grid grid-cols-1 lg:grid-cols-[1fr_18rem] gap-8 lg:gap-12 items-start">
               <ol className="space-y-8">
                 {caseStudy.map((step, index) => (
                   <li key={step.title} className="flex gap-4 sm:gap-6">
@@ -181,7 +181,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
                       {index + 1}
                     </span>
                     <div>
-                      <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">{step.title}</h2>
+                      <h2 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">{step.title}</h2>
                       <p className="mt-2 text-foreground/70 leading-relaxed whitespace-pre-line">{step.text}</p>
                     </div>
                   </li>
@@ -230,7 +230,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
         <section aria-labelledby="autres-projets" className="container mx-auto px-4 sm:px-6 mt-20 sm:mt-24">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-end justify-between gap-4 mb-8">
-              <h2 id="autres-projets" className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+              <h2 id="autres-projets" className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
                 Autres projets
               </h2>
               <Link href="/projects" className="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground/70 hover:text-accent shrink-0">

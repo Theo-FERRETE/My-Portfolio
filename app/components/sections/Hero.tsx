@@ -17,11 +17,11 @@ const PUNCT = 'text-foreground/40';
 
 export default function Hero({ hasContentBelow = false }: { hasContentBelow?: boolean }) {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden pt-28 pb-20 sm:pt-32 bg-background">
+    <section className="relative min-h-[85vh] flex items-center overflow-hidden pt-28 pb-16 sm:pt-32 bg-background">
       {/* Lueur discrète derrière la fenêtre d'éditeur, pas de 3D, un simple dégradé statique */}
       <div
         className="absolute inset-0 -z-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 45% 55% at 72% 45%, color-mix(in srgb, var(--accent) 14%, transparent) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(ellipse 45% 55% at 72% 45%, color-mix(in srgb, var(--accent) 7%, transparent) 0%, transparent 70%)' }}
         aria-hidden
       />
 
@@ -30,18 +30,15 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
           {/* Message : ce que j'apporte avant qui je suis */}
           <div className="text-center lg:text-left animate-fadeIn">
             <p className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent-green/30 bg-accent-green/10 text-accent-green text-xs sm:text-sm font-medium">
-              <span className="relative flex w-2 h-2" aria-hidden>
-                <span className="absolute inset-0 rounded-full bg-accent-green opacity-75 animate-ping motion-reduce:animate-none" />
-                <span className="relative w-2 h-2 rounded-full bg-accent-green" />
-              </span>
+              <span className="w-2 h-2 rounded-full bg-accent-green" aria-hidden />
               {AVAILABILITY_LABEL}
             </p>
 
-            <h1 className="mt-6 text-4xl xs:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.05]">
+            <h1 className="mt-6 text-3xl xs:text-4xl lg:text-[2.75rem] font-bold tracking-tight text-foreground leading-tight">
               Des applications web <span className="text-accent">complètes</span>, de l&apos;interface à l&apos;API.
             </h1>
 
-            <p className="mt-6 text-base sm:text-lg text-foreground/70 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="mt-6 text-sm sm:text-base text-foreground/70 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               Développeur full stack, je conçois et développe des applications web avec{' '}
               <span className="font-semibold text-foreground">Next.js</span>,{' '}
               <span className="font-semibold text-foreground">TypeScript</span> et{' '}
@@ -52,7 +49,7 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-center lg:justify-start mt-8 sm:mt-10">
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity text-sm sm:text-base shadow-[0_8px_30px_-8px_var(--accent)]"
+                className="group inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity text-sm sm:text-base"
               >
                 Me contacter
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
@@ -60,7 +57,7 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
               <a
                 href={CV_PATH}
                 download
-                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent text-sm sm:text-base"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent text-sm sm:text-base"
               >
                 <Download size={18} />
                 Télécharger mon CV
@@ -95,9 +92,9 @@ export default function Hero({ hasContentBelow = false }: { hasContentBelow?: bo
           <div className="animate-slideUp">
             <EditorWindow
               filename="profil.ts"
-              className="glass-raised rounded-2xl overflow-hidden lg:rotate-[1.5deg] transition-transform duration-500 hover:rotate-0"
+              className="glass-raised rounded-2xl overflow-hidden"
             >
-              <div className="grid grid-cols-[auto_1fr] gap-x-4 sm:gap-x-5 px-4 sm:px-6 py-6 sm:py-7 font-mono text-[12px] xs:text-sm sm:text-base lg:text-[15px] xl:text-base leading-7 sm:leading-8 overflow-x-auto">
+              <div className="grid grid-cols-[auto_1fr] gap-x-4 sm:gap-x-5 px-4 sm:px-6 py-6 sm:py-7 font-mono text-[12px] sm:text-sm leading-7 overflow-x-auto">
                 <div className="text-right text-foreground/25 select-none" aria-hidden>
                   {[1, 2, 3, 4, 5, 6, 7].map((n) => (
                     <div key={n}>{n}</div>

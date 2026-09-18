@@ -16,7 +16,7 @@ export default function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <div className={`text-center ${className}`}>
-      <Tag className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
+      <Tag className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight">
         {title}
       </Tag>
       {subtitle && (

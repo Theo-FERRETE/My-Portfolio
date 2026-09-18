@@ -16,22 +16,22 @@ export default function Contact() {
   const { ref, inView } = useInView<HTMLElement>();
 
   return (
-    <section ref={ref} aria-label="Formulaire et coordonnées" className="pb-20 sm:pb-24 bg-background">
+    <section ref={ref} aria-label="Formulaire et coordonnées" className="pb-14 sm:pb-16 bg-background">
       <div className={`container mx-auto px-4 sm:px-6 reveal ${inView ? 'reveal-in' : ''}`}>
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-8 sm:gap-10 items-start">
           <ContactForm />
           <ContactInfo />
         </div>
 
-        <div className="max-w-5xl mx-auto mt-16 sm:mt-20">
-          <h2 className="text-center text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+        <div className="max-w-5xl mx-auto mt-12 sm:mt-14">
+          <h2 className="text-center text-xl sm:text-2xl font-bold tracking-tight text-foreground">
             Comment ça se <span className="text-accent">passe</span> ?
           </h2>
           <ol className="mt-8 sm:mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
             {STEPS.map((step, index) => (
               <li key={step.title} className="glass-card rounded-xl p-6">
                 <span
-                  className="inline-flex w-10 h-10 items-center justify-center rounded-full bg-accent text-background font-extrabold"
+                  className="inline-flex w-10 h-10 items-center justify-center rounded-full bg-accent text-background font-bold"
                   aria-hidden
                 >
                   {index + 1}

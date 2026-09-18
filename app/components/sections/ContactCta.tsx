@@ -15,16 +15,16 @@ export default function ContactCta() {
   const { ref, inView } = useInView<HTMLElement>();
 
   return (
-    <section ref={ref} className="py-20 sm:py-24 bg-background">
+    <section ref={ref} className="py-14 sm:py-16 bg-background">
       <div className="container mx-auto px-4 sm:px-6">
         <div
-          className={`relative max-w-5xl mx-auto overflow-hidden rounded-3xl border border-accent/25 glass-raised px-6 py-14 sm:px-12 sm:py-20 text-center reveal ${
+          className={`relative max-w-5xl mx-auto overflow-hidden rounded-2xl border border-border glass-raised px-6 py-10 sm:px-10 sm:py-12 text-center reveal ${
             inView ? 'reveal-in' : ''
           }`}
         >
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 70%)' }}
+            style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, color-mix(in srgb, var(--accent) 9%, transparent) 0%, transparent 70%)' }}
             aria-hidden
           />
 
@@ -33,19 +33,19 @@ export default function ContactCta() {
               <span className="w-2 h-2 rounded-full bg-accent-green" aria-hidden />
               {AVAILABILITY_LABEL}
             </p>
-            <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
+            <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground">
               Alternance, poste ou projet ?
               <br />
               <span className="text-accent">Parlons-en.</span>
             </h2>
-            <p className="mt-4 text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto">
+            <p className="mt-4 text-sm sm:text-base text-foreground/70 max-w-2xl mx-auto">
               Écrivez-moi en quelques lignes : on voit ensemble comment je peux vous être utile.
             </p>
 
             <div className="mt-8 flex flex-col items-center gap-4">
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center gap-2 px-10 py-4 bg-accent text-background rounded-lg font-semibold text-base sm:text-lg hover:opacity-90 transition-opacity shadow-[0_8px_30px_-8px_var(--accent)]"
+                className="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent text-background rounded-lg font-semibold text-sm sm:text-base hover:opacity-90 transition-opacity"
               >
                 Démarrer la discussion
                 <ArrowRight size={20} className="transition-transform group-hover:translate-x-0.5" />

@@ -79,7 +79,7 @@ export default function Skills({ skills, projects = [] }: SkillsProps) {
   }, [skills]);
 
   return (
-    <section ref={ref} aria-label="Technologies par domaine" className="pb-20 sm:pb-24 bg-background">
+    <section ref={ref} aria-label="Technologies par domaine" className="pb-14 sm:pb-16 bg-background">
       <div className={`container mx-auto px-4 sm:px-6 reveal ${inView ? 'reveal-in' : ''}`}>
         {grouped.length === 0 ? (
           <p className="text-center text-foreground/60 py-16">Les compétences arrivent bientôt.</p>
@@ -91,7 +91,7 @@ export default function Skills({ skills, projects = [] }: SkillsProps) {
               return (
                 <li
                   key={category}
-                  className="glass-card rounded-xl p-6 sm:p-7 transition-colors duration-300 hover:border-accent/40"
+                  className="glass-card rounded-xl p-5 sm:p-6 transition-colors duration-300 hover:border-accent/40"
                 >
                   <div className="flex items-start gap-4">
                     <span className="inline-flex w-11 h-11 shrink-0 items-center justify-center rounded-lg bg-accent/15 text-accent">

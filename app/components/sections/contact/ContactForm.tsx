@@ -106,8 +106,8 @@ export default function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="glass-raised p-6 sm:p-8 rounded-2xl">
-      <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6">Envoyer un message</h2>
+    <form onSubmit={handleSubmit} noValidate className="glass-raised p-5 sm:p-6 rounded-2xl">
+      <h2 className="text-lg sm:text-xl font-bold text-foreground mb-6">Envoyer un message</h2>
       <div className="mb-6">
         <label htmlFor="name" className="block text-sm font-semibold text-foreground/80 mb-2">
           Nom
@@ -171,7 +171,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-accent text-background font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+        className="w-full px-5 sm:px-6 py-2.5 sm:py-3 bg-accent text-background font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
       >
         {isSubmitting ? 'Envoi en cours…' : 'Envoyer le message'}
       </button>

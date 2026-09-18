@@ -19,12 +19,12 @@ export default function FeaturedProjects({ projects }: { projects: Project[] }) 
   if (selection.length === 0) return null;
 
   return (
-    <section ref={ref} className="py-20 sm:py-24 bg-background">
+    <section ref={ref} className="py-14 sm:py-16 bg-background">
       <div className={`container mx-auto px-4 sm:px-6 reveal ${inView ? 'reveal-in' : ''}`}>
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
                 Projets <span className="text-accent">phares</span>
               </h2>
               <p className="mt-2 text-foreground/70 text-sm sm:text-base">Une sélection de mes réalisations.</p>

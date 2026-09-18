@@ -68,25 +68,25 @@ export default function Services() {
   const { ref, inView } = useInView<HTMLElement>();
 
   return (
-    <section ref={ref} className="py-20 sm:py-24 bg-surface/40 border-y border-border">
+    <section ref={ref} className="py-14 sm:py-16 bg-surface/40 border-y border-border">
       <div className={`container mx-auto px-4 sm:px-6 reveal ${inView ? 'reveal-in' : ''}`}>
         <SectionHeading
           title="Ce que je fais"
           subtitle="Pour une équipe qui recrute ou un projet à lancer, du front au back."
-          className="mb-12 sm:mb-14"
+          className="mb-8 sm:mb-10"
         />
 
         <ul className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {SERVICES.map((service) => (
             <li
               key={service.title}
-              className="glass-card rounded-xl p-6 sm:p-8 flex flex-col transition-colors duration-300 hover:border-accent/40"
+              className="glass-card rounded-xl p-5 sm:p-6 flex flex-col transition-colors duration-300 hover:border-accent/40"
             >
-              <span className={`inline-flex w-12 h-12 items-center justify-center rounded-lg tint ${service.accent}`}>
-                <service.icon size={24} aria-hidden />
+              <span className={`inline-flex w-10 h-10 items-center justify-center rounded-lg tint ${service.accent}`}>
+                <service.icon size={20} aria-hidden />
               </span>
-              <h3 className="mt-5 text-xl font-bold text-foreground">{service.title}</h3>
-              <p className="mt-2 text-sm sm:text-base text-foreground/70 leading-relaxed">{service.pitch}</p>
+              <h3 className="mt-4 text-lg font-bold text-foreground">{service.title}</h3>
+              <p className="mt-2 text-sm text-foreground/70 leading-relaxed">{service.pitch}</p>
               <ul className="mt-5 pt-5 border-t border-border space-y-2.5">
                 {service.benefits.map((benefit) => (
                   <li key={benefit} className="flex items-start gap-2 text-sm text-foreground/80">
@@ -99,8 +99,8 @@ export default function Services() {
           ))}
         </ul>
 
-        <div className="max-w-6xl mx-auto mt-16 sm:mt-20">
-          <h3 className="text-center text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+        <div className="max-w-6xl mx-auto mt-12 sm:mt-14">
+          <h3 className="text-center text-xl sm:text-2xl font-bold tracking-tight text-foreground">
             Pourquoi <span className="text-accent">moi</span> ?
           </h3>
           <ul className="mt-8 sm:mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">

@@ -30,7 +30,7 @@ export default async function SkillsPage() {
       >
         <Link
           href="/projects"
-          className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-[0_8px_30px_-8px_var(--accent)]"
+          className="group inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity"
         >
           Les voir en action
           <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />

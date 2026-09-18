@@ -18,15 +18,15 @@ export default function StatusPage({ code, title, message, children }: StatusPag
     >
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 45% 50% at 50% 45%, color-mix(in srgb, var(--accent) 14%, transparent) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(ellipse 45% 50% at 50% 45%, color-mix(in srgb, var(--accent) 7%, transparent) 0%, transparent 70%)' }}
         aria-hidden
       />
       <div className="relative text-center max-w-xl animate-fadeIn">
-        <p className="text-7xl sm:text-8xl font-extrabold tracking-tight text-accent leading-none" aria-hidden>
+        <p className="text-5xl sm:text-6xl font-bold tracking-tight text-accent leading-none" aria-hidden>
           {code}
         </p>
-        <h1 className="mt-6 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">{title}</h1>
-        <p className="mt-4 text-base sm:text-lg text-foreground/70">{message}</p>
+        <h1 className="mt-6 text-2xl sm:text-3xl font-bold tracking-tight text-foreground">{title}</h1>
+        <p className="mt-4 text-sm sm:text-base text-foreground/70">{message}</p>
         <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">{children}</div>
       </div>
     </main>
