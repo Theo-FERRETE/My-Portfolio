@@ -2,47 +2,43 @@
 
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import SectionHeading from '@/app/components/ui/SectionHeading';
-import ProjectCard from '@/app/components/ui/ProjectCard';
+import ProjectCarousel from '@/app/components/ui/ProjectCarousel';
 import type { Project } from '@/lib/data';
 import { useInView } from '@/lib/hooks/use-in-view';
 
-const MAX_FEATURED = 3;
+const MAX_PROJECTS = 6;
 
-/** Les projets marqués "phare" dans l'admin ; à défaut, les premiers publiés. */
+/** Aperçu des projets sur l'accueil : les phares d'abord, en carrousel. */
 export default function FeaturedProjects({ projects }: { projects: Project[] }) {
   const { ref, inView } = useInView<HTMLElement>();
 
-  const featured = projects.filter((p) => p.featured);
-  const selection = (featured.length > 0 ? featured : projects).slice(0, MAX_FEATURED);
+  const selection = [...projects]
+    .sort((a, b) => Number(b.featured) - Number(a.featured))
+    .slice(0, MAX_PROJECTS);
 
   if (selection.length === 0) return null;
 
   return (
     <section ref={ref} className="py-20 sm:py-24 bg-background">
       <div className={`container mx-auto px-4 sm:px-6 reveal ${inView ? 'reveal-in' : ''}`}>
-        <SectionHeading
-          title="Projets phares"
-          subtitle="Une sélection de mes réalisations."
-          className="mb-12 sm:mb-14"
-        />
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+                Projets <span className="text-accent">phares</span>
+              </h2>
+              <p className="mt-2 text-foreground/70 text-sm sm:text-base">Une sélection de mes réalisations.</p>
+            </div>
+            <Link
+              href="/projects"
+              className="group inline-flex items-center gap-2 text-sm font-semibold text-foreground/70 hover:text-accent shrink-0"
+            >
+              Voir tous les projets ({projects.length})
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
 
-        <ul className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {selection.map((project) => (
-            <li key={project.id}>
-              <ProjectCard project={project} />
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-10 text-center">
-          <Link
-            href="/projects"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border text-foreground font-semibold hover:border-accent hover:text-accent text-sm sm:text-base"
-          >
-            Voir tous les projets ({projects.length})
-            <ArrowRight size={16} />
-          </Link>
+          <ProjectCarousel projects={selection} />
         </div>
       </div>
     </section>

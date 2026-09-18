@@ -11,12 +11,14 @@ export default function ContactPage() {
   return (
     <main id="contenu" className="min-h-screen">
       <PageHero
+        showAvailability
+        showSignature
         title={
           <>
-            Parlons de votre <span className="text-accent">projet</span>
+            Parlons de votre <span className="text-accent">projet</span>.
           </>
         }
-        subtitle="Une mission, un poste ou une simple question : envoyez-moi un message via le formulaire ou retrouvez-moi sur les réseaux."
+        subtitle="Une mission, un poste ou une simple question : décrivez votre besoin en quelques lignes, je vous réponds par email."
       />
       <Contact />
     </main>

@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import Projects from '@/app/components/sections/Projects';
+import ProofBand from '@/app/components/sections/ProofBand';
 import ContactCta from '@/app/components/sections/ContactCta';
 import PageHero from '@/app/components/ui/PageHero';
-import { getProjects } from '@/lib/data';
+import { getProjects, getSkills } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Projets - Théo FERRETE',
@@ -14,19 +17,29 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function ProjectsPage() {
-  const projects = await getProjects();
+  const [projects, skills] = await Promise.all([getProjects(), getSkills()]);
 
   return (
     <main id="contenu" className="min-h-screen">
       <PageHero
+        showAvailability
         title={
           <>
-            Mes <span className="text-accent">projets</span>
+            Ce que j&apos;ai déjà <span className="text-accent">construit</span>.
           </>
         }
-        subtitle="Une sélection d'applications web sur lesquelles j'ai travaillé."
-      />
+        subtitle="Chaque projet a été conçu et développé par mes soins. Ouvrez-en un pour voir le contexte, mon rôle et le résultat."
+      >
+        <Link
+          href="/contact"
+          className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-[0_8px_30px_-8px_var(--accent)]"
+        >
+          Lancer votre projet
+          <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      </PageHero>
       <Projects projects={projects} />
+      <ProofBand skills={skills} />
       <ContactCta />
     </main>
   );

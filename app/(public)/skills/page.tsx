@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import Skills from '@/app/components/sections/Skills';
+import StackReasons from '@/app/components/sections/StackReasons';
 import ContactCta from '@/app/components/sections/ContactCta';
 import PageHero from '@/app/components/ui/PageHero';
 import { getProjects, getSkills } from '@/lib/data';
@@ -19,22 +20,24 @@ export default async function SkillsPage() {
   return (
     <main id="contenu" className="min-h-screen">
       <PageHero
+        showAvailability
         title={
           <>
-            Ma <span className="text-accent">stack</span>
+            Une stack, <span className="text-accent">tout le projet</span>.
           </>
         }
-        subtitle="Les technologies avec lesquelles je conçois vos applications, de l'interface à la mise en ligne."
+        subtitle="De l'interface à la mise en ligne, voici les technologies avec lesquelles je travaille — et ce qu'elles vous apportent."
       >
         <Link
           href="/projects"
-          className="group inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground rounded-lg font-semibold hover:border-accent hover:text-accent"
+          className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-background rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-[0_8px_30px_-8px_var(--accent)]"
         >
-          Les voir en action dans mes projets
-          <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+          Les voir en action
+          <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
         </Link>
       </PageHero>
       <Skills skills={skills} projects={projects} />
+      <StackReasons />
       <ContactCta />
     </main>
   );

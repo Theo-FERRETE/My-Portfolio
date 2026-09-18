@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, ImageOff, Star } from 'lucide-react';
-import ProjectCard from '@/app/components/ui/ProjectCard';
+import ProjectGrid from '@/app/components/ui/ProjectGrid';
 import TagPill from '@/app/components/ui/TagPill';
 import type { Project } from '@/lib/data';
 import { useInView } from '@/lib/hooks/use-in-view';
@@ -91,8 +91,12 @@ export default function Projects({ projects }: { projects: Project[] }) {
     return [...filtered].sort((a, b) => Number(b.featured) - Number(a.featured));
   }, [projects, activeTag]);
 
-  // Vitrine : le premier projet phare, en grand, seulement sans filtre actif.
-  const spotlight = activeTag === ALL && visibleProjects[0]?.featured ? visibleProjects[0] : null;
+  // Vitrine : le premier projet phare, en grand. En dessous de 4 projets, elle
+  // viderait la grille — mieux vaut alors des cartes de taille égale.
+  const spotlight =
+    activeTag === ALL && visibleProjects.length >= 4 && visibleProjects[0]?.featured
+      ? visibleProjects[0]
+      : null;
   const gridProjects = spotlight ? visibleProjects.slice(1) : visibleProjects;
 
   return (
@@ -134,15 +138,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
         ) : (
           <div className="max-w-6xl mx-auto">
             {spotlight && <ProjectSpotlight project={spotlight} />}
-            {gridProjects.length > 0 && (
-              <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {gridProjects.map((project) => (
-                  <li key={project.id}>
-                    <ProjectCard project={project} />
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ProjectGrid projects={gridProjects} />
           </div>
         )}
 

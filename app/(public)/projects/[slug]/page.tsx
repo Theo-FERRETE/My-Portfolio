@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Github, ExternalLink, ArrowLeft, ArrowRight, Star, ImageOff, CalendarDays } from 'lucide-react';
 import { getProjectById, getProjectBySlug, getProjects } from '@/lib/data';
 import TagPill from '@/app/components/ui/TagPill';
-import ProjectCard from '@/app/components/ui/ProjectCard';
+import ProjectGrid from '@/app/components/ui/ProjectGrid';
 import ContactCta from '@/app/components/sections/ContactCta';
 
 const OTHER_PROJECTS_COUNT = 3;
@@ -238,13 +238,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageParams) {
                 <ArrowRight size={14} />
               </Link>
             </div>
-            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {otherProjects.map((other) => (
-                <li key={other.id}>
-                  <ProjectCard project={other} />
-                </li>
-              ))}
-            </ul>
+            <ProjectGrid projects={otherProjects} />
           </div>
         </section>
       )}
